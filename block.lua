@@ -1,10 +1,10 @@
 module(...,package.seeall)
 
 local images = {
-  powercurve="chainl.png",
-  powerstraight="chain.png",
-  downcurve="chainl.png",
-  downstraight="chain.png"
+  powercurve="powercurve.png",
+  powerstraight="powerstraight.png",
+  downcurve="downcurve.png",
+  downstraight="downstraight.png"
 }
 
 local names = {
@@ -68,23 +68,27 @@ function newBlock(name)
     self.y = y
   end
 
+  function block:setRotation(rot)
+    self.image.rotation = rot
+  end
+
   function block:duplicate()
     local duplicateBlock =  newBlock(self.name,0)    
     duplicateBlock:setX(self.x)
     duplicateBlock:setY(self.y)    
-	duplicateBlock:setDragDelegate(self.onDragDelegate)
-	duplicateBlock:setDragFailDelegate(self.onDragFailDelegate)
-	duplicateBlock:checkBlockPositionDelegate(self.checkBlockPositionDelegate)
-	duplicateBlock:checkIsInsideBoardDelegate(self.checkIsInsideBoard)	
+    duplicateBlock:setDragDelegate(self.onDragDelegate)
+    duplicateBlock:setDragFailDelegate(self.onDragFailDelegate)
+    duplicateBlock:checkBlockPositionDelegate(self.checkBlockPositionDelegate)
+    duplicateBlock:checkIsInsideBoardDelegate(self.checkIsInsideBoard)	
     return duplicateBlock
   end
 
   local isDragging = false
   
   function block:touch(event)		
-	if currentDragging ~= nil and currentDragging ~= self then 
-		return true 
-	end	
+  	if currentDragging ~= nil and currentDragging ~= self then 
+  		return true 
+  	end	
     if event.phase == "began" then		
 		if self.checkIsInsideBoard then
 			local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)			
@@ -97,6 +101,7 @@ function newBlock(name)
 			isDragging = true
 			if self.onDragDelegate and not self.onDragDelegate(self) then					
 				isDragging = false
+        currentDragging = nil
 				return
 			end
 			if self.checkIsInsideBoard then

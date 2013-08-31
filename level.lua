@@ -32,6 +32,13 @@ local draggingPiece = false
 -- 
 -----------------------------------------------------------------------------------------
 
+------------------------
+-- Board delegates
+------------------------
+
+------------------------
+-- Block delegates
+------------------------
 local function onStartDragBlock(block)
 	if draggingPiece or block.placed then return true end
 	boardGrid:invalidatePosition(block.x, block.y)
@@ -70,7 +77,11 @@ local function isInsideBoard(x,y)
 	return boardGrid:blockIsInside(x,y)
 end
 
-function scene:generateBlocks (group,level)
+------------------------
+-- Scene delegates
+------------------------
+
+function scene:generateBlocks (group,level)	
 	piecesList = levelsData[level].pieces
 	for i=1,#piecesList do
 		local block = Block.newBlock(piecesList[i].name)		
@@ -90,18 +101,21 @@ end
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	local group = self.view
-
+	--TODO: carregar do banco
+	local levelName = "level1"
 	-- create a grey rectangle as the backdrop
-	local bg = display.newImageRect( "puzzle_screen.jpg", screenW, screenH )
+	local bg = display.newImageRect( levelsData[levelName].bgImg, screenW, screenH )
 	bg:setReferencePoint(display.TopLeftReferencePoint)
 	bg.x,bg.y = 0, 0 	
 	-- all display objects must be inserted into group
 	group:insert( bg )	
 
 	boardGrid = Board.new(group,tileWidth,tileHeight)
-	boardGrid:createTiles(group)
+	boardGrid.onNewBlockFromSetupGrid = onNewBlockFromSetupGrid
+	boardGrid:createTiles(group)	
+	boardGrid:setupGridImages(levelsData[levelName].board)
 
-	scene:generateBlocks(group,"level1")	
+	scene:generateBlocks(group,levelName)	
 end
 
 -- Called immediately after scene has moved onscreen:
