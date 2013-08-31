@@ -7,7 +7,8 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local levelsData = require("levelsdata")
-local blocks = require("block")
+local Block = require("block")
+local Board = require("board")
 
 -- include Corona's "physics" library
 -- local physics = require "physics"
@@ -20,6 +21,7 @@ local screenW, screenH, halfW = display.contentWidth, display.contentHeight, dis
 local tileWidth, tileHeight = 32,32
 local piecesList
 local textsPiecesCount = {}
+local boardGrid 
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -29,21 +31,10 @@ local textsPiecesCount = {}
 -- 
 -----------------------------------------------------------------------------------------
 
-function scene:createBoard (group)
-	for i=1,5 do
-		for j=1,5 do
-			local crate = display.newImageRect("crate.png",tileWidth,tileHeight)
-			crate:setReferencePoint(display.TopLeftReferencePoint)
-			crate.x,crate.y = tileWidth*2+(tileWidth*i),tileHeight+(tileHeight*j)
-			group:insert( crate )
-		end		
-	end	
-end
-
 function scene:generateBlocks (group,level)
 	piecesList = levelsData[level].pieces
 	for i=1,#piecesList do
-		local block = blocks.newBlock(piecesList[i].name)		
+		local block = Block.newBlock(piecesList[i].name)		
 		local column = tileWidth*12		
 		block:setX(column)
 		block:setY(tileHeight+(tileHeight*i))
@@ -64,7 +55,9 @@ function scene:createScene( event )
 	-- all display objects must be inserted into group
 	group:insert( bg )	
 
-	scene:createBoard(group)
+	boardGrid = Board.new(group,tileWidth,tileHeight)
+	boardGrid:createTiles(group)
+
 	scene:generateBlocks(group,"level1")	
 end
 
