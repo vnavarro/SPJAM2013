@@ -23,7 +23,7 @@ function new(x, y, speed)
 	timerBar.monsterSprite = display.newImageRect("barra_monster.png",32,50)
 	timerBar.limit = timerBar.barSprite.width
 	timerBar.monsterSprite.x = timerBar.x - timerBar.limit/2
-	timerBar.monsterSprite.y = timerBar.y
+	timerBar.monsterSprite.y = timerBar.y - 10
 	timerBar.girlSprite = display.newImageRect("barra_menina.png",44,36)
 	timerBar.girlSprite.x = timerBar.x + timerBar.limit/2
 	timerBar.girlSprite.y = timerBar.y

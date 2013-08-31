@@ -9,82 +9,95 @@ local scene = storyboard.newScene()
 
 -- include Corona's "widget" library
 local widget = require "widget"
-require 'db'
 
 --------------------------------------------
 
--- forward declarations and other locals
-local playBtn
-local selectedLevel = 1
-
 -- 'onRelease' event listener for playBtn
 local function onPlayBtnRelease()
-	
-	-- go to level1.lua scene
-	storyboard.gotoScene( "levelselection", "fade", 500, params = {level=1} )
-	
-	return true	-- indicates successful touch
+  
+  -- go to level1.lua scene
+  storyboard.gotoScene( "level", "fade", 500 )
+  
+  return true -- indicates successful touch
 end
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
 -- NOTE: Code outside of listener functions (below) will only be executed once,
---		 unless storyboard.removeScene() is called.
+--     unless storyboard.removeScene() is called.
 -- 
 -----------------------------------------------------------------------------------------
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
-	local group = self.view
+  local group = self.view
 
-	-- display a background image
-	local background = display.newImageRect( "start_screen_01.jpg", display.contentWidth, display.contentHeight )
-	background:setReferencePoint( display.TopLeftReferencePoint )
-	background.x, background.y = 0, 0
-	
-	-- create a widget button (which will loads level1.lua on release)
-	playBtn = widget.newButton{
-		label="Play Now",
-		labelColor = { default={255}, over={128} },
-		defaultFile="button.png",
-		overFile="button-over.png",
-		width=154, height=40,
-		onRelease = onPlayBtnRelease	-- event listener function
-	}
-	playBtn:setReferencePoint( display.CenterReferencePoint )
-	playBtn.x = display.contentWidth*0.5
-	playBtn.y = display.contentHeight - 125
-	
-	-- all display objects must be inserted into group
-	group:insert( background )
-	group:insert( playBtn )
+  -- display a background image
+  local background = display.newImageRect(group, "BG_stage_select.png", display.contentWidth, display.contentHeight )
+  background:setReferencePoint( display.TopLeftReferencePoint )
+  background.x, background.y = 0, 0
+  
+  group.buttonList = {}
+  for i=1,6 do
+    -- create a widget button (which will loads level1.lua on release)
+    local playBtn = widget.newButton{
+      -- label="Play Now",
+      -- labelColor = { default={255}, over={128} },
+      defaultFile="0"..i..".png",
+      -- overFile="button-over.png",
+      width=58, height=58,
+      onRelease = onPlayBtnRelease  -- event listener function
+    }
+    playBtn:setReferencePoint( display.CenterReferencePoint )
+    paddingX = (68 * (i-1))
+    paddingY = 0
+    if i > 3 then
+      paddingX = (68 * (i-4))
+      paddingY = 68 
+    end
+    playBtn.x = display.contentWidth/3 + paddingX
+    playBtn.y = display.contentHeight/2.5 + paddingY
+    
+    -- all display objects must be inserted into group
+    group:insert( playBtn )
+  end
+
+  -- create/position logo/title image on upper-half of the screen
+  local stage = display.newImageRect(group, "blend.png", display.contentWidth, display.contentHeight )
+  stage:setReferencePoint( display.TopLeftReferencePoint )
+  stage.x, stage.y = 0, 0
+  stage.blendMode = "multiply"
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
-	local group = self.view
-	
-	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
-	
+  local group = self.view
+  
+  -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
+  
 end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
-	local group = self.view
-	
-	-- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
-	
+  local group = self.view
+  
+  -- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
+  
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
-	local group = self.view
-	
-	if playBtn then
-		playBtn:removeSelf()	-- widgets must be manually removed
-		playBtn = nil
-	end
+  local group = self.view
+  
+  local count = #group.buttonList
+  for i=1,count do
+    local playBtn = group.buttonList[i]
+    if playBtn then
+      playBtn:removeSelf()  -- widgets must be manually removed
+      playBtn = nil
+    end
+  end
 end
 
 -----------------------------------------------------------------------------------------
