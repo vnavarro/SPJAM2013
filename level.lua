@@ -116,6 +116,14 @@ function scene:createScene( event )
 	boardGrid:createTiles(group)	
 	boardGrid:setupGridImages(levelsData[levelName].board)
 
+	local arrows = levelsData[levelName].arrows
+	for k,arrow in pairs(arrows) do
+		local bg = display.newImageRect( arrow.img, arrow.w,arrow.h )
+		bg:setReferencePoint(display.CenterReferencePoint)
+		bg.x,bg.y = arrow.x, arrow.y 	
+		group:insert( bg )
+	end
+
 	timerBar = TimerBar.new(halfW-60,screenH-45,0.5)
 	timerBar:addToGroup(group)
 
