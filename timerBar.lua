@@ -6,7 +6,7 @@ o lado da menina fica fixo
 
 -- x, y = posicao na tela
 -- speed = velocidade do avanco do tempo
-function newTimerBar(x, y, speed)
+function new(x, y, speed)
 	--local timerBar = display.newGroup()
 	local timerBar = {}
 	local monsterPos
@@ -14,13 +14,23 @@ function newTimerBar(x, y, speed)
 	timerBar.monsterPos = 0
 	timerBar.x = x or 0
 	timerBar.y = y or 0
-	timerBar.barSprite = display.newImageRect("barSprite.png",200,50)
+	timerBar.barSprite = display.newImageRect("barra_externa.png",268,16)
 	timerBar.barSprite.x = timerBar.x
 	timerBar.barSprite.y = timerBar.y
-	timerBar.monsterSprite = display.newImageRect("monsterSprite.png",50,50)
+	timerBar.frontBarSprite = display.newImageRect("barra_interna.png",268,16)
+	timerBar.frontBarSprite.x = timerBar.x
+	timerBar.frontBarSprite.y = timerBar.y
+	timerBar.monsterSprite = display.newImageRect("barra_monster.png",32,50)
 	timerBar.limit = timerBar.barSprite.width
 	timerBar.monsterSprite.x = timerBar.x - timerBar.limit/2
 	timerBar.monsterSprite.y = timerBar.y
+	timerBar.girlSprite = display.newImageRect("barra_menina.png",44,36)
+	timerBar.girlSprite.x = timerBar.x + timerBar.limit/2
+	timerBar.girlSprite.y = timerBar.y
+	timerBar.barMask = graphics.newMask("barra_mask.png")
+	timerBar.frontBarSprite:setMask(timerBar.barMask)
+	timerBar.frontBarSprite.maskX = -timerBar.frontBarSprite.width 
+	timerBar.frontBarSprite.maskY = timerBar.frontBarSprite.contentHeight*0.5
 	--timerBar:insert(timerBar.barSprite)
 	--timerBar:insert(timerBar.monsterSprite)
 	timerBar.speed = speed
@@ -29,19 +39,29 @@ function newTimerBar(x, y, speed)
 	-- evento a ser disparado quando o tempo expirar
 	timerBar.expiredTimeEvent = {name = "expiredTime"}
 	
+	function timerBar:resetTime()
+		self.monsterPos = 0
+	end
+	
 	function timerBar:addToGroup(group)
 		group:insert(self.barSprite)
+		group:insert(self.frontBarSprite)
+		group:insert(self.girlSprite)
 		group:insert(self.monsterSprite)
 	end
 	
+	local lastUpdate
 	local function updateTimerBar(event)
 		if not timerBar.active then return end
-		timerBar.monsterPos = timerBar.monsterPos + timerBar.speed * (event.time/1000)-- * (timerBar.limit/10)
+		if not lastUpdate then lastUpdate = event.time end
+		timerBar.monsterPos = timerBar.monsterPos + timerBar.speed * ((event.time-lastUpdate)/1000) * (timerBar.limit/10)
 		timerBar.monsterSprite.x = timerBar.monsterPos + timerBar.x - timerBar.limit/2
+		timerBar.frontBarSprite.maskX = timerBar.monsterPos + timerBar.x - timerBar.frontBarSprite.width - 40
 		if timerBar.monsterPos >= timerBar.limit then
 			Runtime:removeEventListener("enterFrame", updateTimerBar)
 			Runtime:dispatchEvent(timerBar.expiredTimeEvent)
 		end
+		lastUpdate = event.time
 	end
 	
 	Runtime:addEventListener("enterFrame", updateTimerBar)
