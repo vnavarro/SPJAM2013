@@ -104,10 +104,10 @@ function newBlock(name)
 				if not valid then
 					self:duplicate():addToGroup(self.image.parent)
 				end
-			end			
+			end
 		end
-		self:setX(event.x-block.image.width/2)
-		self:setY(event.y-block.image.height/2)
+		self:setX(event.x-self.image.width/2)
+		self:setY(event.y-self.image.height/2)
 	elseif event.phase == "ended" then
 		if isDragging then
 			if self.checkBlockPositionDelegate then
@@ -124,7 +124,9 @@ function newBlock(name)
 			end
 			isDragging = false
 		else
-			block.image.rotation = block.image.rotation + 90
+			if CurrentDragging == self or not CurrentDragging then
+				self.image.rotation = self.image.rotation + 90
+			end
 		end
 		currentDragging = nil
 	end		

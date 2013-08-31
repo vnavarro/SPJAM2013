@@ -34,6 +34,7 @@ local draggingPiece = false
 
 local function onStartDragBlock(block)
 	if draggingPiece or block.placed then return true end
+	boardGrid:invalidatePosition(block.x, block.y)
 	local piece = nil
 	for i=1,#piecesList do
 		piece = piecesList[i]

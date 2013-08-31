@@ -17,11 +17,8 @@ function new(group,tileWidth,tileHeight)
     for i=1,5 do
       local rowTiles = {}
       for j=1,5 do
-        local crate = display.newImageRect("crate.png",tileWidth,tileHeight)
-        crate:setReferencePoint(display.TopLeftReferencePoint)
-        crate.x,crate.y = tileWidth*2+(tileWidth*i),tileHeight+(tileHeight*j)
-        table.insert(rowTiles,{x=crate.x,y=crate.y})
-        self.group:insert( crate )
+        local tx, ty = tileWidth*2+(tileWidth*i),tileHeight+(tileHeight*j)
+        table.insert(rowTiles,{x=tx, y=ty, hasBlock = false})
       end   
       table.insert(board.tiles,rowTiles)
     end
@@ -31,6 +28,19 @@ function new(group,tileWidth,tileHeight)
     return x >= board.x and x <= board.xMax and y >= board.y and y <= board.yMax
   end
 
+  function board:invalidatePosition(x,y)
+	if not self:blockIsInside(x,y) then return end
+	for i=1,5 do
+      for j=1,5 do
+        local position = board.tiles[i][j];
+        if x > position.x and x < position.x+board.tileWidth and 
+          y > position.y and y < position.y+board.tileHeight and position.hasBlock then
+		  board.tiles[i][j].hasBlock = false
+        end
+      end
+    end
+  end
+  
   function board:canPlaceBlock(x,y)
     if not self:blockIsInside(x,y) then
       return false
@@ -39,7 +49,8 @@ function new(group,tileWidth,tileHeight)
       for j=1,5 do
         local position = board.tiles[i][j];
         if x > position.x and x < position.x+board.tileWidth and 
-          y > position.y and y < position.y+board.tileHeight then
+          y > position.y and y < position.y+board.tileHeight and not position.hasBlock then
+		  position.hasBlock = true
           return true,position.x,position.y
         end
       end
