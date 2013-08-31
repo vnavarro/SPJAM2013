@@ -52,8 +52,9 @@ function new(group,tileWidth,tileHeight)
       for j=1,5 do
         local position = board.tiles[i][j];
         if x > position.x and x < position.x+board.tileWidth and 
-          y > position.y and y < position.y+board.tileHeight and not position.hasBlock then
-		  position.hasBlock = true
+          y > position.y and y < position.y+board.tileHeight and not position.hasBlock 
+          and not position.hasObject then
+    		  position.hasBlock = true 
           return true,position.x,position.y
         end
       end

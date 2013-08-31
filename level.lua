@@ -89,13 +89,13 @@ function scene:generateBlocks (group,level)
 		local block = Block.newBlock(piecesList[i].name)		
 		local column = tileWidth*12		
 		block:setX(column)
-		block:setY(tileHeight+(tileHeight*i))
+		block:setY(tileHeight+(12*(i-1))+(tileHeight*i))
 		block:addToGroup(group)
 		block:setDragDelegate(onStartDragBlock)
 		block:setDragFailDelegate(onCancelDragBlock)
 		block:checkBlockPositionDelegate(canPlaceBlock)
 		block:checkIsInsideBoardDelegate(isInsideBoard)
-		local countText = display.newText(group,piecesList[i].count,column+tileWidth,tileHeight+(tileHeight*i),native.newFont("Arial"),12)
+		local countText = display.newText(group,piecesList[i].count,column+tileWidth,tileHeight+(12*(i))+(tileHeight*i),native.newFont("Arial"),12)
 		table.insert(textsPiecesCount,countText)
 	end
 end
@@ -124,8 +124,15 @@ function scene:createScene( event )
 		group:insert( bg )
 	end
 
-	timerBar = TimerBar.new(halfW-60,screenH-45,0.5)
+	timerBar = TimerBar.new(halfW-60,screenH-45,0.25)
 	timerBar:addToGroup(group)
+
+	local blocksBg = display.newImageRect(group, "hud.png", 94,250  )	
+	blocksBg.x = 400
+	blocksBg.y = 135
+
+	local column = tileWidth*11
+	display.newText(group,"Pontes",column+tileWidth,tileHeight,native.newFont("Arial"),12)
 
 	scene:generateBlocks(group,levelName)	
 end
