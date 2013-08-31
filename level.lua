@@ -22,6 +22,7 @@ local tileWidth, tileHeight = 32,32
 local piecesList
 local textsPiecesCount = {}
 local boardGrid 
+local draggingPiece = false
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -31,6 +32,43 @@ local boardGrid
 -- 
 -----------------------------------------------------------------------------------------
 
+local function onStartDragBlock(block)
+	if draggingPiece or block.placed then return true end
+	local piece = nil
+	for i=1,#piecesList do
+		piece = piecesList[i]
+		if piece.name == block.name and piece.count > 0 then
+			piece.count = piece.count - 1
+			piecesList[i].count = piece.count
+			textsPiecesCount[i].text = piece.count
+			draggingPiece = true
+			return true
+		end
+	end
+	return false
+end
+
+local function onCancelDragBlock(name)
+	local piece = nil	
+	for i=1,#piecesList do
+		piece = piecesList[i]
+		if piece.name == name then
+			piece.count = piece.count + 1
+			piecesList[i].count = piece.count
+			textsPiecesCount[i].text = piece.count
+		end
+	end
+end
+
+local function canPlaceBlock(x,y)
+	draggingPiece = false
+	return boardGrid:canPlaceBlock(x,y)
+end
+
+local function isInsideBoard(x,y)	
+	return boardGrid:blockIsInside(x,y)
+end
+
 function scene:generateBlocks (group,level)
 	piecesList = levelsData[level].pieces
 	for i=1,#piecesList do
@@ -39,6 +77,10 @@ function scene:generateBlocks (group,level)
 		block:setX(column)
 		block:setY(tileHeight+(tileHeight*i))
 		block:addToGroup(group)
+		block:setDragDelegate(onStartDragBlock)
+		block:setDragFailDelegate(onCancelDragBlock)
+		block:checkBlockPositionDelegate(canPlaceBlock)
+		block:checkIsInsideBoardDelegate(isInsideBoard)
 		local countText = display.newText(group,piecesList[i].count,column+tileWidth,tileHeight+(tileHeight*i),native.newFont("Arial"),12)
 		table.insert(textsPiecesCount,countText)
 	end

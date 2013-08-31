@@ -14,6 +14,8 @@ local names = {
   downstraight="downstraight"
 }
 
+local currentDragging = nil
+
 function newBlock(name)
   local block = {}
   block.name = name
@@ -25,6 +27,8 @@ function newBlock(name)
   block.onDragDelegate = nil
   block.onDragFailDelegate = nil
   block.checkBlockPositionDelegate = nil
+  block.checkIsInsideBoard = nil
+  block.placed = false
 
   function block:setDragDelegate(func)
 	self.onDragDelegate = func
@@ -36,6 +40,10 @@ function newBlock(name)
   
   function block:checkBlockPositionDelegate(func)
 	self.checkBlockPositionDelegate = func
+  end
+  
+  function block:checkIsInsideBoardDelegate(func)
+	self.checkIsInsideBoard = func
   end
   
   function block:addToGroup(group)
@@ -52,11 +60,11 @@ function newBlock(name)
   end
 
   function block:setX(x)
-    self.image.x = x+block.image.width/2
+    self.image.x = x+self.image.width/2
     self.x = x
   end
   function block:setY(y)
-    self.image.y = y+block.image.height/2
+    self.image.y = y+self.image.height/2
     self.y = y
   end
 
@@ -64,28 +72,42 @@ function newBlock(name)
     local duplicateBlock =  newBlock(self.name,0)    
     duplicateBlock:setX(self.x)
     duplicateBlock:setY(self.y)    
+	duplicateBlock:setDragDelegate(self.onDragDelegate)
+	duplicateBlock:setDragFailDelegate(self.onDragFailDelegate)
+	duplicateBlock:checkBlockPositionDelegate(self.checkBlockPositionDelegate)
+	duplicateBlock:checkIsInsideBoardDelegate(self.checkIsInsideBoard)	
     return duplicateBlock
   end
 
-  function block:isValidBoardPosition(board)
-	-- TODO: ligação com a função de checagem de board
-	return true
-  end
-  
   local isDragging = false
   
-  function block:touch(event)
-    if event.phase == "began" then
-	
-	elseif event.phase == "moved" then
-		if not isDragging then
-			if self.onDragDelegate then
-				self.onDragDelegate()
-			end
-			isDragging = true
+  function block:touch(event)		
+	if currentDragging ~= nil and currentDragging ~= self then 
+		return true 
+	end	
+    if event.phase == "began" then		
+		if self.checkIsInsideBoard then
+			local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)			
+			self.placed = valid
 		end
-		self:setX(event.x)
-		self:setY(event.y)
+		self.image:toFront()
+	elseif event.phase == "moved" then		
+		currentDragging = self
+		if not isDragging then
+			isDragging = true
+			if self.onDragDelegate and not self.onDragDelegate(self) then					
+				isDragging = false
+				return
+			end
+			if self.checkIsInsideBoard then
+				local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)
+				if not valid then
+					self:duplicate():addToGroup(self.image.parent)
+				end
+			end			
+		end
+		self:setX(event.x-block.image.width/2)
+		self:setY(event.y-block.image.height/2)
 	elseif event.phase == "ended" then
 		if isDragging then
 			if self.checkBlockPositionDelegate then
@@ -95,20 +117,17 @@ function newBlock(name)
 					self:setY(y)
 				else
 					if self.onDragFailDelegate then
-						self.onDragFailDelegate()
+						self.onDragFailDelegate(self.name)
 						self:destroy()
 					end
 				end
 			end
+			isDragging = false
 		else
 			block.image.rotation = block.image.rotation + 90
 		end
-	end
-	
-	if event.phase == "ended" then
-      print(self.image.parent)
-      self:duplicate():addToGroup(self.image.parent)
-    end
+		currentDragging = nil
+	end		
   end
 
   block.image:addEventListener("touch", block)
