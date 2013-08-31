@@ -47,18 +47,47 @@ function scene:createScene( event )
 	titleLogo.x = display.contentWidth * 0.5
 	titleLogo.y = 100
 	
-	-- create a widget button (which will loads level1.lua on release)
+	-- level select
 	playBtn = widget.newButton{
-		label="Play Now",
+		label="Jogar",
 		labelColor = { default={255}, over={128} },
 		defaultFile="button.png",
 		overFile="button-over.png",
 		width=154, height=40,
 		onRelease = onPlayBtnRelease	-- event listener function
 	}
+	
+	-- audio config
+	confBtn = widget.newButton{
+		label="Audio",
+		labelColor = { default={255}, over={128} },
+		defaultFile="button.png",
+		overFile="button-over.png",
+		width=154, height=40,
+		onRelease = onPlayBtnRelease	-- event listener function
+	}
+	
+	-- credits
+	creditsBtn = widget.newButton{
+		label="Créditos",
+		labelColor = { default={255}, over={128} },
+		defaultFile="button.png",
+		overFile="button-over.png",
+		width=154, height=40,
+		onRelease = onPlayBtnRelease	-- event listener function
+	}
+	
 	playBtn:setReferencePoint( display.CenterReferencePoint )
-	playBtn.x = display.contentWidth*0.5
+	playBtn.x = display.contentWidth*0.66
 	playBtn.y = display.contentHeight - 125
+	
+	confBtn:setReferencePoint( display.CenterReferencePoint )
+	confBtn.x = display.contentWidth*0.8
+	confBtn.y = display.contentHeight - 40
+	
+	creditsBtn:setReferencePoint( display.CenterReferencePoint )
+	creditsBtn.x = display.contentWidth*0.66
+	creditsBtn.y = display.contentHeight - 85
 	
 	-- all display objects must be inserted into group
 	group:insert( background )
