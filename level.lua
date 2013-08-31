@@ -9,6 +9,7 @@ local scene = storyboard.newScene()
 local levelsData = require("levelsdata")
 local Block = require("block")
 local Board = require("board")
+local TimerBar = require("timerBar")
 
 -- include Corona's "physics" library
 -- local physics = require "physics"
@@ -23,6 +24,7 @@ local piecesList
 local textsPiecesCount = {}
 local boardGrid 
 local draggingPiece = false
+local timerBar
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -97,17 +99,18 @@ function scene:createScene( event )
 	bg.x,bg.y = 0, 0 	
 	-- all display objects must be inserted into group
 	group:insert( bg )	
-
+	
 	boardGrid = Board.new(group,tileWidth,tileHeight)
 	boardGrid:createTiles(group)
-
-	scene:generateBlocks(group,"level1")	
+	timerBar = TimerBar.new(halfW-60,screenH-45,0.5)
+	timerBar:addToGroup(group)
+	scene:generateBlocks(group,"level1")
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	
+	timerBar.active = true
 	-- physics.start()
 	
 end
