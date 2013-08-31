@@ -17,6 +17,9 @@ local blocks = require("block")
 
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
+local tileWidth, tileHeight = 32,32
+local piecesList
+local textsPiecesCount = {}
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -29,28 +32,24 @@ local screenW, screenH, halfW = display.contentWidth, display.contentHeight, dis
 function scene:createBoard (group)
 	for i=1,5 do
 		for j=1,5 do
-			local crate = display.newImageRect("crate.png",32,32)
+			local crate = display.newImageRect("crate.png",tileWidth,tileHeight)
 			crate:setReferencePoint(display.TopLeftReferencePoint)
-			crate.x,crate.y = 64+(32*i),32+(32*j)
+			crate.x,crate.y = tileWidth*2+(tileWidth*i),tileHeight+(tileHeight*j)
 			group:insert( crate )
 		end		
 	end	
 end
 
 function scene:generateBlocks (group,level)
-	print(levelsData,blocks)
-	local pieces = levelsData[level].pieces
-	for i=1,#pieces do
-		local block = blocks.newBlock(pieces[i].name,pieces[i].rot)		
-		local column = 384
-		local yPadding = i
-		if i > 6 then
-			column = 416
-			yPadding = i-6
-		end
+	piecesList = levelsData[level].pieces
+	for i=1,#piecesList do
+		local block = blocks.newBlock(piecesList[i].name)		
+		local column = tileWidth*12		
 		block:setX(column)
-		block:setY(32+(32*yPadding))
-		group:insert( block ) 
+		block:setY(tileHeight+(tileHeight*i))
+		block:addToGroup(group)
+		local countText = display.newText(group,piecesList[i].count,column+tileWidth,tileHeight+(tileHeight*i),native.newFont("Arial"),12)
+		table.insert(textsPiecesCount,countText)
 	end
 end
 
@@ -66,7 +65,7 @@ function scene:createScene( event )
 	group:insert( bg )	
 
 	scene:createBoard(group)
-	scene:generateBlocks(group,"level1")
+	scene:generateBlocks(group,"level1")	
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -89,6 +88,8 @@ end
 function scene:destroyScene( event )
 	local group = self.view
 	
+	pieceList = nil
+	textsPiecesCount = nil	
 	-- package.loaded[physics] = nil
 	-- physics = nil
 end
