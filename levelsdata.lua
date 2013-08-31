@@ -5,7 +5,7 @@ local levels = {
       {{tileType=""},{tileType="stone"},{tileType="block",name="powercurve",rotation=180},{tileType=""},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
-      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
+      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="block", name="powercurve", rotation=0}},
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""}}
     },
     arrows = {
