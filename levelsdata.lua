@@ -1,10 +1,3 @@
---carrega
-local SC = require ("soundControl")
-
-
-
-
-
 local levels = {
   level1 = {
     bgImg = "good_scene01.png",
