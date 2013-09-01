@@ -41,9 +41,9 @@ local badScreenFile = "tela_ruim.png"
 ------------------------
 -- Block delegates
 ------------------------
-local function onStartDragBlock(block)
-	if draggingPiece or block.placed then return true end
+local function onStartDragBlock(block)	
 	boardGrid:invalidatePosition(block.x, block.y)
+	if draggingPiece or block.placed then return true end		
 	local piece = nil
 	for i=1,#piecesList do
 		piece = piecesList[i]

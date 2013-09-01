@@ -30,13 +30,14 @@ function new(group,tileWidth,tileHeight)
     return x >= board.x and x <= board.xMax and y >= board.y and y <= board.yMax
   end
 
-  function board:invalidatePosition(x,y)
+  function board:invalidatePosition(x,y)    
 	if not self:blockIsInside(x,y) then return end
+  print("Invalidanting Started",self:blockIsInside(x,y))
 	for i=1,5 do
       for j=1,5 do
         local position = board.tiles[i][j];
-        if x > position.x and x < position.x+board.tileWidth and 
-          y > position.y and y < position.y+board.tileHeight and position.hasBlock then
+        if x >= position.x and x <= position.x+board.tileWidth and 
+          y >= position.y and y <= position.y+board.tileHeight and position.hasBlock then
       		  board.tiles[i][j].hasBlock = false
         end
       end

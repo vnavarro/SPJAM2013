@@ -91,60 +91,67 @@ function newBlock(name)
 
   local isDragging = false
   
-  function block:touch(event)		
+  -- local blockTouch = function(event)	
+  function block:touch(event)
   	if currentDragging ~= nil and currentDragging ~= self then 
   		return true 
   	end	
     if event.phase == "began" then		
-		if self.checkIsInsideBoard then
-			local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)			
-			self.placed = valid
-		end
-		self.image:toFront()
-	elseif event.phase == "moved" then		
-		currentDragging = self
-		if not isDragging then
-			isDragging = true
-			if self.onDragDelegate and not self.onDragDelegate(self) then					
-				isDragging = false
-        currentDragging = nil
-				return
-			end
-			if self.checkIsInsideBoard then
-				local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)
-				if not valid then
-					self:duplicate():addToGroup(self.image.parent)
-				end
-			end
-		end
-		self:setX(event.x-self.image.width/2)
-		self:setY(event.y-self.image.height/2)
-	elseif event.phase == "ended" then
-		if isDragging then
-			if self.checkBlockPositionDelegate then
-				local valid, x, y = self.checkBlockPositionDelegate(self.image.x, self.image.y)
-				if valid then
-					self:setX(x)
-					self:setY(y)
-          self.onBlockInserted(self)
-				else
-					if self.onDragFailDelegate then
-						self.onDragFailDelegate(self.name)
-						self:destroy()
-					end
-				end
-			end
-			isDragging = false
-		else
-			if CurrentDragging == self or not CurrentDragging then
-				self.image.rotation = self.image.rotation + 90
-			end
-		end
-		currentDragging = nil
-	end		
+  		if self.checkIsInsideBoard then
+  			local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)			
+  			self.placed = valid
+  		end
+  		self.image:toFront()
+
+      display.getCurrentStage():setFocus( self.image )
+      self.image.isFocus = true
+  	elseif event.phase == "moved" then		
+  		currentDragging = self
+  		if not isDragging then
+  			isDragging = true
+  			if self.onDragDelegate and not self.onDragDelegate(self) then					
+  				isDragging = false
+          currentDragging = nil
+  				return
+  			end
+  			if self.checkIsInsideBoard then
+  				local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)
+  				if not valid then
+  					self:duplicate():addToGroup(self.image.parent)
+  				end
+  			end
+  		end
+  		self:setX(event.x-self.image.width/2)
+  		self:setY(event.y-self.image.height/2)
+  	elseif event.phase == "ended" then
+  		if isDragging then
+  			if self.checkBlockPositionDelegate then
+  				local valid, x, y = self.checkBlockPositionDelegate(self.image.x, self.image.y)
+  				if valid then
+  					self:setX(x)
+  					self:setY(y)
+            self.onBlockInserted(self)
+  				else
+  					if self.onDragFailDelegate then
+  						self.onDragFailDelegate(self.name)
+  						self:destroy()
+  					end
+  				end
+  			end
+  			isDragging = false
+  		else
+  			if CurrentDragging == self or not CurrentDragging then
+  				self.image.rotation = self.image.rotation + 90
+  			end
+  		end
+  		currentDragging = nil
+      display.getCurrentStage():setFocus( nil )
+      self.isFocus = nil
+  	end		
   end
 
   block.image:addEventListener("touch", block)
+  -- Runtime:addEventListener("touch", blockTouch)
 
   return block
 end
