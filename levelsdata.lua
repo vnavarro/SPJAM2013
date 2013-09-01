@@ -33,7 +33,7 @@ local levels = {
     bgImg = "good_scene01.png",
     board = {
       {{tileType="stone"},{tileType="stone"},{tileType="block",name="powercurve",rotation=180},{tileType=""},{tileType=""}},
-      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
+      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="block", name="downcurve", rotation=0}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType=""}}
@@ -69,13 +69,13 @@ local levels = {
     bgImg = "tela_ruim.png",
     board = {
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType="stone"}},
-      {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
+      {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType="block", name="downcurve", rotation=180}},
-      {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""}},
+      {{tileType="stone"},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType="stone"},{tileType="stone"}}
     },
     arrows = {
-      {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
+      -- {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
       -- {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
       {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24}
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
@@ -100,21 +100,21 @@ local levels = {
     level4 = {
     bgImg = "good_scene01.png",
     board = {
-      {{tileType=""},{tileType=""},{tileType="stone"},{tileType="stone"},{tileType="stone"}},
-      {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType="stone"}},
+      {{tileType=""},{tileType="block", name="downcurve", rotation = 0},{tileType="stone"},{tileType="stone"},{tileType="stone"}},
+      {{tileType="stone"},{tileType="block", name="downcurve", rotation = 180},{tileType=""},{tileType=""},{tileType="stone"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType="block", name="powerstraight", rotation=90}},
       {{tileType=""},{tileType="stone"},{tileType="stone"},{tileType=""},{tileType="stone"}}
     },
     arrows = {
-      {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
+      -- {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
       {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
-      {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24},
+      -- {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24},
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
       {name="powercurve",count=0},{name="downstraight",count=1},
-      {name="downcurve",count=8},{name="powerstraight",count=2}
+      {name="downcurve",count=8},{name="powerstraight",count=1}
     },
 	startPos = "right",
 	solution = {
@@ -130,23 +130,24 @@ local levels = {
 	}
   },
     level5 = {
-    bgImg = "tela_ruim.png",
+    -- bgImg = "tela_ruim.png",
+    bgImg = "good_scene01.png",
     board = {
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType="stone"}},
-      {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
+      {{tileType=""},{tileType=""},{tileType="block", name = "downcurve", rotation=270},{tileType=""},{tileType=""}},
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
-      {{tileType="stone"},{tileType="stone"},{tileType="block", name="downcurve", rotation=270},{tileType=""},{tileType="stone"}}
+      {{tileType="stone"},{tileType="stone"},{tileType="block", name="powercurve", rotation=270},{tileType=""},{tileType="stone"}}
     },
     arrows = {
       -- {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36}
-      {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
+      -- {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
       {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24},
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
-      {name="powercurve",count=0},{name="downstraight",count=1},
-      {name="downcurve",count=3},{name="powerstraight",count=3}
+      {name="powercurve",count=4},{name="downstraight",count=1},
+      {name="downcurve",count=6},{name="powerstraight",count=1}
     },
 	startPos = "down",
 	solution = {
@@ -159,16 +160,16 @@ local levels = {
 	  {position = {x=2,y=3}, name = "downcurve", rotation=180},
 	  {position = {x=3,y=3}, name = "downcurve", rotation=90},
 	  {position = {x=5,y=3}, name = "powerstraight", rotation=0},
-	  {position = {x=4,y=4}, name = "downcurve", rotation=270},
+	  {position = {x=4,y=4}, name = "powercurve", rotation=270},
 	  {position = {x=5,y=4}, name = "powercurve", rotation=90},
-	  {position = {x=3,y=5}, name = "downcurve", rotation=270},
-	  {position = {x=4,y=5}, name = "downcurve", rotation=90},
+	  {position = {x=3,y=5}, name = "powercurve", rotation=270},
+	  {position = {x=4,y=5}, name = "powercurve", rotation=90},
 	}
   },
     level6 = {
     bgImg = "tela_ruim.png",
     board = {
-      {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
+      {{tileType="stone"},{tileType=""},{tileType=""},{tileType="block", name = "downcurve", rotation = 0},{tileType=""}},
       {{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType="stone"},{tileType="stone"},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="block", name="downcurve", rotation=180}},
