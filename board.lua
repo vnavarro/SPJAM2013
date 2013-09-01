@@ -20,7 +20,6 @@ function new(group,tileWidth,tileHeight)
       local rowTiles = {}
       for j=1,5 do
         local tx, ty = tileWidth*2+(tileWidth*j),tileHeight+(tileHeight*i)
-        print(tx,ty)
         table.insert(rowTiles,{x=tx, y=ty, hasBlock = false})
       end   
       table.insert(board.tiles,rowTiles)

@@ -11,10 +11,6 @@ local Block = require("block")
 local Board = require("board")
 local TimerBar = require("timerBar")
 
--- include Corona's "physics" library
--- local physics = require "physics"
--- physics.start(); physics.pause()
-
 --------------------------------------------
 
 -- forward declarations and other locals
@@ -25,6 +21,8 @@ local textsPiecesCount = {}
 local boardGrid 
 local draggingPiece = false
 local timerBar
+local changedToBad = false
+local badScreenFile = "tela_ruim.png"
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -70,6 +68,17 @@ local function onCancelDragBlock(name)
 	end
 end
 
+local function onBlockInsertedDelegate(block)
+	if block:isDown() then
+		timerBar.speed = timerBar.speed + 0.025
+		scene:changeToBad()
+	end
+end
+
+------------------------
+-- Scene other 
+------------------------
+
 local function canPlaceBlock(x,y)
 	draggingPiece = false
 	return boardGrid:canPlaceBlock(x,y)
@@ -79,9 +88,22 @@ local function isInsideBoard(x,y)
 	return boardGrid:blockIsInside(x,y)
 end
 
-------------------------
--- Scene delegates
-------------------------
+function scene:hasChangedToBad()
+	return changedToBad
+end
+
+function scene:changeToBad()
+	if self:hasChangedToBad() then return end
+	local bg = display.newImageRect( "tela_ruim.png", screenW, screenH )
+	bg:setReferencePoint(display.TopLeftReferencePoint)
+	bg.x,bg.y = 0, 0 	
+	bg.alpha = 0
+	self.view:insert(2,bg)
+	transition.to(bg, {time = 800, alpha = 1, onComplete = function() 
+		self.view.bg:removeSelf()
+		end})
+	changedToBad = true
+end
 
 function scene:generateBlocks (group,level)	
 	piecesList = levelsData[level].pieces
@@ -95,10 +117,15 @@ function scene:generateBlocks (group,level)
 		block:setDragFailDelegate(onCancelDragBlock)
 		block:checkBlockPositionDelegate(canPlaceBlock)
 		block:checkIsInsideBoardDelegate(isInsideBoard)
+		block.onBlockInserted = onBlockInsertedDelegate
 		local countText = display.newText(group,piecesList[i].count,column+tileWidth+2,tileHeight+(8*(i))+(tileHeight*i),"Braxton",20)
 		table.insert(textsPiecesCount,countText)
 	end
 end
+
+------------------------
+-- Scene delegates
+------------------------
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
@@ -107,11 +134,15 @@ function scene:createScene( event )
 	local levelName = "level"..event.params.level
 
 	-- create a grey rectangle as the backdrop
-	local bg = display.newImageRect( levelsData[levelName].bgImg, screenW, screenH )
-	bg:setReferencePoint(display.TopLeftReferencePoint)
-	bg.x,bg.y = 0, 0 	
+	local bgImg = levelsData[levelName].bgImg
+	if bgImg == badScreenFile then
+		changedToBad = true		
+	end
+	group.bg = display.newImageRect( bgImg, screenW, screenH )
+	group.bg:setReferencePoint(display.TopLeftReferencePoint)
+	group.bg.x,group.bg.y = 0, 0 	
 	-- all display objects must be inserted into group
-	group:insert( bg )	
+	group:insert( group.bg )	
 	
 	boardGrid = Board.new(group,tileWidth,tileHeight)
 	boardGrid:createTiles(group)	
@@ -125,7 +156,11 @@ function scene:createScene( event )
 		group:insert( bg )
 	end
 
-	timerBar = TimerBar.new(halfW-60,screenH-45,0.25)
+	local speed = 0.25
+	if changedToBad then
+		speed = 0.275
+	end
+	timerBar = TimerBar.new(halfW-60,screenH-45,speed)
 	timerBar:addToGroup(group)
 
 	local blocksBg = display.newImageRect(group, "hud.png", 94,250  )	
@@ -142,15 +177,13 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	timerBar.active = true
-	-- physics.start()
 	
 end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
 	local group = self.view
-	
-	-- physics.stop()
+	timerBar.active = false
 	
 end
 
@@ -160,8 +193,6 @@ function scene:destroyScene( event )
 	
 	pieceList = nil
 	textsPiecesCount = nil	
-	-- package.loaded[physics] = nil
-	-- physics = nil
 end
 
 -----------------------------------------------------------------------------------------

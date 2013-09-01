@@ -28,6 +28,7 @@ function newBlock(name)
   block.onDragFailDelegate = nil
   block.checkBlockPositionDelegate = nil
   block.checkIsInsideBoard = nil
+  block.onBlockInserted = nil
   block.placed = false
 
   function block:setDragDelegate(func)
@@ -80,7 +81,12 @@ function newBlock(name)
     duplicateBlock:setDragFailDelegate(self.onDragFailDelegate)
     duplicateBlock:checkBlockPositionDelegate(self.checkBlockPositionDelegate)
     duplicateBlock:checkIsInsideBoardDelegate(self.checkIsInsideBoard)	
+    duplicateBlock.onBlockInserted = self.onBlockInserted    
     return duplicateBlock
+  end
+
+  function block:isDown()
+    return block.name == names.downcurve or block.name == names.downstraight
   end
 
   local isDragging = false
@@ -120,6 +126,7 @@ function newBlock(name)
 				if valid then
 					self:setX(x)
 					self:setY(y)
+          self.onBlockInserted(self)
 				else
 					if self.onDragFailDelegate then
 						self.onDragFailDelegate(self.name)
