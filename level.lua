@@ -96,7 +96,7 @@ end
 
 local function onEndedRotation(event)	
 	boardGrid:updateBlockAt(event)
-	if boardGrid:checkIfWon(levelsData[levelName].solution) then
+	if boardGrid:blockIsInside(event.x,event.y) and  boardGrid:checkIfWon(levelsData[levelName].solution) then
 		print("WON")
 		scene:won()
 	end
@@ -282,7 +282,7 @@ function scene:createScene( event )
 		group:insert( bg )
 	end
 
-	local speed = 3--0.25
+	local speed = 0.25
 	if changedToBad then
 		speed = 0.275
 	end
@@ -323,7 +323,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	timerBar.active = false
+	timerBar.active = true
 	
 end
 
