@@ -30,30 +30,48 @@ function new(group,tileWidth,tileHeight)
     return x >= board.x and x <= board.xMax and y >= board.y and y <= board.yMax
   end
 
-  function board:invalidatePosition(x,y)
-	if not self:blockIsInside(x,y) then return end
-	for i=1,5 do
+  function board:invalidatePosition(x,y)    
+  	if not self:blockIsInside(x,y) then return end
+  	for i=1,5 do
       for j=1,5 do
         local position = board.tiles[i][j];
-        if x > position.x and x < position.x+board.tileWidth and 
-          y > position.y and y < position.y+board.tileHeight and position.hasBlock then
-      		  board.tiles[i][j].hasBlock = false
+        if x >= position.x and x <= position.x+board.tileWidth and 
+          y >= position.y and y <= position.y+board.tileHeight and position.hasBlock then
+      		  position.hasBlock = false
+            position.name = nil
+            position.rotation = -1
+        end
+      end
+    end
+  end
+
+  function board:updateBlockAt(event)    
+    if not self:blockIsInside(event.x,event.y) then return end    
+    for i=1,5 do
+      for j=1,5 do
+        local position = board.tiles[i][j];
+        if event.x >= position.x and event.x <= position.x+board.tileWidth and 
+          event.y >= position.y and event.y <= position.y+board.tileHeight and position.hasBlock then
+            position.name = event.name
+            position.rotation = event.rot
         end
       end
     end
   end
   
-  function board:canPlaceBlock(x,y)
-    if not self:blockIsInside(x,y) then
+  function board:canPlaceBlock(event)
+    if not self:blockIsInside(event.x,event.y) then
       return false
     end
     for i=1,5 do
       for j=1,5 do
-        local position = board.tiles[i][j];
-        if x > position.x and x < position.x+board.tileWidth and 
-          y > position.y and y < position.y+board.tileHeight and not position.hasBlock 
+        local position = board.tiles[i][j]
+        if event.x > position.x and event.x < position.x+board.tileWidth and 
+          event.y > position.y and event.y < position.y+board.tileHeight and not position.hasBlock 
           and not position.hasObject then
     		  position.hasBlock = true 
+          position.name = event.name
+          position.rotation = event.rot
           return true,position.x,position.y
         end
       end
@@ -71,16 +89,33 @@ function new(group,tileWidth,tileHeight)
           stone.x,stone.y = self.tileWidth*2+(self.tileWidth*j),self.tileHeight+(self.tileHeight*i)
         elseif boardData[i][j].tileType == "block" then
           self.tiles[i][j].hasBlock = true
+          self.tiles[i][j].name = boardData[i][j].name
+          self.tiles[i][j].rotation = boardData[i][j].rotation
+
           local block = Block.newBlock(boardData[i][j].name)
           block:setRotation(boardData[i][j].rotation)
           block:setX(self.tiles[i][j].x)
           block:setY(self.tiles[i][j].y)
           block:addToGroup(self.group)
           block.placed = true
+
           block.image:removeEventListener("touch", block)
         end
       end      
     end
+  end
+
+  function board:checkIfWon(solution)
+    local count = 0
+    for i=1,#solution do
+      local blockSolution = solution[i]
+      local position = self.tiles[blockSolution.position.y][blockSolution.position.x]      
+      if position.name == blockSolution.name and 
+        position.rotation == blockSolution.rotation and position.hasBlock then
+        count = count +1
+      end      
+    end
+    return count == #solution
   end
 
   return board

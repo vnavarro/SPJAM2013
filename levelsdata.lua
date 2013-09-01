@@ -2,6 +2,12 @@
 local SC = require ("soundControl")
 SC.stopAll()
 
+  -- dando play no som "tranquilo"
+    -- audio.fadeOut({ channel=SC.MENU_SELECTED, time=500 } )
+    SC.loadSound( SC.TRANKSMUSIK )
+    SC.playSound( SC.TRANKSMUSIK, true, "-1", nil ) 
+
+
 local levels = {
   level1 = {
     bgImg = "good_scene01.png",
@@ -40,7 +46,7 @@ local levels = {
       {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""}},
-      {{tileType="stone"},{tileType=""},{tileType=""},{tileType="stone"},{tileType=""}}
+      {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType=""}}
     },
     arrows = {
       -- {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
@@ -170,12 +176,12 @@ local levels = {
 	}
   },
     level6 = {
-    bgImg = "good_scene01.png",
+    bgImg = "tela_ruim.png",
     board = {
-      {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
-      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
-      {{tileType="stone"},{tileType=""},{tileType="stone"},{tileType="stone"},{tileType=""}},
-      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="block", name="powercurve", rotation=180}},
+      {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
+      {{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""},{tileType=""}},
+      {{tileType=""},{tileType=""},{tileType="stone"},{tileType="stone"},{tileType=""}},
+      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="block", name="downcurve", rotation=180}},
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType=""},{tileType="stone"}}
     },
     arrows = {
@@ -185,10 +191,23 @@ local levels = {
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
-      {name="powercurve",count=4},{name="downstraight",count=0},
-      {name="downcurve",count=0},{name="powerstraight",count=5}
+      {name="powercurve",count=0},{name="downstraight",count=3},
+      {name="downcurve",count=8},{name="powerstraight",count=0}
     },
-	startPos = "right"
+	 startPos = "right",
+   solution = {
+      {position = {x=2,y=1}, name = "downcurve", rotation=270},
+      {position = {x=3,y=1}, name = "downstraight", rotation=90},
+      {position = {x=4,y=1}, name = "downcurve", rotation=0},
+      {position = {x=2,y=2}, name = "downstraight", rotation=0},
+      {position = {x=4,y=2}, name = "downcurve", rotation=180},
+      {position = {x=5,y=2}, name = "downcurve", rotation=0},
+      {position = {x=1,y=3}, name = "downcurve", rotation=270},
+      {position = {x=2,y=3}, name = "downcurve", rotation=90},
+      {position = {x=5,y=3}, name = "downstraight", rotation=0},
+      {position = {x=1,y=4}, name = "downcurve", rotation=90},
+      {position = {x=5,y=4}, name = "downcurve", rotation=180},
+    }
   },
 }
 

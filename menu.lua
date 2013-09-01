@@ -114,7 +114,8 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	-- add random sound
+	
+	-- add menu sound
 	if not SC.isPlaying(SC.MENU_SELECTED) then
 		SC.loadSound( SC.MENU_SELECTED )
 		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 

@@ -11,6 +11,9 @@ local Block = require("block")
 local Board = require("board")
 local TimerBar = require("timerBar")
 local SelinaSprite = require("selina")
+--class sounds
+local SC = require ("soundControl")
+
 
 --------------------------------------------
 
@@ -25,6 +28,7 @@ local timerBar
 local selina
 local changedToBad = false
 local badScreenFile = "tela_ruim.png"
+local levelName
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -41,9 +45,9 @@ local badScreenFile = "tela_ruim.png"
 ------------------------
 -- Block delegates
 ------------------------
-local function onStartDragBlock(block)
-	if draggingPiece or block.placed then return true end
+local function onStartDragBlock(block)	
 	boardGrid:invalidatePosition(block.x, block.y)
+	if draggingPiece or block.placed then return true end		
 	local piece = nil
 	for i=1,#piecesList do
 		piece = piecesList[i]
@@ -71,10 +75,16 @@ local function onCancelDragBlock(name)
 end
 
 local function onBlockInsertedDelegate(block)
+	print("WON",boardGrid:checkIfWon(levelsData[levelName].solution))
 	if block:isDown() then
 		timerBar.speed = timerBar.speed + 0.025
-		scene:changeToBad()
+		scene:changeToBad()		
 	end
+end
+
+local function onEndedRotation(event)	
+	boardGrid:updateBlockAt(event)
+	print("WON",boardGrid:checkIfWon(levelsData[levelName].solution))
 end
 
 ------------------------
@@ -90,9 +100,10 @@ end
 -- Scene other 
 ------------------------
 
-local function canPlaceBlock(x,y)
+local function canPlaceBlock(event)
 	draggingPiece = false
-	return boardGrid:canPlaceBlock(x,y)
+	print(event.name,event.rot,event.x,event.y)
+	return boardGrid:canPlaceBlock(event)
 end
 
 local function isInsideBoard(x,y)	
@@ -114,7 +125,19 @@ function scene:changeToBad()
 		self.view.bg:removeSelf()
 		end})
 	changedToBad = true
+
+		-- change to bad scene
+		if ( changedToBad == true ) then
+			SC.stopAll()
+		    SC.loadSound( SC.DANGERGO )
+		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
+		    SC.loadSound( SC.DANGERSOUND )
+		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+		end
+
 end
+
+
 
 function scene:generateBlocks (group,level)	
 	piecesList = levelsData[level].pieces
@@ -129,6 +152,7 @@ function scene:generateBlocks (group,level)
 		block:checkBlockPositionDelegate(canPlaceBlock)
 		block:checkIsInsideBoardDelegate(isInsideBoard)
 		block.onBlockInserted = onBlockInsertedDelegate
+		block.onEndedRotation = onEndedRotation
 		local countText = display.newText(group,piecesList[i].count,column+tileWidth+2,tileHeight+(8*(i))+(tileHeight*i),"Braxton",20)
 		table.insert(textsPiecesCount,countText)
 	end
@@ -142,7 +166,7 @@ end
 function scene:createScene( event )
 	local group = self.view
 
-	local levelName = "level"..event.params.level
+	levelName = "level"..event.params.level
 	local levelData = levelsData[levelName]
 
 	-- create a grey rectangle as the backdrop
@@ -159,6 +183,8 @@ function scene:createScene( event )
 	boardGrid = Board.new(group,tileWidth,tileHeight)
 	boardGrid:createTiles(group)	
 	boardGrid:setupGridImages(levelData.board)
+	boardGrid.solution = levelData.solution
+
 	if levelData.startPos == "up" then
 		selina = SelinaSprite.new(177,30,group)
 	elseif levelData.startPos == "right" then
