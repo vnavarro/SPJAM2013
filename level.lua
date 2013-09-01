@@ -10,6 +10,7 @@ local levelsData = require("levelsdata")
 local Block = require("block")
 local Board = require("board")
 local TimerBar = require("timerBar")
+local SelinaSprite = require("selina")
 
 -- include Corona's "physics" library
 -- local physics = require "physics"
@@ -25,6 +26,7 @@ local textsPiecesCount = {}
 local boardGrid 
 local draggingPiece = false
 local timerBar
+local selina
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -105,9 +107,10 @@ function scene:createScene( event )
 	local group = self.view
 
 	local levelName = "level"..event.params.level
+	local levelData = levelsData[levelName]
 
 	-- create a grey rectangle as the backdrop
-	local bg = display.newImageRect( levelsData[levelName].bgImg, screenW, screenH )
+	local bg = display.newImageRect( levelData.bgImg, screenW, screenH )
 	bg:setReferencePoint(display.TopLeftReferencePoint)
 	bg.x,bg.y = 0, 0 	
 	-- all display objects must be inserted into group
@@ -115,9 +118,18 @@ function scene:createScene( event )
 	
 	boardGrid = Board.new(group,tileWidth,tileHeight)
 	boardGrid:createTiles(group)	
-	boardGrid:setupGridImages(levelsData[levelName].board)
-
-	local arrows = levelsData[levelName].arrows
+	boardGrid:setupGridImages(levelData.board)
+	if levelData.startPos == "up" then
+		selina = SelinaSprite.new(177,30,group)
+	elseif levelData.startPos == "right" then
+		selina = SelinaSprite.new(280,135,group)
+	elseif levelData.startPos == "down" then
+		selina = SelinaSprite.new(177,255,group)
+	end
+	
+	selina:animate()
+	
+	local arrows = levelData.arrows
 	for k,arrow in pairs(arrows) do
 		local bg = display.newImageRect( arrow.img, arrow.w,arrow.h )
 		bg:setReferencePoint(display.CenterReferencePoint)
@@ -125,7 +137,11 @@ function scene:createScene( event )
 		group:insert( bg )
 	end
 
-	timerBar = TimerBar.new(halfW-60,screenH-45,0.25)
+	if levelData.startPos == "down" then
+		timerBar = TimerBar.new(halfW-60,40,0.25)
+	else
+		timerBar = TimerBar.new(halfW-60,screenH-45,0.25)
+	end
 	timerBar:addToGroup(group)
 
 	local blocksBg = display.newImageRect(group, "hud.png", 94,250  )	

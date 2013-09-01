@@ -56,7 +56,7 @@ function new(x, y, speed)
 		if not lastUpdate then lastUpdate = event.time end
 		timerBar.monsterPos = timerBar.monsterPos + timerBar.speed * ((event.time-lastUpdate)/1000) * (timerBar.limit/10)
 		timerBar.monsterSprite.x = timerBar.monsterPos + timerBar.x - timerBar.limit/2
-		timerBar.frontBarSprite.maskX = timerBar.monsterPos + timerBar.x - timerBar.frontBarSprite.width - 40
+		timerBar.frontBarSprite.maskX = timerBar.monsterPos + timerBar.x - timerBar.frontBarSprite.width - 45
 		if timerBar.monsterPos >= timerBar.limit then
 			Runtime:removeEventListener("enterFrame", updateTimerBar)
 			Runtime:dispatchEvent(timerBar.expiredTimeEvent)
