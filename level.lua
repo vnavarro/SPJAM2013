@@ -25,6 +25,7 @@ local timerBar
 local selina
 local changedToBad = false
 local badScreenFile = "tela_ruim.png"
+local levelName
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -71,10 +72,16 @@ local function onCancelDragBlock(name)
 end
 
 local function onBlockInsertedDelegate(block)
+	print("WON",boardGrid:checkIfWon(levelsData[levelName].solution))
 	if block:isDown() then
 		timerBar.speed = timerBar.speed + 0.025
-		scene:changeToBad()
+		scene:changeToBad()		
 	end
+end
+
+local function onEndedRotation(event)	
+	boardGrid:updateBlockAt(event)
+	print("WON",boardGrid:checkIfWon(levelsData[levelName].solution))
 end
 
 ------------------------
@@ -89,9 +96,10 @@ end
 -- Scene other 
 ------------------------
 
-local function canPlaceBlock(x,y)
+local function canPlaceBlock(event)
 	draggingPiece = false
-	return boardGrid:canPlaceBlock(x,y)
+	print(event.name,event.rot,event.x,event.y)
+	return boardGrid:canPlaceBlock(event)
 end
 
 local function isInsideBoard(x,y)	
@@ -128,6 +136,7 @@ function scene:generateBlocks (group,level)
 		block:checkBlockPositionDelegate(canPlaceBlock)
 		block:checkIsInsideBoardDelegate(isInsideBoard)
 		block.onBlockInserted = onBlockInsertedDelegate
+		block.onEndedRotation = onEndedRotation
 		local countText = display.newText(group,piecesList[i].count,column+tileWidth+2,tileHeight+(8*(i))+(tileHeight*i),"Braxton",20)
 		table.insert(textsPiecesCount,countText)
 	end
@@ -141,7 +150,7 @@ end
 function scene:createScene( event )
 	local group = self.view
 
-	local levelName = "level"..event.params.level
+	levelName = "level"..event.params.level
 	local levelData = levelsData[levelName]
 
 	-- create a grey rectangle as the backdrop
@@ -158,6 +167,8 @@ function scene:createScene( event )
 	boardGrid = Board.new(group,tileWidth,tileHeight)
 	boardGrid:createTiles(group)	
 	boardGrid:setupGridImages(levelData.board)
+	boardGrid.solution = levelData.solution
+
 	if levelData.startPos == "up" then
 		selina = SelinaSprite.new(177,30,group)
 	elseif levelData.startPos == "right" then

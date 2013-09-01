@@ -29,6 +29,7 @@ function newBlock(name)
   block.checkBlockPositionDelegate = nil
   block.checkIsInsideBoard = nil
   block.onBlockInserted = nil
+  block.onEndedRotation = nil
   block.placed = false
 
   function block:setDragDelegate(func)
@@ -52,11 +53,8 @@ function newBlock(name)
   end
 
   function block:destroy()
-	self.image:removeEventListener("touch", self)
+  	self.image:removeEventListener("touch", self)
     self.image:removeSelf()
-	self.onDragDelegate = nil
-	self.onDragFailDelegate = nil
-	self.checkBlockPositionDelegate = nil
     self = nil;
   end
 
@@ -82,6 +80,7 @@ function newBlock(name)
     duplicateBlock:checkBlockPositionDelegate(self.checkBlockPositionDelegate)
     duplicateBlock:checkIsInsideBoardDelegate(self.checkIsInsideBoard)	
     duplicateBlock.onBlockInserted = self.onBlockInserted    
+    duplicateBlock.onEndedRotation = self.onEndedRotation
     return duplicateBlock
   end
 
@@ -126,7 +125,7 @@ function newBlock(name)
   	elseif event.phase == "ended" then
   		if isDragging then
   			if self.checkBlockPositionDelegate then
-  				local valid, x, y = self.checkBlockPositionDelegate(self.image.x, self.image.y)
+  				local valid, x, y = self.checkBlockPositionDelegate({x=self.image.x, y=self.image.y,name=self.name,rot=self.image.rotation})
   				if valid then
   					self:setX(x)
   					self:setY(y)
@@ -142,6 +141,12 @@ function newBlock(name)
   		else
   			if CurrentDragging == self or not CurrentDragging then
   				self.image.rotation = self.image.rotation + 90
+          local rotationLimit = 360
+          if self.name == names.powerstraight or self.name == names.downstraight then
+            rotationLimit = 180
+          end
+          self.image.rotation = self.image.rotation % rotationLimit
+          self.onEndedRotation({x=self.image.x,y=self.image.y,name=self.name,rot=self.image.rotation})
   			end
   		end
   		currentDragging = nil
