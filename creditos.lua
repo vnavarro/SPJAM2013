@@ -30,13 +30,23 @@ end
 --     unless storyboard.removeScene() is called.
 -- 
 -----------------------------------------------------------------------------------------
+local creditsScroll, creditsScrollTransition
+local scrollDown, scrollUp
+
+local function scrollDown(obj)
+  creditsScrollTransition = transition.to(creditsScroll, {delay = 1000, time = 8000, y = 0, onComplete=scrollUp})
+end
+
+local function scrollUp(obj)
+  creditsScrollTransition = transition.to(creditsScroll, {delay = 1000, time = 8000, y = -300, onComplete=scrollDown})
+end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
 
   -- display a background image
-  local background = display.newImageRect(group, "creditos.png", display.contentWidth, display.contentHeight )
+  local background = display.newImageRect(group, "splash_screen.png", display.contentWidth, display.contentHeight )
   background:setReferencePoint( display.TopLeftReferencePoint )
   background.x, background.y = 0, 0
 
@@ -46,6 +56,10 @@ function scene:createScene( event )
   stage.x, stage.y = 0, 0
   stage.blendMode = "multiply" 
 
+  creditsScroll = display.newImage(group,"creditosNOVO.png", 480, 598)
+  creditsScroll:setReferencePoint( display.TopLeftReferencePoint )
+  creditsScroll.x, creditsScroll.y = 0, 0
+  
   local backBtn = display.newImageRect( group,"back.png", 58, 58 )
   backBtn:addEventListener("touch", onBackBtnTouch)
   
@@ -57,10 +71,12 @@ function scene:createScene( event )
   group:insert( background )  
   group:insert( backBtn )
   group:insert( stage )
+  group:insert(creditsScroll)
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
+  scrollUp(creditsScroll)
   local group = self.view
   
   -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -70,6 +86,7 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
   local group = self.view
+  transition.cancel(creditsScrollTransition)
   
   -- INSERT code here (e.g. stop timers, remove listenets, unload sounds, etc.)
   
@@ -78,6 +95,7 @@ end
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
   local group = self.view
+  creditsScroll:removeSelf()
 end
 
 -----------------------------------------------------------------------------------------
