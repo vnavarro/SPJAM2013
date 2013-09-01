@@ -80,6 +80,14 @@ local function onBlockInsertedDelegate(block)
 	end
 	if block:isDown() then
 		timerBar.speed = timerBar.speed + 0.025
+		if changedToBad == false then
+			SC.stopAll()
+		    SC.loadSound( SC.DANGERGO )
+		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
+		    SC.loadSound( SC.DANGERSOUND )
+		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+		end
+
 		scene:changeToBad()		
 	end
 end
@@ -96,6 +104,11 @@ end
 ------------------------
 local function expiredTimeEvent()
 	scene:gameOver()
+
+	 -- dando play no som "tranquilo"
+    SC.stopAll()
+    SC.loadSound( SC.GAMEOVER )
+    SC.playSound( SC.GAMEOVER, true, "0", nil ) 
 end
 
 ------------------------
@@ -128,14 +141,6 @@ function scene:changeToBad()
 		end})
 	changedToBad = true
 
-		-- change to bad scene
-		if ( changedToBad == true ) then
-			SC.stopAll()
-		    SC.loadSound( SC.DANGERGO )
-		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
-		    SC.loadSound( SC.DANGERSOUND )
-		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
-		end
 
 end
 
@@ -253,7 +258,23 @@ function scene:createScene( event )
 	local column = tileWidth*12
 	display.newText(group,"Pontes",column-7,tileHeight-5,"Braxton",25)
 
-	scene:generateBlocks(group,levelName)	
+	scene:generateBlocks(group,levelName)
+
+	-- change to bad scene
+	if ( changedToBad == true ) then
+		SC.stopAll()
+	    SC.loadSound( SC.DANGERGO )
+	    SC.playSound( SC.DANGERGO, true, "0", nil ) 
+	    SC.loadSound( SC.DANGERSOUND )
+	    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+
+	else
+	 	SC.stopAll()
+	    SC.loadSound( SC.TRANKSMUSIK )
+	    SC.playSound( SC.TRANKSMUSIK, true, "-1", nil )
+
+
+	end	
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -279,6 +300,10 @@ function scene:destroyScene( event )
 	textsPiecesCount = nil	
 	Runtime:removeEventListener("expiredTime", expiredTimeEvent)
 end
+
+	
+
+
 
 -----------------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION

@@ -117,6 +117,7 @@ function scene:enterScene( event )
 	
 	-- add menu sound
 	if not SC.isPlaying(SC.MENU_SELECTED) then
+	    SC.stopAll()
 		SC.loadSound( SC.MENU_SELECTED )
 		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
 	end
