@@ -50,7 +50,7 @@ function scene:createScene( event )
   backBtn:addEventListener("touch", onBackBtnTouch)
   
   backBtn:setReferencePoint( display.CenterReferencePoint )
-  backBtn.x = display.contentWidth - 50
+  backBtn.x = 50
   backBtn.y = display.contentHeight - 50
   
   -- all display objects must be inserted into group

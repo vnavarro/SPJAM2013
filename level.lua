@@ -25,7 +25,6 @@ local textsPiecesCount = {}
 local boardGrid 
 local draggingPiece = false
 local timerBar
-local selina
 local changedToBad = false
 local badScreenFile = "tela_ruim.png"
 local levelName
@@ -75,7 +74,10 @@ local function onCancelDragBlock(name)
 end
 
 local function onBlockInsertedDelegate(block)
-	print("WON",boardGrid:checkIfWon(levelsData[levelName].solution))
+	if boardGrid:checkIfWon(levelsData[levelName].solution) then
+		scene:Won()
+		return
+	end
 	if block:isDown() then
 		timerBar.speed = timerBar.speed + 0.025
 		scene:changeToBad()		
@@ -84,15 +86,16 @@ end
 
 local function onEndedRotation(event)	
 	boardGrid:updateBlockAt(event)
-	print("WON",boardGrid:checkIfWon(levelsData[levelName].solution))
+	if boardGrid:checkIfWon(levelsData[levelName].solution) then
+		scene:Won()
+	end
 end
 
 ------------------------
 -- Timer Bar Delegate
 ------------------------
 local function expiredTimeEvent()
-	-- local endGameText = display.newImageRect( scene.view,"GameOver.png", width, height )
-	storyboard.gotoScene( "levelselection", "fade", 500 )	
+	scene:gameOver()
 end
 
 ------------------------
@@ -136,10 +139,15 @@ function scene:changeToBad()
 
 end
 
-
+function scene:createPiecesList(piecesData)
+	piecesList = {}
+	for k,piece in pairs(piecesData) do
+		table.insert(piecesList,{name=piece.name,count=piece.count})
+	end
+end
 
 function scene:generateBlocks (group,level)	
-	piecesList = levelsData[level].pieces
+	self:createPiecesList(levelsData[level].pieces)
 	for i=1,#piecesList do
 		local block = Block.newBlock(piecesList[i].name)		
 		local column = tileWidth*12		
@@ -157,6 +165,27 @@ function scene:generateBlocks (group,level)
 	end
 end
 
+function scene:won()
+
+end
+
+function scene:gameOver()
+	-- local endGameText = display.newImageRect( scene.view,"GameOver.png", width, height )	
+	storyboard.gotoScene( "levelselection", "fade", 500 )	
+end
+
+function scene:reset()
+	print("RESET CARALHO!!!")
+	piecesList = nil
+	textsPiecesCount = {}
+	boardGrid = nil
+	draggingPiece = false
+	timerBar:destroy()
+	timerBar = nil
+	changedToBad = false
+	levelName = nil
+end
+
 ------------------------
 -- Scene delegates
 ------------------------
@@ -164,6 +193,8 @@ end
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	local group = self.view
+
+	print("CREATE!!")
 
 	levelName = "level"..event.params.level
 	local levelData = levelsData[levelName]
@@ -184,6 +215,7 @@ function scene:createScene( event )
 	boardGrid:setupGridImages(levelData.board)
 	boardGrid.solution = levelData.solution
 
+	local selina = nil
 	if levelData.startPos == "up" then
 		selina = SelinaSprite.new(177,30,group)
 	elseif levelData.startPos == "right" then
@@ -202,7 +234,7 @@ function scene:createScene( event )
 		group:insert( bg )
 	end
 
-	local speed = 0.25
+	local speed = 3--0.25
 	if changedToBad then
 		speed = 0.275
 	end
@@ -234,14 +266,15 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
 	local group = self.view
-	timerBar.active = false
-	
+	timerBar.active = false	
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
 	
+	scene:reset()
+
 	pieceList = nil
 	textsPiecesCount = nil	
 end
