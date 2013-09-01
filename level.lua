@@ -82,6 +82,14 @@ local function onBlockInsertedDelegate(block)
 	end
 	if block:isDown() then
 		timerBar.speed = timerBar.speed + 0.025
+		if changedToBad == false then
+			SC.stopAll()
+		    SC.loadSound( SC.DANGERGO )
+		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
+		    SC.loadSound( SC.DANGERSOUND )
+		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+		end
+
 		scene:changeToBad()		
 	end
 end
@@ -99,6 +107,11 @@ end
 ------------------------
 local function expiredTimeEvent()
 	scene:gameOver()
+
+	 -- dando play no som "tranquilo"
+    SC.stopAll()
+    SC.loadSound( SC.GAMEOVER )
+    SC.playSound( SC.GAMEOVER, true, "0", nil ) 
 end
 
 ------------------------
@@ -131,14 +144,6 @@ function scene:changeToBad()
 		end})
 	changedToBad = true
 
-		-- change to bad scene
-		if ( changedToBad == true ) then
-			SC.stopAll()
-		    SC.loadSound( SC.DANGERGO )
-		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
-		    SC.loadSound( SC.DANGERSOUND )
-		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
-		end
 
 end
 
@@ -182,9 +187,29 @@ function scene:won()
 	end
 end
 
+function makeTransition(group)
+	local redBg = display.newRect(group,0,0,display.contentWidth, display.contentHeight)
+	redBg:setFillColor(255,0,0)
+	redBg.alpha = 0
+	local gameOverSprite = display.newImageRect(group, "GameOver.png",266,79)
+	gameOverSprite.alpha = 0
+	gameOverSprite.x, gameOverSprite.y = display.contentWidth/2, display.contentHeight/2
+	local filter = display.newImageRect(group,"embed.png", display.contentWidth, display.contentHeight)
+	filter.blendMode = "multiply" 
+	filter.x, filter.y = display.contentWidth/2, display.contentHeight/2
+	filter.alpha = 0
+	
+	transition.to(redBg,{time=2000, alpha = 0.7})
+	transition.to(filter,{time=2000, alpha = 1})
+	transition.to(gameOverSprite,{time=500, alpha = 1})
+	
+	timer.performWithDelay(4000, function() storyboard.gotoScene( "loadNextScene", {effect = "fade", time = 200, params={nextScene = "levelselection"} }) end)
+end
+
+
+
 function scene:gameOver()
-	-- local endGameText = display.newImageRect( scene.view,"GameOver.png", width, height )	
-	storyboard.gotoScene( "levelselection", "fade", 500 )	
+	makeTransition(self.view)
 end
 
 function scene:reset()
@@ -276,7 +301,23 @@ function scene:createScene( event )
 	local column = tileWidth*12
 	display.newText(group,"Pontes",column-7,tileHeight-5,"Braxton",25)
 
-	scene:generateBlocks(group,levelName)	
+	scene:generateBlocks(group,levelName)
+
+	-- change to bad scene
+	if ( changedToBad == true ) then
+		SC.stopAll()
+	    SC.loadSound( SC.DANGERGO )
+	    SC.playSound( SC.DANGERGO, true, "0", nil ) 
+	    SC.loadSound( SC.DANGERSOUND )
+	    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+
+	else
+	 	SC.stopAll()
+	    SC.loadSound( SC.TRANKSMUSIK )
+	    SC.playSound( SC.TRANKSMUSIK, true, "-1", nil )
+
+
+	end	
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -302,6 +343,10 @@ function scene:destroyScene( event )
 	textsPiecesCount = nil	
 	Runtime:removeEventListener("expiredTime", expiredTimeEvent)
 end
+
+	
+
+
 
 -----------------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
