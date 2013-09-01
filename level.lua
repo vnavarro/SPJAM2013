@@ -11,6 +11,9 @@ local Block = require("block")
 local Board = require("board")
 local TimerBar = require("timerBar")
 local SelinaSprite = require("selina")
+--class sounds
+local SC = require ("soundControl")
+
 
 --------------------------------------------
 
@@ -113,7 +116,19 @@ function scene:changeToBad()
 		self.view.bg:removeSelf()
 		end})
 	changedToBad = true
+
+		-- change to bad scene
+		if ( changedToBad == true ) then
+			SC.stopAll()
+		    SC.loadSound( SC.DANGERGO )
+		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
+		    SC.loadSound( SC.DANGERSOUND )
+		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+		end
+
 end
+
+
 
 function scene:generateBlocks (group,level)	
 	piecesList = levelsData[level].pieces

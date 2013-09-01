@@ -5,9 +5,15 @@ local soundHandles = {}
 local soundChannels = {}
 
 MENU_SELECTED = "menuSelected"
+TRANKSMUSIK = "tranksMusik"
+DANGERSOUND = "dangerSound"
+DANGERGO = "dangerGo"
 
 local soundList = {
 	menuSelected="sound_Intro.mp3",
+	tranksMusik="sound_Tranks.mp3",
+	dangerSound="sound_Danger.mp3",
+	dangerGo="sound_VirouProMau.mp3",
 }
 
 ---------------------------

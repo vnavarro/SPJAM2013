@@ -112,7 +112,7 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	
-	-- add menu
+	-- add menu sound
 		SC.loadSound( SC.MENU_SELECTED )
 		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
 
