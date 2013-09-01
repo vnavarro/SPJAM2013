@@ -114,7 +114,6 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	-- SC.stopAll()
 	-- add random sound
 	if not SC.isPlaying(SC.MENU_SELECTED) and not SC.isPlaying(SC.MENU_SELECTED2) then
 		if( math.random(1,2) == 1 ) then
