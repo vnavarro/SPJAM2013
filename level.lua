@@ -103,8 +103,9 @@ end
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	local group = self.view
-	--TODO: carregar do banco
-	local levelName = "level1"
+
+	local levelName = "level"..event.params.level
+	
 	-- create a grey rectangle as the backdrop
 	local bg = display.newImageRect( levelsData[levelName].bgImg, screenW, screenH )
 	bg:setReferencePoint(display.TopLeftReferencePoint)

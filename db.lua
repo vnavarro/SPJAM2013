@@ -1,7 +1,7 @@
 -- http://lua.sqlite.org/index.cgi/doc/tip/doc/lsqlite3.wiki#numerical_error_and_result_codes
 ------------------------
 require "sqlite3"
-local db_scripts = require ('scripts')
+local db_scripts = require ('dbscripts')
 -----------------
 --Constants
 -----------------
@@ -125,6 +125,11 @@ function DB:getLevels(chapter_id)
   return levels
 end
 
+function DB:unlockLevel(nextLevel)
+  local error = self.db:exec("UPDATE [Level] SET unlocked=1 WHERE idLevel="..nextLevel.."",nil,nil) 
+  print("DB:setConfig result (error if non-zero)",error)
+end
+
 --[[Summary
 Check if a level is unlocked
 params 
@@ -132,8 +137,8 @@ params
 @chapter_id:int The chapter id of the level`s chapter
 return bool - true if level is unlocked, false otherwise
 ]]--
-function DB:isLevelUnlocked(level_id,chapter_id)
-  for total in self.db:urows( "SELECT COUNT(*) as total FROM Level WHERE idLevel = "..level_id.." AND idChapter="..chapter_id.." AND unlocked=1") do
+function DB:isLevelUnlocked(level_id)
+  for total in self.db:urows( "SELECT COUNT(*) as total FROM Level WHERE idLevel = "..level_id.." AND unlocked=1") do
     return total > 0
   end
   return false

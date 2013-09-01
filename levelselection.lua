@@ -9,14 +9,14 @@ local scene = storyboard.newScene()
 
 -- include Corona's "widget" library
 local widget = require "widget"
-
 --------------------------------------------
 
 -- 'onRelease' event listener for playBtn
-local function onPlayBtnRelease()
-  
-  -- go to level1.lua scene
-  storyboard.gotoScene( "level", "fade", 500 )
+local function onPlayBtnTouch(event)
+
+  if event.phase == "ended" then
+    storyboard.gotoScene( "level", { "fade", 500, params = {level=event.target.selectedLevel}} )
+  end
   
   return true -- indicates successful touch
 end
@@ -40,34 +40,31 @@ function scene:createScene( event )
   
   group.buttonList = {}
   for i=1,6 do
-    -- create a widget button (which will loads level1.lua on release)
-    local playBtn = widget.newButton{
-      -- label="Play Now",
-      -- labelColor = { default={255}, over={128} },
-      defaultFile="0"..i..".png",
-      -- overFile="button-over.png",
-      width=58, height=58,
-      onRelease = onPlayBtnRelease  -- event listener function
-    }
-    playBtn:setReferencePoint( display.CenterReferencePoint )
-    paddingX = (68 * (i-1))
-    paddingY = 0
-    if i > 3 then
-      paddingX = (68 * (i-4))
-      paddingY = 68 
+    if db:isLevelUnlocked(i) then
+      -- create a widget button (which will loads level1.lua on release)
+      local playBtn = display.newImageRect( group,"0"..i..".png", 58, 58 )
+      playBtn.selectedLevel = i
+      playBtn:addEventListener("touch", onPlayBtnTouch)
+      playBtn:setReferencePoint( display.CenterReferencePoint )
+      paddingX = (68 * (i-1))
+      paddingY = 0
+      if i > 3 then
+        paddingX = (68 * (i-4))
+        paddingY = 68 
+      end
+      playBtn.x = display.contentWidth/3 + paddingX
+      playBtn.y = display.contentHeight/2.5 + paddingY
+      
+      -- all display objects must be inserted into group
+      group:insert( playBtn ) 
     end
-    playBtn.x = display.contentWidth/3 + paddingX
-    playBtn.y = display.contentHeight/2.5 + paddingY
-    
-    -- all display objects must be inserted into group
-    group:insert( playBtn )
   end
 
   -- create/position logo/title image on upper-half of the screen
   local stage = display.newImageRect(group, "blend.png", display.contentWidth, display.contentHeight )
   stage:setReferencePoint( display.TopLeftReferencePoint )
   stage.x, stage.y = 0, 0
-  stage.blendMode = "multiply"
+  stage.blendMode = "multiply"  
 end
 
 -- Called immediately after scene has moved onscreen:

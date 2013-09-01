@@ -15,13 +15,14 @@ require 'db'
 
 -- forward declarations and other locals
 local playBtn
-local selectedLevel = 1
+local creditsBtn
+local audioBtn
 
 -- 'onRelease' event listener for playBtn
 local function onPlayBtnRelease()
 	
 	-- go to level1.lua scene
-	storyboard.gotoScene( "levelselection", "fade", 500, params = {level=1} )
+	storyboard.gotoScene( "levelselection", "fade", 500 )
 	
 	return true	-- indicates successful touch
 end
@@ -53,7 +54,7 @@ function scene:createScene( event )
 	}
 	
 	-- audio config
-	confBtn = widget.newButton{
+	audioBtn = widget.newButton{
 		label="Audio",
 		labelColor = { default={255}, over={128} },
 		defaultFile="button.png",
@@ -76,9 +77,9 @@ function scene:createScene( event )
 	playBtn.x = display.contentWidth*0.66
 	playBtn.y = display.contentHeight - 125
 	
-	confBtn:setReferencePoint( display.CenterReferencePoint )
-	confBtn.x = display.contentWidth*0.8
-	confBtn.y = display.contentHeight - 40
+	audioBtn:setReferencePoint( display.CenterReferencePoint )
+	audioBtn.x = display.contentWidth*0.8
+	audioBtn.y = display.contentHeight - 40
 	
 	creditsBtn:setReferencePoint( display.CenterReferencePoint )
 	creditsBtn.x = display.contentWidth*0.66
@@ -87,6 +88,12 @@ function scene:createScene( event )
 	-- all display objects must be inserted into group
 	group:insert( background )
 	group:insert( playBtn )
+	group:insert( audioBtn )
+	group:insert( creditsBtn )
+
+	db = DB.new()   
+  db:loadBase()
+  db:setupBase()
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -113,6 +120,16 @@ function scene:destroyScene( event )
 		playBtn:removeSelf()	-- widgets must be manually removed
 		playBtn = nil
 	end
+
+	if creditsBtn then
+		creditsBtn:removeSelf()	-- widgets must be manually removed
+		creditsBtn = nil
+	end
+
+	if audioBtn then
+		audioBtn:removeSelf()	-- widgets must be manually removed
+		audioBtn = nil
+	end	
 end
 
 -----------------------------------------------------------------------------------------
