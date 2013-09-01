@@ -168,7 +168,6 @@ function scene:won()
 	local nextLevel = levelIndex+1	
 	if nextLevel >= 7 then
 		scene:stopMusic()
-		timerBar.active = false
 		media.playVideo("final_scene_tela_3.mp4",false,function () 
 				-- storyboard.gotoScene( "menu", "fade", 500 )
 				storyboard.gotoScene( "loadNextScene", { delay=200,"fade", 500, params = {nextScene="menu"}})

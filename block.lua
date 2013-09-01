@@ -95,12 +95,12 @@ function newBlock(name)
   	if currentDragging ~= nil and currentDragging ~= self then 
   		return true 
   	end	
+    self.image:toFront()
     if event.phase == "began" then		
   		if self.checkIsInsideBoard then
   			local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)			
   			self.placed = valid
   		end
-  		self.image:toFront()
 
       display.getCurrentStage():setFocus( self.image )
       self.image.isFocus = true
