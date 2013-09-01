@@ -36,7 +36,9 @@ end
 local function onAudioBtnTouch(event)
 	
 	if event.phase == "ended" then
-	-- go to level1.lua scene
+		audioBtnOn.isVisible = not audioBtnOn.isVisible
+		audioBtnOff.isVisible = not audioBtnOff.isVisible
+		SC.switchSound()
 	end
 	return true	-- indicates successful touch
 end
@@ -75,7 +77,8 @@ function scene:createScene( event )
   audioBtnOn:addEventListener("touch", onAudioBtnTouch)
 
   audioBtnOff = display.newImageRect( group,"som_off.png", 58, 58 )
-  audioBtnOff.alpha = 0
+  audioBtnOff:addEventListener("touch", onAudioBtnTouch)
+  audioBtnOff.isVisible = false
 
   local creditsBtn = display.newImageRect( group,"credits.png", 58, 58 )
   creditsBtn:addEventListener("touch", onCreditsBtnTouch)
@@ -111,14 +114,16 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	
+	-- SC.stopAll()
 	-- add random sound
-	if( math.random(1,2) == 1 ) then
-		SC.loadSound( SC.MENU_SELECTED )
-		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
-	else
-		SC.loadSound( SC.MENU_SELECTED2 )
-		SC.playSound( SC.MENU_SELECTED2, true, "-1", nil ) 
+	if not SC.isPlaying(SC.MENU_SELECTED) and not SC.isPlaying(SC.MENU_SELECTED2) then
+		if( math.random(1,2) == 1 ) then
+			SC.loadSound( SC.MENU_SELECTED )
+			SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
+		else
+			SC.loadSound( SC.MENU_SELECTED2 )
+			SC.playSound( SC.MENU_SELECTED2, true, "-1", nil ) 
+		end
 	end
 
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)

@@ -7,6 +7,8 @@ local soundChannels = {}
 MENU_SELECTED = "menuSelected"
 MENU_SELECTED2 = "menuSelected2"
 
+local SOUND = "on"
+
 local soundList = {
 	menuSelected="sound_Intro.mp3",
 	menuSelected2="sound_Intro2.mp3"
