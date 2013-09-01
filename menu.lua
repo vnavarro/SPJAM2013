@@ -115,14 +115,9 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	-- add random sound
-	if not SC.isPlaying(SC.MENU_SELECTED) and not SC.isPlaying(SC.MENU_SELECTED2) then
-		if( math.random(1,2) == 1 ) then
-			SC.loadSound( SC.MENU_SELECTED )
-			SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
-		else
-			SC.loadSound( SC.MENU_SELECTED2 )
-			SC.playSound( SC.MENU_SELECTED2, true, "-1", nil ) 
-		end
+	if not SC.isPlaying(SC.MENU_SELECTED) then
+		SC.loadSound( SC.MENU_SELECTED )
+		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
 	end
 
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
