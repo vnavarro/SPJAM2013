@@ -30,16 +30,16 @@ function new(group,tileWidth,tileHeight)
     return x >= board.x and x <= board.xMax and y >= board.y and y <= board.yMax
   end
 
-  function board:invalidatePosition(x,y)    
+  function board:invalidatePosition(x,y) 
   	if not self:blockIsInside(x,y) then return end
   	for i=1,5 do
       for j=1,5 do
         local position = board.tiles[i][j];
-        if x >= position.x and x <= position.x+board.tileWidth and 
-          y >= position.y and y <= position.y+board.tileHeight and position.hasBlock then
+        if x == position.x and  y == position.y and position.hasBlock then
       		  position.hasBlock = false
             position.name = nil
             position.rotation = -1
+            print("invalidate",i,j,position.x,position.y)
         end
       end
     end
@@ -51,9 +51,10 @@ function new(group,tileWidth,tileHeight)
       for j=1,5 do
         local position = board.tiles[i][j];
         if event.x >= position.x and event.x <= position.x+board.tileWidth and 
-          event.y >= position.y and event.y <= position.y+board.tileHeight and position.hasBlock then
+          event.y >= position.y and event.y <= position.y+board.tileHeight then
             position.name = event.name
             position.rotation = event.rot
+            print("UPDATE AT",position.name,position.rotation,position.hasBlock)
         end
       end
     end
@@ -72,6 +73,7 @@ function new(group,tileWidth,tileHeight)
     		  position.hasBlock = true 
           position.name = event.name
           position.rotation = event.rot
+          print("canPlaceBlock",position.name,position.rotation,position.hasBlock)
           return true,position.x,position.y
         end
       end
@@ -107,14 +109,18 @@ function new(group,tileWidth,tileHeight)
 
   function board:checkIfWon(solution)
     local count = 0
+    print(">>>>>>>")
     for i=1,#solution do
       local blockSolution = solution[i]
       local position = self.tiles[blockSolution.position.y][blockSolution.position.x]      
+      print("checkIfWon AT",position.name,position.rotation,position.hasBlock)
       if position.name == blockSolution.name and 
         position.rotation == blockSolution.rotation and position.hasBlock then
         count = count +1
       end      
     end
+    print("WON?",count,#solution)
+    print(">>>>>>>")
     return count == #solution
   end
 
