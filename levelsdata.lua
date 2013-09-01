@@ -1,3 +1,7 @@
+--carrega
+local SC = require ("soundControl")
+SC.stopAll()
+
 local levels = {
   level1 = {
     bgImg = "good_scene01.png",
