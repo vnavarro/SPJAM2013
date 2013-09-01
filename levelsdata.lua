@@ -64,7 +64,7 @@ local levels = {
 	}
   },
     level3 = {
-    bgImg = "good_scene01.png",
+    bgImg = "tela_ruim.png",
     board = {
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType="stone"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
@@ -126,7 +126,7 @@ local levels = {
 	}
   },
     level5 = {
-    bgImg = "good_scene01.png",
+    bgImg = "tela_ruim.png",
     board = {
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType="stone"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
