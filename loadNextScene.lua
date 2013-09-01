@@ -6,7 +6,8 @@
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
-
+local nextScene = ""
+local nextScreenParams
 -- include Corona's "widget" library
 
 --------------------------------------------
@@ -23,36 +24,27 @@ local scene = storyboard.newScene()
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
   local group = self.view
-
-  -- display a background image
-  local background = display.newImageRect(group, "splash_screen.png", display.contentWidth, display.contentHeight )
-  background:setReferencePoint( display.TopLeftReferencePoint )
-  background.x, background.y = 0, 0
-
   -- create/position logo/title image on upper-half of the screen
   local logo = display.newImageRect(group, "logo.png", 244, 176 )
   --logo:setReferencePoint( display.TopLeftReferencePoint )
   logo.x, logo.y = display.contentWidth/2, display.contentHeight/2
   
-  local filter = display.newImageRect(group, "embed.png", display.contentWidth, display.contentHeight)
-  
-  filter.blendMode = "multiply" 
-  filter.x, filter.y = display.contentWidth/2, display.contentHeight/2
-  -- all display objects must be inserted into group
-  group:insert( background )  
   group:insert( logo )
-  group:insert( filter )
   
 end
 
-local function goToMain(event)
-  storyboard.gotoScene( "menu",{ effect="fade", time = 1000 })
+local function goToScene(event)
+  storyboard.gotoScene( nextScene,{ effect = "fade", time = 500, params={nextScreenParams}} )
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
+for k,v in pairs(event) do print(k,v) end
+  print(event.params, event.params.nextScene)
   local group = self.view
-  timer.performWithDelay(1500, goToMain)
+  nextScene = event.params.nextScene
+  nextScreenParams = event.params.nextScreenParams
+  timer.performWithDelay(1500, goToScene)
   -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
   
 end

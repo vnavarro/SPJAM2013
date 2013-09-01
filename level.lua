@@ -277,6 +277,7 @@ function scene:destroyScene( event )
 
 	pieceList = nil
 	textsPiecesCount = nil	
+	Runtime:removeEventListener("expiredTime", expiredTimeEvent)
 end
 
 -----------------------------------------------------------------------------------------
