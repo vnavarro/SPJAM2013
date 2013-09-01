@@ -15,7 +15,7 @@ local widget = require "widget"
 local function onPlayBtnTouch(event)
 
   if event.phase == "ended" then
-    storyboard.gotoScene( "level", { "fade", 500, params = {level=event.target.selectedLevel}} )
+	storyboard.gotoScene( "level", { "fade", 500, params = {level=event.target.selectedLevel}} )
   end
   
   return true -- indicates successful touch
@@ -80,7 +80,7 @@ function scene:createScene( event )
   local stage = display.newImageRect(group, "blend.png", display.contentWidth, display.contentHeight )
   stage:setReferencePoint( display.TopLeftReferencePoint )
   stage.x, stage.y = 0, 0
-  stage.blendMode = "multiply"  
+  stage.blendMode = "multiply"
 end
 
 -- Called immediately after scene has moved onscreen:

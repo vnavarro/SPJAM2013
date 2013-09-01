@@ -68,8 +68,13 @@ function new(x, y, speed)
 	
 	function timerBar:destroy()
 		self.barSprite:removeSelf()
+		self.frontBarSprite:removeSelf()
+		self.girlSprite:removeSelf()
 		self.monsterSprite:removeSelf()
+		
 		self.barSprite = nil
+		self.frontBarSprite = nil
+		self.girlSprite = nil
 		self.monsterSprite = nil
 	end
 	

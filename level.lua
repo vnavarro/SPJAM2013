@@ -82,7 +82,8 @@ end
 ------------------------
 local function expiredTimeEvent()
 	-- local endGameText = display.newImageRect( scene.view,"GameOver.png", width, height )
-	storyboard.gotoScene( "levelselection", "fade", 500 )	
+	-- storyboard.gotoScene( "levelselection", "fade", 500 )
+	storyboard.gotoScene( "loadNextScene", {effect = "fade", time = 500, params = {nextScene="levelselection"}})	
 end
 
 ------------------------
@@ -218,6 +219,7 @@ function scene:destroyScene( event )
 	
 	pieceList = nil
 	textsPiecesCount = nil	
+	Runtime:removeEventListener("expiredTime", expiredTimeEvent)
 end
 
 -----------------------------------------------------------------------------------------
