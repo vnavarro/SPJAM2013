@@ -169,9 +169,29 @@ function scene:won()
 
 end
 
+function makeTransition(group)
+	local redBg = display.newRect(group,0,0,display.contentWidth, display.contentHeight)
+	redBg:setFillColor(255,0,0)
+	redBg.alpha = 0
+	local gameOverSprite = display.newImageRect(group, "GameOver.png",266,79)
+	gameOverSprite.alpha = 0
+	gameOverSprite.x, gameOverSprite.y = display.contentWidth/2, display.contentHeight/2
+	local filter = display.newImageRect(group,"embed.png", display.contentWidth, display.contentHeight)
+	filter.blendMode = "multiply" 
+	filter.x, filter.y = display.contentWidth/2, display.contentHeight/2
+	filter.alpha = 0
+	
+	transition.to(redBg,{time=2000, alpha = 0.7})
+	transition.to(filter,{time=2000, alpha = 1})
+	transition.to(gameOverSprite,{time=500, alpha = 1})
+	
+	timer.performWithDelay(4000, function() storyboard.gotoScene( "loadNextScene", {effect = "fade", time = 200, params={nextScene = "levelselection"} }) end)
+end
+
+
+
 function scene:gameOver()
-	-- local endGameText = display.newImageRect( scene.view,"GameOver.png", width, height )	
-	storyboard.gotoScene( "levelselection", "fade", 500 )	
+	makeTransition(self.view)
 end
 
 function scene:reset()
