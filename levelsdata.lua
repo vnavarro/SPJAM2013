@@ -2,6 +2,12 @@
 local SC = require ("soundControl")
 SC.stopAll()
 
+  -- dando play no som "tranquilo"
+    -- audio.fadeOut({ channel=SC.MENU_SELECTED, time=500 } )
+    SC.loadSound( SC.TRANKSMUSIK )
+    SC.playSound( SC.TRANKSMUSIK, true, "-1", nil ) 
+
+
 local levels = {
   level1 = {
     bgImg = "good_scene01.png",
