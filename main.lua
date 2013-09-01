@@ -3,6 +3,13 @@
 -- main.lua
 --
 -----------------------------------------------------------------------------------------
+-- inclune audio lib
+SC = require ("soundControl")
+  SC.loadSound( SC.MENU_SELECTED )
+  SC.loadSound( SC.DANGERGO )
+  SC.loadSound( SC.DANGERSOUND )
+  SC.loadSound( SC.GAMEOVER )
+  SC.loadSound( SC.TRANKSMUSIK )
 
 -- hide the status bar
 display.setStatusBar( display.HiddenStatusBar )

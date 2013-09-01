@@ -88,7 +88,10 @@ function scene:enterScene( event )
   local group = self.view
   
   -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
-  
+  print("PORRA",SC.isPlaying(SC.MENU_SELECTED))
+  if not SC.isPlaying(SC.MENU_SELECTED) then
+    SC.playSound( SC.MENU_SELECTED, false, -1, nil ) 
+  end
 end
 
 -- Called when scene is about to move offscreen:

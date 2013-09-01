@@ -98,6 +98,7 @@ function stopAll()
 end
 
 function stopSound(name)
+	if not soundChannels[name] then return end
 	audio.stop( soundChannels[name] )
 	for i=1,#soundChannels do
 		if soundChannels[i] == soundChannels[name] then

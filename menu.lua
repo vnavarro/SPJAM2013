@@ -12,16 +12,12 @@ local widget = require "widget"
 require 'db'
 
 -- inclune audio lib
-local SC = require ("soundControl")
 
 --------------------------------------------
 
 -- forward declarations and other locals
 local audioBtnOff
 local audioBtnOn
-
---class sounds
-local SC = require ("soundControl")
 
 
 -- 'onRelease' event listener for playBtn
@@ -66,12 +62,6 @@ function scene:createScene( event )
 	local group = self.view
 
 	--load(sound)
-	SC.loadSound( SC.MENU_SELECTED )
-	SC.loadSound( SC.DANGERGO )
-	SC.loadSound( SC.DANGERSOUND )
-    SC.loadSound( SC.GAMEOVER )
-	SC.loadSound( SC.TRANKSMUSIK )
-
 
 	-- display a background image
 	local background = display.newImageRect( "start_screen_01.jpg", display.contentWidth, display.contentHeight )
@@ -126,8 +116,7 @@ function scene:enterScene( event )
 	
 	-- add menu sound
 	if not SC.isPlaying(SC.MENU_SELECTED) then
-	    SC.stopAll()
-		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
+		SC.playSound( SC.MENU_SELECTED, false, -1, nil ) 
 	end
 
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -147,11 +136,12 @@ function scene:destroyScene( event )
 	local group = self.view
 
 	--unload(sound)
-	SC.unloadSound( SC.MENU_SELECTED )
-	SC.unloadSound( SC.DANGERGO )
-	SC.unloadSound( SC.DANGERSOUND )
-    SC.unloadSound( SC.GAMEOVER )
-	SC.unloadSound( SC.TRANKSMUSIK )
+	-- PRINT("DESTROY")
+	-- SC.unloadSound( SC.MENU_SELECTED )
+	-- SC.unloadSound( SC.DANGERGO )
+	-- SC.unloadSound( SC.DANGERSOUND )
+ --  SC.unloadSound( SC.GAMEOVER )
+	-- SC.unloadSound( SC.TRANKSMUSIK )
 end
 
 -----------------------------------------------------------------------------------------

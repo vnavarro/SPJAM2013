@@ -12,9 +12,6 @@ local Board = require("board")
 local TimerBar = require("timerBar")
 local SelinaSprite = require("selina")
 
--- inclune audio lib
-local SC = require ("soundControl")
-
 --------------------------------------------
 
 -- forward declarations and other locals
@@ -76,16 +73,15 @@ end
 
 local function onBlockInsertedDelegate(block)
 	if boardGrid:checkIfWon(levelsData[levelName].solution) then
-		print("WON")
 		scene:won()
 		return
 	end
 	if block:isDown() then
 		timerBar.speed = timerBar.speed + 0.025
 		if changedToBad == false then
-			SC.stopAll()
-		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
-		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+			scene:stopMusic()
+			SC.playSound( SC.DANGERGO, false, 0, nil ) 
+			SC.playSound( SC.DANGERSOUND, false, -1, nil ) 
 		end
 
 		scene:changeToBad()		
@@ -95,7 +91,6 @@ end
 local function onEndedRotation(event)	
 	boardGrid:updateBlockAt(event)
 	if boardGrid:blockIsInside(event.x,event.y) and  boardGrid:checkIfWon(levelsData[levelName].solution) then
-		print("WON")
 		scene:won()
 	end
 end
@@ -107,8 +102,8 @@ local function expiredTimeEvent()
 	scene:gameOver()
 
 	 -- dando play no som "tranquilo"
-    SC.stopAll()
-    SC.playSound( SC.GAMEOVER, true, "0", nil ) 
+		scene:stopMusic()
+		SC.playSound( SC.GAMEOVER, false, 0, nil ) 
 end
 
 ------------------------
@@ -117,7 +112,6 @@ end
 
 local function canPlaceBlock(event)
 	draggingPiece = false
-	print(event.name,event.rot,event.x,event.y)
 	return boardGrid:canPlaceBlock(event)
 end
 
@@ -173,14 +167,12 @@ end
 function scene:won()
 	local nextLevel = levelIndex+1	
 	if nextLevel >= 7 then
-		print("VIDEO")
-		SC.stopAll()
+		scene:stopMusic()
 		media.playVideo("final_scene_tela_3.mp4",false,function () 
 				-- storyboard.gotoScene( "menu", "fade", 500 )
 				storyboard.gotoScene( "loadNextScene", { delay=200,"fade", 500, params = {nextScene="menu"}})
 			end)
 	else 
-		print("NEXT LEVEL ",nextLevel)
 			storyboard.gotoScene( "loadNextScene", { delay=200,"fade", 500, params = {nextScene="level",nextScreenParams={level=nextLevel}}})
 	end
 end
@@ -222,6 +214,13 @@ function scene:reset()
 	levelIndex = 1
 end
 
+function scene:stopMusic()
+	SC.stopSound(SC.MENU_SELECTED)
+	SC.stopSound(SC.DANGERGO)
+	SC.stopSound(SC.DANGERSOUND)
+	SC.stopSound(SC.TRANKSMUSIK)
+end
+
 ------------------------
 -- Scene delegates
 ------------------------
@@ -233,10 +232,6 @@ function scene:createScene( event )
 	levelName = "level"..event.params.level
 	levelIndex = event.params.level
 
-	for k,v in pairs(event.params) do
-		print(k,v)
-	end
-	print("LOading",levelName,levelIndex)
 	local levelData = levelsData[levelName]
 
 	-- create a grey rectangle as the backdrop
@@ -303,15 +298,13 @@ function scene:createScene( event )
 
 	-- change to bad scene
 	if ( changedToBad == true ) then
-		SC.stopAll()
-	    SC.playSound( SC.DANGERGO, true, "0", nil ) 
-	    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
+		scene:stopMusic()
+    SC.playSound( SC.DANGERGO, false, 0, nil ) 
+    SC.playSound( SC.DANGERSOUND, false, -1, nil ) 
 
 	else
-	 	SC.stopAll()
-	    SC.playSound( SC.TRANKSMUSIK, true, "-1", nil )
-
-
+	 	scene:stopMusic()
+    SC.playSound( SC.TRANKSMUSIK, false, -1, nil )
 	end	
 end
 
