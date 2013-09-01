@@ -66,7 +66,7 @@ local levels = {
 	}
   },
     level3 = {
-    bgImg = "good_scene01.png",
+    bgImg = "tela_ruim.png",
     board = {
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType="stone"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},
@@ -77,7 +77,7 @@ local levels = {
     arrows = {
       {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
       -- {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
-      {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24},
+      {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24}
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
@@ -130,7 +130,7 @@ local levels = {
 	}
   },
     level5 = {
-    bgImg = "good_scene01.png",
+    bgImg = "tela_ruim.png",
     board = {
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType="stone"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType=""},{tileType=""}},

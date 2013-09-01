@@ -48,8 +48,8 @@ function scene:createScene( event )
   background.x, background.y = 0, 0
   
   group.buttonList = {}
-  for i=1,6 do
-    if db:isLevelUnlocked(i) then
+  for i=1,6 do    
+    -- if db:isLevelUnlocked(i) then
       -- create a widget button (which will loads level1.lua on release)
       local playBtn = display.newImageRect( group,"0"..i..".png", 58, 58 )
       playBtn.selectedLevel = i
@@ -66,7 +66,7 @@ function scene:createScene( event )
       
       -- all display objects must be inserted into group
       group:insert( playBtn ) 
-    end
+    -- end
   end
 
   local backBtn = display.newImageRect( group,"back.png", 58, 58 )
@@ -88,7 +88,7 @@ function scene:enterScene( event )
   local group = self.view
   
   -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
-  
+  storyboard.removeScene( "level" )
 end
 
 -- Called when scene is about to move offscreen:

@@ -36,7 +36,7 @@ function scene:createScene( event )
   local group = self.view
 
   -- display a background image
-  local background = display.newImageRect(group, "BG_stage_select.png", display.contentWidth, display.contentHeight )
+  local background = display.newImageRect(group, "creditos.png", display.contentWidth, display.contentHeight )
   background:setReferencePoint( display.TopLeftReferencePoint )
   background.x, background.y = 0, 0
 

@@ -11,11 +11,17 @@ local scene = storyboard.newScene()
 local widget = require "widget"
 require 'db'
 
+-- inclune audio lib
+local SC = require ("soundControl")
+
 --------------------------------------------
 
 -- forward declarations and other locals
 local audioBtnOff
 local audioBtnOn
+
+
+
 
 -- 'onRelease' event listener for playBtn
 local function onPlayBtnTouch(event)
@@ -106,6 +112,15 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	
+	-- add random sound
+	if( math.random(1,2) == 1 ) then
+		SC.loadSound( SC.MENU_SELECTED )
+		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
+	else
+		SC.loadSound( SC.MENU_SELECTED2 )
+		SC.playSound( SC.MENU_SELECTED2, true, "-1", nil ) 
+	end
+
 	-- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
 	
 end
