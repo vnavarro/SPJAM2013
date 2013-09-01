@@ -45,8 +45,8 @@ local levels = {
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
-      {name="powercurve",count=2},{name="downstraight",count=8},
-      {name="downcurve",count=5},{name="powerstraight",count=1}
+      {name="powercurve",count=1},{name="downstraight",count=8},
+      {name="downcurve",count=5},{name="powerstraight",count=0}
     },
 	startPos = "up",
 	solution = {
