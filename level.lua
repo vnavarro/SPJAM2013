@@ -76,6 +76,14 @@ local function onBlockInsertedDelegate(block)
 end
 
 ------------------------
+-- Timer Bar Delegate
+------------------------
+local function expiredTimeEvent()
+	-- local endGameText = display.newImageRect( scene.view,"GameOver.png", width, height )
+	storyboard.gotoScene( "levelselection", "fade", 500 )	
+end
+
+------------------------
 -- Scene other 
 ------------------------
 
@@ -162,6 +170,7 @@ function scene:createScene( event )
 	end
 	timerBar = TimerBar.new(halfW-60,screenH-45,speed)
 	timerBar:addToGroup(group)
+	Runtime:addEventListener("expiredTime", expiredTimeEvent)
 
 	local blocksBg = display.newImageRect(group, "hud.png", 94,250  )	
 	blocksBg.x = 400

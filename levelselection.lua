@@ -88,7 +88,7 @@ function scene:enterScene( event )
   local group = self.view
   
   -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
-  
+  storyboard.removeScene( "level" )
 end
 
 -- Called when scene is about to move offscreen:
