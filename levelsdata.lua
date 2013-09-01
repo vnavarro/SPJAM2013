@@ -73,9 +73,9 @@ local levels = {
       {{tileType=""},{tileType=""},{tileType=""},{tileType="stone"},{tileType="stone"}}
     },
     arrows = {
-      {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36}
+      {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
       -- {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
-      {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24},
+      {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24}
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
@@ -104,7 +104,7 @@ local levels = {
       {{tileType=""},{tileType="stone"},{tileType="stone"},{tileType=""},{tileType="stone"}}
     },
     arrows = {
-      {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36}
+      {img="d_arrow.png",x=display.contentWidth/2-60,y=display.contentHeight-70,w=24, h=36},
       {img="u_arrow.png",x=display.contentWidth/2-60,y=30,w=24, h=36},
       {img="l_arrow.png",x=60,y=display.contentHeight/2,w=36, h=24},
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
