@@ -11,9 +11,9 @@ local Block = require("block")
 local Board = require("board")
 local TimerBar = require("timerBar")
 local SelinaSprite = require("selina")
---class sounds
-local SC = require ("soundControl")
 
+-- inclune audio lib
+local SC = require ("soundControl")
 
 --------------------------------------------
 
@@ -84,9 +84,7 @@ local function onBlockInsertedDelegate(block)
 		timerBar.speed = timerBar.speed + 0.025
 		if changedToBad == false then
 			SC.stopAll()
-		    SC.loadSound( SC.DANGERGO )
 		    SC.playSound( SC.DANGERGO, true, "0", nil ) 
-		    SC.loadSound( SC.DANGERSOUND )
 		    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
 		end
 
@@ -110,7 +108,6 @@ local function expiredTimeEvent()
 
 	 -- dando play no som "tranquilo"
     SC.stopAll()
-    SC.loadSound( SC.GAMEOVER )
     SC.playSound( SC.GAMEOVER, true, "0", nil ) 
 end
 
@@ -306,14 +303,11 @@ function scene:createScene( event )
 	-- change to bad scene
 	if ( changedToBad == true ) then
 		SC.stopAll()
-	    SC.loadSound( SC.DANGERGO )
 	    SC.playSound( SC.DANGERGO, true, "0", nil ) 
-	    SC.loadSound( SC.DANGERSOUND )
 	    SC.playSound( SC.DANGERSOUND, true, "-1", nil ) 
 
 	else
 	 	SC.stopAll()
-	    SC.loadSound( SC.TRANKSMUSIK )
 	    SC.playSound( SC.TRANKSMUSIK, true, "-1", nil )
 
 

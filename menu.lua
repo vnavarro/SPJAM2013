@@ -20,7 +20,8 @@ local SC = require ("soundControl")
 local audioBtnOff
 local audioBtnOn
 
-
+--class sounds
+local SC = require ("soundControl")
 
 
 -- 'onRelease' event listener for playBtn
@@ -63,6 +64,14 @@ end
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
 	local group = self.view
+
+	--load(sound)
+	SC.loadSound( SC.MENU_SELECTED )
+	SC.loadSound( SC.DANGERGO )
+	SC.loadSound( SC.DANGERSOUND )
+    SC.loadSound( SC.GAMEOVER )
+	SC.loadSound( SC.TRANKSMUSIK )
+
 
 	-- display a background image
 	local background = display.newImageRect( "start_screen_01.jpg", display.contentWidth, display.contentHeight )
@@ -118,7 +127,6 @@ function scene:enterScene( event )
 	-- add menu sound
 	if not SC.isPlaying(SC.MENU_SELECTED) then
 	    SC.stopAll()
-		SC.loadSound( SC.MENU_SELECTED )
 		SC.playSound( SC.MENU_SELECTED, true, "-1", nil ) 
 	end
 
@@ -137,6 +145,13 @@ end
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
+
+	--unload(sound)
+	SC.unloadSound( SC.MENU_SELECTED )
+	SC.unloadSound( SC.DANGERGO )
+	SC.unloadSound( SC.DANGERSOUND )
+    SC.unloadSound( SC.GAMEOVER )
+	SC.unloadSound( SC.TRANKSMUSIK )
 end
 
 -----------------------------------------------------------------------------------------
