@@ -8,6 +8,7 @@ MENU_SELECTED = "menuSelected"
 TRANKSMUSIK = "tranksMusik"
 DANGERSOUND = "dangerSound"
 DANGERGO = "dangerGo"
+GAMEOVER = "gameOver"
 
 local SOUND = "on"
 
@@ -16,6 +17,7 @@ local soundList = {
 	tranksMusik="sound_Tranks.mp3",
 	dangerSound="sound_Danger.mp3",
 	dangerGo="sound_VirouProMau.mp3",
+	gameOver="sound_GameOver.mp3",
 }
 
 ---------------------------
