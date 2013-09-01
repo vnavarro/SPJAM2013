@@ -34,7 +34,7 @@ function scene:createScene( event )
 end
 
 local function goToScene(event)
-  storyboard.gotoScene( nextScene,{ effect = "fade", time = 500, params={nextScreenParams}} )
+  storyboard.gotoScene( nextScene,{ effect = "fade", time = 500, params=nextScreenParams} )
 end
 
 -- Called immediately after scene has moved onscreen:
@@ -42,11 +42,11 @@ function scene:enterScene( event )
 for k,v in pairs(event) do print(k,v) end
   print(event.params, event.params.nextScene)
   local group = self.view
-  nextScene = event.params.nextScene
+  nextScene = event.params.nextScene  
   nextScreenParams = event.params.nextScreenParams
   timer.performWithDelay(1500, goToScene)
   -- INSERT code here (e.g. start timers, load audio, start listeners, etc.)
-  
+  storyboard.removeScene( "level" )
 end
 
 -- Called when scene is about to move offscreen:

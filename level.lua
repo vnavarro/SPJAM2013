@@ -28,6 +28,7 @@ local timerBar
 local changedToBad = false
 local badScreenFile = "tela_ruim.png"
 local levelName
+local levelIndex 
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -75,7 +76,8 @@ end
 
 local function onBlockInsertedDelegate(block)
 	if boardGrid:checkIfWon(levelsData[levelName].solution) then
-		scene:Won()
+		print("WON")
+		scene:won()
 		return
 	end
 	if block:isDown() then
@@ -87,7 +89,8 @@ end
 local function onEndedRotation(event)	
 	boardGrid:updateBlockAt(event)
 	if boardGrid:checkIfWon(levelsData[levelName].solution) then
-		scene:Won()
+		print("WON")
+		scene:won()
 	end
 end
 
@@ -166,7 +169,17 @@ function scene:generateBlocks (group,level)
 end
 
 function scene:won()
-
+	local nextLevel = levelIndex+1	
+	if nextLevel >= 7 then
+		print("VIDEO")
+		media.playVideo("final_scene_tela_3.mp4",false,function () 
+				-- storyboard.gotoScene( "menu", "fade", 500 )
+				storyboard.gotoScene( "loadNextScene", { delay=200,"fade", 500, params = {nextScene="menu"}})
+			end)
+	else 
+		print("NEXT LEVEL ",nextLevel)
+			storyboard.gotoScene( "loadNextScene", { delay=200,"fade", 500, params = {nextScene="level",nextScreenParams={level=nextLevel}}})
+	end
 end
 
 function scene:gameOver()
@@ -175,7 +188,6 @@ function scene:gameOver()
 end
 
 function scene:reset()
-	print("RESET CARALHO!!!")
 	piecesList = nil
 	textsPiecesCount = {}
 	boardGrid = nil
@@ -184,6 +196,7 @@ function scene:reset()
 	timerBar = nil
 	changedToBad = false
 	levelName = nil
+	levelIndex = 1
 end
 
 ------------------------
@@ -194,9 +207,13 @@ end
 function scene:createScene( event )
 	local group = self.view
 
-	print("CREATE!!")
-
 	levelName = "level"..event.params.level
+	levelIndex = event.params.level
+
+	for k,v in pairs(event.params) do
+		print(k,v)
+	end
+	print("LOading",levelName,levelIndex)
 	local levelData = levelsData[levelName]
 
 	-- create a grey rectangle as the backdrop
@@ -214,6 +231,12 @@ function scene:createScene( event )
 	boardGrid:createTiles(group)	
 	boardGrid:setupGridImages(levelData.board)
 	boardGrid.solution = levelData.solution
+
+	if levelIndex == 6 then
+		local chest = display.newImageRect( "bau.png", 40,38 )
+		chest.x,chest.y = 50,display.contentHeight/2
+		group:insert(chest)
+	end
 
 	local selina = nil
 	if levelData.startPos == "up" then
@@ -259,7 +282,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
 	local group = self.view
-	timerBar.active = true
+	timerBar.active = false
 	
 end
 

@@ -10,8 +10,11 @@ settings = {
 	
 	iphone = {
 		plist = {
+      CFBundleIconFiles = {
+
+      },
       UIAppFonts={
-        "braxtonfree.otf"
+        "Braxton.otf"
       },
 			UIStatusBarHidden = false,
 			UIPrerenderedIcon = true, -- set to false for "shine" overlay
