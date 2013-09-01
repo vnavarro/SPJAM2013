@@ -14,16 +14,33 @@ require 'db'
 --------------------------------------------
 
 -- forward declarations and other locals
-local playBtn
-local creditsBtn
-local audioBtn
+local audioBtnOff
+local audioBtnOn
 
 -- 'onRelease' event listener for playBtn
-local function onPlayBtnRelease()
+local function onPlayBtnTouch(event)
 	
+	if event.phase == "ended" then
 	-- go to level1.lua scene
-	storyboard.gotoScene( "levelselection", "fade", 500 )
+		storyboard.gotoScene( "levelselection", "fade", 500 )
+	end
+	return true	-- indicates successful touch
+end
+
+local function onAudioBtnTouch(event)
 	
+	if event.phase == "ended" then
+	-- go to level1.lua scene
+	end
+	return true	-- indicates successful touch
+end
+
+local function onCreditsBtnTouch(event)
+	
+	if event.phase == "ended" then
+	-- go to level1.lua scene
+		storyboard.gotoScene( "creditos", "fade", 500 )
+	end
 	return true	-- indicates successful touch
 end
 
@@ -44,51 +61,40 @@ function scene:createScene( event )
 	background:setReferencePoint( display.TopLeftReferencePoint )
 	background.x, background.y = 0, 0
 	
-	playBtn = widget.newButton{
-		label="Jogar",
-		labelColor = { default={255}, over={128} },
-		defaultFile="button.png",
-		overFile="button-over.png",
-		width=154, height=40,
-		onRelease = onPlayBtnRelease	-- event listener function
-	}
+	local playBtn = display.newImageRect( group,"jogar.png", 58, 58 )
+  playBtn:addEventListener("touch", onPlayBtnTouch)
 	
 	-- audio config
-	audioBtn = widget.newButton{
-		label="Audio",
-		labelColor = { default={255}, over={128} },
-		defaultFile="button.png",
-		overFile="button-over.png",
-		width=154, height=40,
-		onRelease = onPlayBtnRelease	-- event listener function
-	}
-	
-	-- credits
-	creditsBtn = widget.newButton{
-		label="Créditos",
-		labelColor = { default={255}, over={128} },
-		defaultFile="button.png",
-		overFile="button-over.png",
-		width=154, height=40,
-		onRelease = onPlayBtnRelease	-- event listener function
-	}
+	audioBtnOn = display.newImageRect( group,"som_on.png", 58, 58 )
+  audioBtnOn:addEventListener("touch", onAudioBtnTouch)
+
+  audioBtnOff = display.newImageRect( group,"som_off.png", 58, 58 )
+  audioBtnOff.alpha = 0
+
+  local creditsBtn = display.newImageRect( group,"credits.png", 58, 58 )
+  creditsBtn:addEventListener("touch", onCreditsBtnTouch)
 	
 	playBtn:setReferencePoint( display.CenterReferencePoint )
-	playBtn.x = display.contentWidth*0.66
-	playBtn.y = display.contentHeight - 125
+	playBtn.x = display.contentWidth*0.50
+	playBtn.y = display.contentHeight - 100
 	
-	audioBtn:setReferencePoint( display.CenterReferencePoint )
-	audioBtn.x = display.contentWidth*0.8
-	audioBtn.y = display.contentHeight - 40
+	audioBtnOn:setReferencePoint( display.CenterReferencePoint )
+	audioBtnOn.x = display.contentWidth*0.82
+	audioBtnOn.y = display.contentHeight - 100
+
+	audioBtnOff:setReferencePoint( display.CenterReferencePoint )
+	audioBtnOff.x = display.contentWidth*0.82
+	audioBtnOff.y = display.contentHeight - 100
 	
 	creditsBtn:setReferencePoint( display.CenterReferencePoint )
 	creditsBtn.x = display.contentWidth*0.66
-	creditsBtn.y = display.contentHeight - 85
+	creditsBtn.y = display.contentHeight - 100
 	
 	-- all display objects must be inserted into group
 	group:insert( background )
 	group:insert( playBtn )
-	group:insert( audioBtn )
+	group:insert( audioBtnOn )
+	group:insert( audioBtnOff )
 	group:insert( creditsBtn )
 
 	db = DB.new()   
@@ -115,21 +121,6 @@ end
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
 function scene:destroyScene( event )
 	local group = self.view
-	
-	if playBtn then
-		playBtn:removeSelf()	-- widgets must be manually removed
-		playBtn = nil
-	end
-
-	if creditsBtn then
-		creditsBtn:removeSelf()	-- widgets must be manually removed
-		creditsBtn = nil
-	end
-
-	if audioBtn then
-		audioBtn:removeSelf()	-- widgets must be manually removed
-		audioBtn = nil
-	end	
 end
 
 -----------------------------------------------------------------------------------------

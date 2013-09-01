@@ -95,7 +95,7 @@ function scene:generateBlocks (group,level)
 		block:setDragFailDelegate(onCancelDragBlock)
 		block:checkBlockPositionDelegate(canPlaceBlock)
 		block:checkIsInsideBoardDelegate(isInsideBoard)
-		local countText = display.newText(group,piecesList[i].count,column+tileWidth,tileHeight+(12*(i))+(tileHeight*i),native.newFont("Arial"),12)
+		local countText = display.newText(group,piecesList[i].count,column+tileWidth+2,tileHeight+(8*(i))+(tileHeight*i),"Braxton",20)
 		table.insert(textsPiecesCount,countText)
 	end
 end
@@ -105,7 +105,7 @@ function scene:createScene( event )
 	local group = self.view
 
 	local levelName = "level"..event.params.level
-	
+
 	-- create a grey rectangle as the backdrop
 	local bg = display.newImageRect( levelsData[levelName].bgImg, screenW, screenH )
 	bg:setReferencePoint(display.TopLeftReferencePoint)
@@ -132,8 +132,8 @@ function scene:createScene( event )
 	blocksBg.x = 400
 	blocksBg.y = 135
 
-	local column = tileWidth*11
-	display.newText(group,"Pontes",column+tileWidth,tileHeight,native.newFont("Arial"),12)
+	local column = tileWidth*12
+	display.newText(group,"Pontes",column-7,tileHeight-5,"Braxton",25)
 
 	scene:generateBlocks(group,levelName)	
 end
