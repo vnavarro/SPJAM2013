@@ -80,7 +80,7 @@ local function onBlockInsertedDelegate(block)
 		timerBar.speed = timerBar.speed + 0.025
 		if changedToBad == false then
 			scene:stopMusic()
-			SC.playSound( SC.DANGERGO, false, 0, nil ) 
+			-- SC.playSound( SC.DANGERGO, false, 0, nil ) 
 			SC.playSound( SC.DANGERSOUND, false, -1, nil ) 
 		end
 
@@ -216,7 +216,7 @@ end
 
 function scene:stopMusic()
 	SC.stopSound(SC.MENU_SELECTED)
-	SC.stopSound(SC.DANGERGO)
+	-- SC.stopSound(SC.DANGERGO)
 	SC.stopSound(SC.DANGERSOUND)
 	SC.stopSound(SC.TRANKSMUSIK)
 end
@@ -299,7 +299,7 @@ function scene:createScene( event )
 	-- change to bad scene
 	if ( changedToBad == true ) then
 		scene:stopMusic()
-    SC.playSound( SC.DANGERGO, false, 0, nil ) 
+    -- SC.playSound( SC.DANGERGO, false, 0, nil ) 
     SC.playSound( SC.DANGERSOUND, false, -1, nil ) 
 
 	else
