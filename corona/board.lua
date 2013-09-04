@@ -66,21 +66,40 @@ function new(group,tileWidth,tileHeight)
     end
     for i=1,5 do
       for j=1,5 do
-        local position = board.tiles[i][j]
-        if event.x > position.x and event.x < position.x+board.tileWidth and 
-          event.y > position.y and event.y < position.y+board.tileHeight and not position.hasBlock 
-          and not position.hasObject then
-    		  position.hasBlock = true 
-          position.name = event.name
-          position.rotation = event.rot
-          print("canPlaceBlock",position.name,position.rotation,position.hasBlock)
-          return true,position.x,position.y
+        local boardTile = board.tiles[i][j]
+        if event.x > boardTile.x and event.x < boardTile.x+board.tileWidth and 
+          event.y > boardTile.y and event.y < boardTile.y+board.tileHeight and not boardTile.hasBlock 
+          and not boardTile.hasObject then
+          if boardTile.hasPortal == true then            
+            if not self:isBlockAPortalMatch(boardTile,event.name) then              
+              return false
+            end
+          end
+    		  boardTile.hasBlock = true 
+          boardTile.name = event.name
+          boardTile.rotation = event.rot
+          print("canPlaceBlock",boardTile.name,boardTile.rotation,boardTile.hasBlock)
+          return true,boardTile.x,boardTile.y
         end
       end
     end
     return false
   end
 
+  function board:isBlockAPortalMatch(boardTile,blockName)
+    if boardTile.portalType == "bad" and 
+      (blockName == "downcurve" or blockName == "downstraight") then
+      return true
+    elseif boardTile.portalType == "good" and 
+      (blockName == "powercurve" or blockName == "powerstraight") then
+      return true
+    end
+    return false
+  end
+
+  ----------------
+  -- Board Setup
+  ----------------  
   function board:setupGridImages(boardData)
     for i=1,#boardData do
       for j=1,#boardData[i] do            
@@ -102,10 +121,32 @@ function new(group,tileWidth,tileHeight)
           block.placed = true
 
           block.image:removeEventListener("touch", block)
+        elseif boardData[i][j].tileType == "portal" then
+          self:setupPortalOnGrid(boardData[i][j],i,j)
         end
       end      
     end
   end
+
+  function board:setupPortalOnGrid(portalData,i,j)
+    self.tiles[i][j].hasPortal = true
+    self.tiles[i][j].portalType = portalData.name
+    if portalData.name == "bad" then      
+      local stone = display.newRect( self.group, 0, 0, 32, 32 )
+      stone:setFillColor(255, 0, 0)
+      stone:setReferencePoint(display.TopLeftReferencePoint)          
+      stone.x,stone.y = self.tileWidth*2+(self.tileWidth*j),self.tileHeight+(self.tileHeight*i)
+    elseif portalData.name == "good" then
+      local stone = display.newRect( self.group, 0, 0, 32, 32 )
+      stone:setFillColor(0, 0, 255)
+      stone:setReferencePoint(display.TopLeftReferencePoint)          
+      stone.x,stone.y = self.tileWidth*2+(self.tileWidth*j),self.tileHeight+(self.tileHeight*i)
+    end
+  end
+
+  ----------------
+  --
+  ----------------    
 
   function board:checkIfWon(solution)
     local count = 0

@@ -33,7 +33,7 @@ local levels = {
     bgImg = "good_scene01.png",
     board = {
       {{tileType="stone"},{tileType="stone"},{tileType="block",name="powercurve",rotation=180},{tileType=""},{tileType=""}},
-      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="block", name="downcurve", rotation=0}},
+      {{tileType=""},{tileType=""},{tileType="stone"},{tileType=""},{tileType="portal", name="bad"}},
       {{tileType=""},{tileType=""},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType=""},{tileType="stone"},{tileType=""},{tileType="stone"},{tileType=""}},
       {{tileType="stone"},{tileType=""},{tileType=""},{tileType=""},{tileType=""}}
@@ -45,14 +45,14 @@ local levels = {
       -- {img="r_arrow.png",x=display.contentWidth/2 + 60,y=display.contentHeight/2,w=36, h=24}
     },
     pieces = {
-      {name="powercurve",count=1},{name="downstraight",count=8},
+      {name="powercurve",count=2},{name="downstraight",count=8},
       {name="downcurve",count=5},{name="powerstraight",count=0}
     },
 	startPos = "up",
 	solution = {
 		{position = {x=3,y=1}, name="powercurve",rotation=180},
 		{position = {x=4,y=1}, name="powercurve",rotation=0},
-		{position = {x=4,y=2}, name="downcurve",rotation=180},
+		{position = {x=4,y=2}, name="powercurve",rotation=180},
 		{position = {x=5,y=2}, name="downcurve",rotation=0},
 		{position = {x=1,y=3}, name="downstraight",rotation=90},
 		{position = {x=2,y=3}, name="downstraight",rotation=90},
