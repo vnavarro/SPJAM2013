@@ -275,9 +275,9 @@ function scene:createScene( event )
 		group:insert( bg )
 	end
 
-	local speed = 0.25
+	local speed = 0.165
 	if changedToBad then
-		speed = 0.275
+		speed = 0.19
 	end
 	if levelData.startPos == "down" then
 		timerBar = TimerBar.new(halfW-60,40,speed)
