@@ -1,0 +1,43 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class TimerBar : MonoBehaviour {
+	// a delegate, called when the timer runs out
+	public delegate void ExpiredTimeHandler();
+	public static event ExpiredTimeHandler ExpiredTime;
+	// the rate the time runs (exactly like in Lua version)
+	public float timerSpeed;
+	// used to have current and final timer reference
+	public Transform currentPos, finalPos;
+	// used to animate the timer bar
+	public GameObject timerBar;
+	
+	// used to make the lua version-like calc
+	private float totalTime;
+	// timerBar material caching
+	private Material barMaterial;
+	
+	void Start () {
+		totalTime = finalPos.position.x - currentPos.position.x;
+		barMaterial = timerBar.renderer.material;
+		barMaterial.SetFloat("_Cut", 0);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		Vector3 moveTimer = currentPos.position;
+		Vector3 endTimer = finalPos.position;
+		// keep lua compatibility
+		moveTimer.x += timerSpeed * Time.deltaTime * totalTime/10;
+		if (moveTimer.x >= endTimer.x){
+			moveTimer.x = endTimer.x;
+			if(ExpiredTime != null){
+				ExpiredTime();
+			}
+			Destroy(this);
+		}
+		// update monster pos and timer bar
+		currentPos.position = moveTimer;
+		barMaterial.SetFloat("_Cut", 0.99f-(endTimer.x - moveTimer.x)/totalTime);
+	}
+}
