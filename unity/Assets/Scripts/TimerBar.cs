@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class TimerBar : MonoBehaviour {
 	// a delegate, called when the timer runs out
@@ -12,6 +11,7 @@ public class TimerBar : MonoBehaviour {
 	// used to animate the timer bar
 	public GameObject timerBar;
 	
+	public bool paused = false;
 	// used to make the lua version-like calc
 	private float totalTime;
 	// timerBar material caching
@@ -23,8 +23,15 @@ public class TimerBar : MonoBehaviour {
 		barMaterial.SetFloat("_Cut", 0);
 	}
 	
+	public void ResetTimer() {
+		currentPos.position = new Vector3(finalPos.position.x - totalTime
+										 ,currentPos.position.y
+										 ,currentPos.position.z);
+	}
+	
 	// Update is called once per frame
 	void Update () {
+		if(paused) return;
 		Vector3 moveTimer = currentPos.position;
 		Vector3 endTimer = finalPos.position;
 		// keep lua compatibility
