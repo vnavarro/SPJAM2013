@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 7d436c10c022645bab8265ed97b27f14
+labels:
+- Piece
 TextureImporter:
   serializedVersion: 2
   mipmaps:

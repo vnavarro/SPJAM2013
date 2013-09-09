@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: f515138f528d949f1bf78e4ab6fb65fc
+labels:
+- Hud
 TextureImporter:
   serializedVersion: 2
   mipmaps:

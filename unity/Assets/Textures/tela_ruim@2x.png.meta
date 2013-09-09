@@ -1,5 +1,7 @@
 fileFormatVersion: 2
 guid: 16ca77555736c47099d6a9a151ba9405
+labels:
+- Background
 TextureImporter:
   serializedVersion: 2
   mipmaps:
