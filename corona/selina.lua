@@ -12,6 +12,7 @@ function new(x,y,group)
 	-- selina.y = y
 	-- selina.group = group
 	local imageSheet = graphics.newImageSheet("selinass.png", sheetInfo:getSheet())
+	print(" selina",imageSheet)
 	selina.sprite = display.newSprite(group, imageSheet, sheetInfo.sequenceData)
 	-- selina.sprite:setReferencePoint(display.TopLeftReference)
 	selina.sprite.x = x

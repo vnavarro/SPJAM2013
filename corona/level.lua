@@ -26,6 +26,7 @@ local changedToBad = false
 local badScreenFile = "tela_ruim.png"
 local levelName
 local levelIndex 
+local selectedBlock = nil
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -159,6 +160,17 @@ function scene:generateBlocks (group,level)
 		block:checkIsInsideBoardDelegate(isInsideBoard)
 		block.onBlockInserted = onBlockInsertedDelegate
 		block.onEndedRotation = onEndedRotation
+		block.onBlockSelected = function(block)
+			if selectedBlock and selectedBlock ~= block then
+				selectedBlock.image:setFillColor(255, 255, 255)
+				selectedBlock.selected = false
+				selectedBlock = block				
+				selectedBlock.image:setFillColor(0, 255, 0)
+			elseif block.selected then
+				selectedBlock = block
+				block.image:setFillColor(0, 255, 0)
+			end
+		end
 		local countText = display.newText(group,piecesList[i].count,column+tileWidth+2,tileHeight+(8*(i))+(tileHeight*i),"Braxton",20)
 		table.insert(textsPiecesCount,countText)
 	end
@@ -219,6 +231,16 @@ function scene:stopMusic()
 	-- SC.stopSound(SC.DANGERGO)
 	SC.stopSound(SC.DANGERSOUND)
 	SC.stopSound(SC.TRANKSMUSIK)
+end
+
+function scene:touch(event)
+	if event.phase == "ended" then
+		local blockToPlace = {x=selectedBlock.image.x, y=selectedBlock.image.y,
+													name=selectedBlock.name,rot=selectedBlock.image.rotation}
+		if isInsideBoard(event.x,event.y) and boardGrid:canPlaceBlock(blockToPlace) then
+			print("Can Place YEAH!")
+		end
+	end
 end
 
 ------------------------
@@ -312,13 +334,14 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	timerBar.active = true
-	
+	-- Runtime:addEventListener("touch", scene)
 end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
 	local group = self.view
 	timerBar.active = false	
+	-- Runtime:removeEventListener("touch", scene)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

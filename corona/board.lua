@@ -1,5 +1,6 @@
 module(...,package.seeall)
 local Block = require("block")
+local Portal = require("portal")
 
 function new(group,tileWidth,tileHeight)
   local board = {}
@@ -72,7 +73,7 @@ function new(group,tileWidth,tileHeight)
           and not boardTile.hasObject then
           if boardTile.hasPortal == true then            
             if not self:isBlockAPortalMatch(boardTile,event.name) then              
-              return false
+              return false  
             end
           end
     		  boardTile.hasBlock = true 
@@ -131,17 +132,11 @@ function new(group,tileWidth,tileHeight)
   function board:setupPortalOnGrid(portalData,i,j)
     self.tiles[i][j].hasPortal = true
     self.tiles[i][j].portalType = portalData.name
-    if portalData.name == "bad" then      
-      local stone = display.newRect( self.group, 0, 0, 32, 32 )
-      stone:setFillColor(255, 0, 0)
-      stone:setReferencePoint(display.TopLeftReferencePoint)          
-      stone.x,stone.y = self.tileWidth*2+(self.tileWidth*j),self.tileHeight+(self.tileHeight*i)
-    elseif portalData.name == "good" then
-      local stone = display.newRect( self.group, 0, 0, 32, 32 )
-      stone:setFillColor(0, 0, 255)
-      stone:setReferencePoint(display.TopLeftReferencePoint)          
-      stone.x,stone.y = self.tileWidth*2+(self.tileWidth*j),self.tileHeight+(self.tileHeight*i)
-    end
+    local pType = portalData.name
+    local x,y =self.tileWidth*2+(self.tileWidth*j),self.tileHeight+(self.tileHeight*i)
+    local newPortal = Portal.new(x,y,board.group,pType)
+    newPortal:animate()
+    -- newPortal:setReferencePoint(display.TopLeftReferencePoint)
   end
 
   ----------------

@@ -31,6 +31,8 @@ function newBlock(name)
   block.onBlockInserted = nil
   block.onEndedRotation = nil
   block.placed = false
+  block.selected = false
+  block.onBlockSelected = nil
 
   function block:setDragDelegate(func)
 	self.onDragDelegate = func
@@ -69,28 +71,62 @@ function newBlock(name)
 
   function block:setRotation(rot)
     self.image.rotation = rot
+    local rotationLimit = 360
+    if self.name == names.powerstraight or self.name == names.downstraight then
+      rotationLimit = 180
+    end
+    self.image.rotation = self.image.rotation % rotationLimit
   end
 
-  function block:duplicate()
-    local duplicateBlock =  newBlock(self.name,0)    
-    duplicateBlock:setX(self.x)
-    duplicateBlock:setY(self.y)    
+  function block:doDuplicate(x,y,group)
+    local duplicateBlock =  newBlock(self.name,0)       
+    duplicateBlock:setX(x)
+    duplicateBlock:setY(y)    
     duplicateBlock:setDragDelegate(self.onDragDelegate)
     duplicateBlock:setDragFailDelegate(self.onDragFailDelegate)
     duplicateBlock:checkBlockPositionDelegate(self.checkBlockPositionDelegate)
     duplicateBlock:checkIsInsideBoardDelegate(self.checkIsInsideBoard)	
     duplicateBlock.onBlockInserted = self.onBlockInserted    
     duplicateBlock.onEndedRotation = self.onEndedRotation
-    return duplicateBlock
+    duplicateBlock:addToGroup(group)
+    -- return duplicateBlock
   end
+
+  function block:duplicate()
+    local currentX,currentY = self.x,self.y
+    local group = self.image.parent
+    -- wrap spawnBall and randomPosition inside a closure
+    local myclosure = function() self:doDuplicate(currentX,currentY,group) end
+    timer.performWithDelay(50, myclosure, 1)
+    --spawnBall()
+end
 
   function block:isDown()
     return block.name == names.downcurve or block.name == names.downstraight
   end
 
+  function block:tap(event)
+    print("tapped")
+    if block.placed and event.numTaps == 1 then
+      if CurrentDragging == self or not CurrentDragging then
+        self:setRotation(self.image.rotation + 90)
+        self.onEndedRotation({x=self.image.x,y=self.image.y,name=self.name,rot=self.image.rotation})
+      end
+    end
+  end
+
   local isDragging = false
   
-  -- local blockTouch = function(event)	
+  function block:newtouch(event)
+    if event.phase == "began" then
+    elseif event.phase == "ended" and not block.checkIsInsideBoard(self.image.x,self.image.y) then      
+      print("touched")
+      block.selected = not block.selected
+      block.onBlockSelected(block)
+    end
+  end
+
+  -- local function blockTouch (event)
   function block:touch(event)
   	if currentDragging ~= nil and currentDragging ~= self then 
   		return true 
@@ -116,7 +152,7 @@ function newBlock(name)
   			if self.checkIsInsideBoard then
   				local valid, x, y = self.checkIsInsideBoard(self.image.x, self.image.y)
   				if not valid then
-  					self:duplicate():addToGroup(self.image.parent)
+  					self:duplicate(self.image.parent)
   				end
   			end
   		end
@@ -149,14 +185,17 @@ function newBlock(name)
           self.onEndedRotation({x=self.image.x,y=self.image.y,name=self.name,rot=self.image.rotation})
   			end
   		end
-  		currentDragging = nil
+  		currentDragging = nil      
       display.getCurrentStage():setFocus( nil )
-      self.isFocus = nil
+      self.image.isFocus = nil
   	end		
+    return true
   end
 
+
   block.image:addEventListener("touch", block)
-  -- Runtime:addEventListener("touch", blockTouch)
+  -- block.image:addEventListener("tap", block)
+  -- Runtime:addEventListener("touch", block)
 
   return block
 end
