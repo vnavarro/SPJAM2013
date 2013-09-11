@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Collider))]
 public class GestureControl : MonoBehaviour {
 	public delegate void TouchBeginHandler(Touch touch);
 	public delegate void TouchMovedHandler(Touch touch);
