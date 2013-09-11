@@ -2,43 +2,71 @@
 using System.Collections;
 
 public class GestureControl : MonoBehaviour {
+	public delegate void TouchBeginHandler(Touch touch);
+	public delegate void TouchMovedHandler(Touch touch);
+	public delegate void TouchEndedHandler(Touch touch);
+	
+	public event TouchBeginHandler onTouchBegin;
+	public event TouchMovedHandler onTouchMoved;
+	public event TouchEndedHandler onTouchEnded;
 
-	// Use this for initialization
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		foreach (Touch touch in Input.touches) {
-			if(touch.phase == TouchPhase.Ended){
-				if(this.isThisBeingTouched(touch)){
-					print("Ended on game object");			
-					print(this.gameObject);
+		this.checkTouch();
+	}
+	
+	void checkTouch(){
+		if(!this.hasCollider()){
+			return;
+		}
+			
+		foreach (Touch touch in Input.touches) {			
+			if(!this.isBeingTouched(touch)){
+				continue;
+			}
+			
+			if(touch.phase == TouchPhase.Began){
+				print("began on game object");
+				if(onTouchBegin != null){
+					onTouchBegin(touch);				
+				}
+			}
+			else if(touch.phase == TouchPhase.Moved){
+				print("moved on game object");	
+				if(onTouchMoved != null){
+					onTouchMoved(touch);
+				}
+			}
+			else if(touch.phase == TouchPhase.Ended){				
+				print("Ended on game object");			
+				if(onTouchEnded != null){
+					onTouchEnded(touch);
 				}
 			}
 		}
 	}
 	
-	bool isThisBeingTouched(Touch touch){				
-		//var ray = Camera.main.ScreenPointToRay (touch.position);	//cam.ScreenPointToRay (touch.position);	
-		var ray = new Ray(new Vector3(touch.position.x,touch.position.y,-1),Vector3.forward);
+	bool hasCollider(){
+		if(this.collider == null || !this.collider.enabled){
+			Debug.LogWarning("To check for touch use/enable a collider in the game object");
+			return false;
+		}
+		return true;
+	}
+	
+	bool isBeingTouched(Touch touch){				
+		Vector3 endVector = Camera.main.ScreenPointToRay (touch.position).origin;
+		endVector.z = 100;
+		var ray = new Ray(Camera.main.ScreenPointToRay(touch.position).origin,endVector);
 		RaycastHit hit;
-		Debug.Log("Direction:"+Camera.main.ScreenPointToRay (touch.position).origin);
-		Debug.DrawLine(Vector3.zero,new Vector3(touch.position.x,touch.position.y,0),Color.magenta);
-		Debug.DrawLine(ray.origin,ray.direction * 10);
-		Debug.DrawRay(ray.origin,ray.direction);
+		Debug.DrawLine(Camera.main.ScreenPointToRay (touch.position).origin,endVector,Color.magenta);
 		
-		//Old way, works i think
 		if (Physics.Raycast(ray,out hit)) {
-			print("Ray touched:"+this.gameObject+","+Physics.Raycast (ray));
-			Debug.Log(hit.transform.name);//Object you touched			
-			//hit.transform.SendMessage(methodName,touch);
 			return true;
 		}
-		/*else if(!isReceiverPhysical){
-			this.gameObject.SendMessage(methodName,touch);
-		}*/
 		return false;
 	}
 }
