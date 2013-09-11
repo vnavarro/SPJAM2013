@@ -120,6 +120,7 @@ corona/u_arrow@2x.png
 unity/[Tt]emp/
 unity/[Oo]bj/
 unity/[Ll]ibrary/
+[Ll]ibrary/
 
 *.svd
 *.userprefs

@@ -23,10 +23,13 @@
 		};
 		float _Cut;
 		void surf (Input IN, inout SurfaceOutput o) {
-			clip(IN.uv_MainTex.x-_Cut);
 			half4 c = tex2D (_MainTex, IN.uv_MainTex);
-			o.Albedo = c.rgb;
-			o.Alpha = c.a;
+			if (IN.uv_MainTex.x > _Cut) {
+				o.Albedo = c.rgb;
+				o.Alpha = c.a;
+			} else {
+				o.Alpha = 0;
+			}
 		}
 		ENDCG
 	} 
