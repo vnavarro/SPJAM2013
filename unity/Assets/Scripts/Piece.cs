@@ -4,6 +4,7 @@
 public class Piece : MonoBehaviour {
 	public PieceSpawner spawner;
 	public static Piece selected = null;
+	public static GameObject boardLimits;
 	
 	private GestureControl control;
 	private bool isMoving = false;
@@ -20,7 +21,7 @@ public class Piece : MonoBehaviour {
 		if(!isMoving){
 			RotatePiece();
 		} else {
-			if (!CheckPosition()){
+			if (!isInsideBoard()){
 				spawner.RestorePiece();
 				Destroy(gameObject);
 			}
@@ -59,7 +60,7 @@ public class Piece : MonoBehaviour {
 		if(!isMoving){
 			RotatePiece();
 		} else {
-			if (!CheckPosition()){
+			if (!isInsideBoard()){
 				spawner.RestorePiece();
 				Destroy(gameObject);
 			}
@@ -73,7 +74,11 @@ public class Piece : MonoBehaviour {
 		Debug.Log(transform.rotation.eulerAngles.z);
 	}
 	
-	bool CheckPosition () {
-		return false;
+	bool isInsideBoard () {
+		Bounds boardBounds = Piece.boardLimits.collider.bounds;
+		Vector3 pieceCenter = this.gameObject.collider.bounds.center;
+		bool isInsideX = pieceCenter.x >= boardBounds.min.x && pieceCenter.x <= boardBounds.max.x;		
+		bool isInsideY = pieceCenter.y >= boardBounds.min.y && pieceCenter.y <= boardBounds.max.y;
+		return isInsideX && isInsideY;
 	}
 }
