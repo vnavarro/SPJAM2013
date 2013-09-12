@@ -30,7 +30,6 @@ public class GestureControl : MonoBehaviour {
 			}
 			
 			if(touch.phase == TouchPhase.Began){
-				//print("began on game object");
 				if(onTouchBegin != null){
 					onTouchBegin(touch);				
 				}

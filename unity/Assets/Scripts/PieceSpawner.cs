@@ -13,6 +13,7 @@ public class PieceSpawner : MonoBehaviour {
 		touchControl.onTouchBegin += OnTouchBegin;
 		counter = transform.GetChild(0).GetComponent<TextMesh>();
 		counter.text = string.Format("x{0:D2}",amount);
+		Piece.boardLimits = GameObject.Find("BoardLimits");
 	}
 	
 	void OnTouchBegin(Touch t){
