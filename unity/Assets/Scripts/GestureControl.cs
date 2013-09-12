@@ -10,9 +10,9 @@ public class GestureControl : MonoBehaviour {
 	public event TouchBeginHandler onTouchBegin;
 	public event TouchMovedHandler onTouchMoved;
 	public event TouchEndedHandler onTouchEnded;
-
-	void Start () {
 	
+	void Start () {
+		
 	}
 	
 	void Update () {
@@ -30,19 +30,19 @@ public class GestureControl : MonoBehaviour {
 			}
 			
 			if(touch.phase == TouchPhase.Began){
-				print("began on game object");
+				//print("began on game object");
 				if(onTouchBegin != null){
 					onTouchBegin(touch);				
 				}
 			}
 			else if(touch.phase == TouchPhase.Moved){
-				print("moved on game object");	
+				//print("moved on game object");	
 				if(onTouchMoved != null){
 					onTouchMoved(touch);
 				}
 			}
 			else if(touch.phase == TouchPhase.Ended){				
-				print("Ended on game object");			
+				//print("Ended on game object");			
 				if(onTouchEnded != null){
 					onTouchEnded(touch);
 				}
@@ -64,8 +64,8 @@ public class GestureControl : MonoBehaviour {
 		var ray = new Ray(Camera.main.ScreenPointToRay(touch.position).origin,endVector);
 		RaycastHit hit;
 		Debug.DrawLine(Camera.main.ScreenPointToRay (touch.position).origin,endVector,Color.magenta);
-		
 		if (Physics.Raycast(ray,out hit)) {
+			if (hit.collider == collider)
 			return true;
 		}
 		return false;

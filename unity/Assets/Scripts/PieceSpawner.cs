@@ -9,7 +9,7 @@ public class PieceSpawner : MonoBehaviour {
 	private TextMesh counter;
 	
 	void Start () {
-		touchControl = GetComponent<GestureControl>();
+		touchControl = gameObject.GetComponent<GestureControl>();
 		touchControl.onTouchBegin += OnTouchBegin;
 		counter = transform.GetChild(0).GetComponent<TextMesh>();
 		counter.text = string.Format("x{0:D2}",amount);
@@ -27,7 +27,6 @@ public class PieceSpawner : MonoBehaviour {
 	}
 #if UNITY_EDITOR
 	void OnMouseDown() {
-		Debug.Log("spawn");
 		if (amount > 0){
 			amount--;
 			Piece p = Instantiate(piece,transform.position,transform.rotation) as Piece;

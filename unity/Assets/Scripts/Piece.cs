@@ -8,13 +8,19 @@ public class Piece : MonoBehaviour {
 	private GestureControl control;
 	private bool isMoving = false;
 	
+	private BoxCollider myCollider;
 	// Use this for initialization
 	void Start () {
-		control = GetComponent<GestureControl>();
+		control = gameObject.GetComponent<GestureControl>();
+		control.onTouchBegin += OnTouchBegin;
 		control.onTouchMoved += OnTouchMove;
 		control.onTouchEnded += OnTouchEnd;
+		myCollider = collider as BoxCollider;
+		Debug.Log(myCollider.size);
+		myCollider.size *= 2;
+		Debug.Log(myCollider.size);
 	}
-#if UNITY_EDITOR
+#if false
 	private Vector3 lastMousePos;
 	void OnMouseUp() {
 		if(!isMoving){
@@ -45,17 +51,22 @@ public class Piece : MonoBehaviour {
 	}
 #endif
 	void OnTouchBegin (Touch t) {
-		selected = this;
+		myCollider.size *= 2;
+		//selected = this;
 	}
 	
 	void OnTouchMove (Touch t) {
-		isMoving = true;
-		Vector3 movement = Camera.main.ScreenToWorldPoint(t.position);
-		movement.z = selected.transform.position.z;
-		selected.transform.position=movement;
+		//if(selected){
+			isMoving = true;
+			Vector3 movement = Camera.main.ScreenToWorldPoint(t.position);
+			movement.z = transform.position.z;
+			transform.position=movement;
+		//}
 	}
 	
 	void OnTouchEnd (Touch t) {
+		myCollider.size /= 2;
+		Debug.Log(isMoving);
 		if(!isMoving){
 			RotatePiece();
 		} else {
@@ -65,7 +76,7 @@ public class Piece : MonoBehaviour {
 			}
 		}
 		isMoving = false;
-		selected = null;
+		//selected = null;
 	}
 	
 	void RotatePiece() {
@@ -74,6 +85,6 @@ public class Piece : MonoBehaviour {
 	}
 	
 	bool CheckPosition () {
-		return false;
+		return true;
 	}
 }
