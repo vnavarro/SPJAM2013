@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class Board : MonoBehaviour {	
 	
 	[System.Serializable]
-	public class Tile{
-		public Vector2 position = Vector2.zero;
+	public struct Tile{
+		public Vector2 position;
 		public bool hasBlock;
 		public string name;
 		public int rotation;
@@ -16,14 +14,12 @@ public class Board : MonoBehaviour {
 	public float tileWidth;
 	public float tileHeight;
 	private const int maxTiles=5;
-	private List<List<Tile>> tiles;
+	private Tile[,] tiles = new Tile[maxTiles,maxTiles];
 	
 	// Use this for initialization
 	void Start () {
-		this.tiles = new List<List<Tile>>();
-		this.tileWidth = (int)Mathf.Floor(this.gameObject.collider.bounds.size.x/Board.maxTiles);
-		this.tileHeight = (int)Mathf.Floor(this.gameObject.collider.bounds.size.y/Board.maxTiles);
-		Debug.Log("Tile width,height"+this.tileWidth+","+this.tileHeight);
+		tileWidth = collider.bounds.size.x/Board.maxTiles;
+		tileHeight = collider.bounds.size.y/Board.maxTiles;
 		createTiles();
 	}
 	
@@ -33,17 +29,12 @@ public class Board : MonoBehaviour {
 	}
 	
 	void createTiles(){
-		Bounds boardBounds = this.gameObject.collider.bounds;
-		for (int i = 0; i < Board.maxTiles; i++) {
-			List<Tile> rowTiles = new List<Tile>();
-			for (int j = 0; j < Board.maxTiles; j++) {
-				Tile tile = new Tile();
-				tile.position.x = boardBounds.min.x+(this.tileWidth*j);
-				tile.position.y = boardBounds.min.y+(this.tileHeight*i);
-				Debug.Log("Tile line,column:"+i+","+j+"in pos:"+tile.position.x+","+tile.position.y);
-				rowTiles.Add(tile);
+		Bounds boardBounds = collider.bounds;
+		for (int i = 0; i < maxTiles; i++) {
+			for (int j = 0; j < maxTiles; j++) {
+				tiles[i,j].position.x = boardBounds.min.x+(tileWidth*j);
+				tiles[i,j].position.y = boardBounds.min.y+(tileHeight*i);
 			}
-			this.tiles.Add(rowTiles);
 		}
 	}
 }

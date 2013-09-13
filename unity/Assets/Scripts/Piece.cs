@@ -21,7 +21,7 @@ public class Piece : MonoBehaviour {
 		myCollider.size *= 2;
 		Debug.Log(myCollider.size);
 	}
-#if false
+#if UNITY_EDITOR
 	private Vector3 lastMousePos;
 	void OnMouseUp() {
 		if(!isMoving){
@@ -30,6 +30,8 @@ public class Piece : MonoBehaviour {
 			if (!isInsideBoard()){
 				spawner.RestorePiece();
 				Destroy(gameObject);
+			} else {
+				SnapInBoard();
 			}
 		}
 		isMoving = false;
@@ -74,6 +76,8 @@ public class Piece : MonoBehaviour {
 			if (!isInsideBoard()){
 				spawner.RestorePiece();
 				Destroy(gameObject);
+			} else {
+				SnapInBoard();
 			}
 		}
 		isMoving = false;
@@ -87,9 +91,19 @@ public class Piece : MonoBehaviour {
 	
 	bool isInsideBoard () {
 		Bounds boardBounds = Piece.boardLimits.collider.bounds;
-		Vector3 pieceCenter = this.gameObject.collider.bounds.center;
+		Vector3 pieceCenter = transform.position;
 		bool isInsideX = pieceCenter.x >= boardBounds.min.x && pieceCenter.x <= boardBounds.max.x;		
 		bool isInsideY = pieceCenter.y >= boardBounds.min.y && pieceCenter.y <= boardBounds.max.y;
 		return isInsideX && isInsideY;
+	}
+	
+	void SnapInBoard() {
+		Board board = boardLimits.GetComponent<Board>();
+		Bounds boardBounds = board.collider.bounds;
+		Vector3 myPos = transform.position;
+		myPos.x = Mathf.Round((myPos.x - boardBounds.min.x)/board.tileWidth)*board.tileWidth + boardBounds.min.x + board.tileWidth/2;
+		myPos.y = Mathf.Round((myPos.y - boardBounds.min.y)/board.tileHeight)*board.tileHeight + boardBounds.min.y + board.tileHeight/2;
+		Debug.Log(myPos);
+		transform.position = myPos;
 	}
 }
