@@ -101,8 +101,8 @@ public class Piece : MonoBehaviour {
 		Board board = boardLimits.GetComponent<Board>();
 		Bounds boardBounds = board.collider.bounds;
 		Vector3 myPos = transform.position;
-		myPos.x = Mathf.Round((myPos.x - boardBounds.min.x)/board.tileWidth)*board.tileWidth + boardBounds.min.x + board.tileWidth/2;
-		myPos.y = Mathf.Round((myPos.y - boardBounds.min.y)/board.tileHeight)*board.tileHeight + boardBounds.min.y + board.tileHeight/2;
+		myPos.x = Mathf.Floor((myPos.x - boardBounds.min.x)/board.tileWidth)*board.tileWidth + boardBounds.min.x + board.tileWidth/2;
+		myPos.y = Mathf.Floor((myPos.y - boardBounds.min.y)/board.tileHeight)*board.tileHeight + boardBounds.min.y + board.tileHeight/2;
 		Debug.Log(myPos);
 		transform.position = myPos;
 	}
