@@ -35,22 +35,22 @@ public class Piece : MonoBehaviour {
 			}
 		}
 		isMoving = false;
-		selected = null;
+		//selected = null;
 	}
 	
 	void OnMouseDrag() {
 		if(lastMousePos != Input.mousePosition) {
 			isMoving = true;
 			Vector3 movement = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			movement.z = selected.transform.position.z;
-			selected.transform.position=movement;
+			movement.z = transform.position.z;
+			transform.position=movement;
 			lastMousePos = Input.mousePosition;
 		}
 	}
 	
 	void OnMouseDown() {
 		lastMousePos = Input.mousePosition;
-		selected = this;
+		//selected = this;
 	}
 #endif
 	void OnTouchBegin (Touch t) {
