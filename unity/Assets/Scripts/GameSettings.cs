@@ -22,7 +22,7 @@ public class GameSettings : MonoBehaviour {
 	*/
 	public int widthRef = 960;
 	public int heightRef = 640;
-	
+	public int levelNumber = 1;
 	
 	private static GameSettings _instance = null;
 	public static GameSettings Instance

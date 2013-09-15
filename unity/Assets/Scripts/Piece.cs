@@ -12,6 +12,8 @@ public class Piece : MonoBehaviour {
 	private BoxCollider myCollider;
 	// Use this for initialization
 	void Start () {
+		if(spawner == null) Destroy(this);
+		name = name.Replace("(Clone)","");
 		control = gameObject.GetComponent<GestureControl>();
 		control.onTouchBegin += OnTouchBegin;
 		control.onTouchMoved += OnTouchMove;
@@ -23,15 +25,17 @@ public class Piece : MonoBehaviour {
 	}
 #if UNITY_EDITOR
 	private Vector3 lastMousePos;
+	private bool firstClick = true;
 	void OnMouseUp() {
+		myCollider.size /= 2;
 		if(!isMoving){
 			RotatePiece();
+			boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
+			SnapInBoard();
 		} else {
-			if (!isInsideBoard()){
+			if (!(isInsideBoard() && SnapInBoard())){
 				spawner.RestorePiece();
 				Destroy(gameObject);
-			} else {
-				SnapInBoard();
 			}
 		}
 		isMoving = false;
@@ -49,12 +53,23 @@ public class Piece : MonoBehaviour {
 	}
 	
 	void OnMouseDown() {
+		if (firstClick){
+			firstClick = false;
+		} else {
+			myCollider.size *= 2;
+			if(isInsideBoard()){
+				boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
+			}
+		}
 		lastMousePos = Input.mousePosition;
 		//selected = this;
 	}
 #endif
 	void OnTouchBegin (Touch t) {
 		myCollider.size *= 2;
+		if(isInsideBoard()){
+			boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
+		}
 		//selected = this;
 	}
 	
@@ -69,15 +84,13 @@ public class Piece : MonoBehaviour {
 	
 	void OnTouchEnd (Touch t) {
 		myCollider.size /= 2;
-		Debug.Log(isMoving);
 		if(!isMoving){
 			RotatePiece();
+			SnapInBoard();
 		} else {
-			if (!isInsideBoard()){
+			if (!(isInsideBoard() && SnapInBoard())){
 				spawner.RestorePiece();
 				Destroy(gameObject);
-			} else {
-				SnapInBoard();
 			}
 		}
 		isMoving = false;
@@ -97,13 +110,19 @@ public class Piece : MonoBehaviour {
 		return isInsideX && isInsideY;
 	}
 	
-	void SnapInBoard() {
+	bool SnapInBoard() {
 		Board board = boardLimits.GetComponent<Board>();
 		Bounds boardBounds = board.collider.bounds;
 		Vector3 myPos = transform.position;
 		myPos.x = Mathf.Floor((myPos.x - boardBounds.min.x)/board.tileWidth)*board.tileWidth + boardBounds.min.x + board.tileWidth/2;
 		myPos.y = Mathf.Floor((myPos.y - boardBounds.min.y)/board.tileHeight)*board.tileHeight + boardBounds.min.y + board.tileHeight/2;
 		Debug.Log(myPos);
-		transform.position = myPos;
+		if(!board.HavePieceAt(myPos)){
+			transform.position = myPos;
+			board.PutPieceAt(myPos,name,transform.rotation.eulerAngles.z);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
