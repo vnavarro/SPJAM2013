@@ -1,7 +1,7 @@
 {
 "levels" : {
   "level1" : {
-    "bgImg" : "good_scene01.png",
+    "bgImg" : "good",
     "board" : [
       [{"tileType":""},{"tileType":"stone"},{"tileType":"block","name":"powercurve","rotation":180},{"tileType":""},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"}],
@@ -31,10 +31,10 @@
 	]
   },
     "level2" : {
-    "bgImg" : "good_scene01.png",
+    "bgImg" : "good",
     "board" : [
       [{"tileType":"stone"},{"tileType":"stone"},{"tileType":"block","name":"powercurve","rotation":180},{"tileType":""},{"tileType":""}],
-      [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block", "name":"downcurve", "rotation":0}],
+      [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"portal", "name":"bad"}],
       [{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}]
@@ -67,7 +67,7 @@
 	]
   },
     "level3" : {
-    "bgImg" : "tela_ruim.png",
+    "bgImg" : "bad",
     "board" : [
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}],
@@ -99,7 +99,7 @@
 	]
   },
     "level4" : {
-    "bgImg" : "good_scene01.png",
+    "bgImg" : "good",
     "board" : [
       [{"tileType":""},{"tileType":"block", "name":"downcurve", "rotation" : 0},{"tileType":"stone"},{"tileType":"stone"},{"tileType":"stone"}],
       [{"tileType":"stone"},{"tileType":"block", "name":"downcurve", "rotation" : 180},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
@@ -130,8 +130,8 @@
 	]
   },
     "level5" : {
-    "bgImg" : "tela_ruim.png",
-    "bgImg" : "good_scene01.png",
+    "bgImg" : "bad",
+    "bgImg" : "good",
     "board" : [
       [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"}],
       [{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "downcurve", "rotation":270},{"tileType":""},{"tileType":""}],
@@ -167,7 +167,7 @@
 	]
   },
     "level6" : {
-    "bgImg" : "tela_ruim.png",
+    "bgImg" : "bad",
     "board" : [
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "downcurve", "rotation" : 0},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""}],

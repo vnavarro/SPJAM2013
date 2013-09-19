@@ -66,7 +66,11 @@ public class Board : MonoBehaviour {
 						tile.name = currentLevelData[i][j]["name"].str;
 						tile.rotation = (int)currentLevelData[i][j]["rotation"].n;
 					} else {
-						tile.name = currentLevelData[i][j]["tileType"].str;
+						if(currentLevelData[i][j]["tileType"].str == "portal"){
+							tile.name = currentLevelData[i][j]["name"].str + currentLevelData[i][j]["tileType"].str;
+						} else {
+							tile.name = currentLevelData[i][j]["tileType"].str;
+						}
 						tile.rotation = 0;
 					}
 				} else {
@@ -92,19 +96,25 @@ public class Board : MonoBehaviour {
 				if (!tiles[i][j].hasObject) continue;
 				switch(tiles[i][j].name){
 				case "stone":
-					Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5.1f),Quaternion.identity);
+					Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 					break;
 				case "powercurve":
-					Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5.1f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+					Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 					break;
 				case "powerstraight":
-					Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5.1f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+					Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 					break;
 				case "downcurve":
-					Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5.1f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+					Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 					break;
 				case "downstraight":
-					Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5.1f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+					Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+					break;
+				case "goodportal":
+					Instantiate(goodPortalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+					break;
+				case "badportal":
+					Instantiate(badPortalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 					break;
 				}
 			}
@@ -114,11 +124,12 @@ public class Board : MonoBehaviour {
 	public bool HavePieceAt(Vector3 position) {
 		Tile t = GetTileAt(position);
 		if(t != null){
-			return t.hasObject;
+			return t.hasObject && !t.name.Contains("portal");
 		} else {
 			return false;
 		}
 	}
+	
 	
 	public void PutPieceAt(Vector3 position, string name, float rotation){
 		Tile t = GetTileAt(position);

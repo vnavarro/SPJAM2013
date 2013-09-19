@@ -12,9 +12,13 @@ public class Piece : MonoBehaviour {
 	private BoxCollider myCollider;
 	// Use this for initialization
 	void Start () {
-		if(spawner == null) Destroy(this);
 		name = name.Replace("(Clone)","");
 		control = gameObject.GetComponent<GestureControl>();
+		if(spawner == null) {
+			collider.enabled = false;
+			enabled = false;
+			control.enabled = false;
+		}
 		control.onTouchBegin += OnTouchBegin;
 		control.onTouchMoved += OnTouchMove;
 		control.onTouchEnded += OnTouchEnd;

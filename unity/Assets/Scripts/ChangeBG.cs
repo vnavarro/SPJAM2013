@@ -10,12 +10,31 @@ public class ChangeBG : MonoBehaviour {
 		mat = renderer.material;
 		mat.SetFloat("_Blend",0);
 	}
-	public void ToGood() {
+	
+	public void ToGood(){
+		ToGood(false);
+	}
+	
+	public void ToBad(){
+		ToBad(false);
+	}
+	
+	public void ToGood(bool instantChange) {
+		if(instantChange){
+			currentVar = 0;
+			mat.SetFloat("_Blend",0);
+			return;
+		}
 		if (currentVar <= 0) return;
 		if (changeSpeed > 0) changeSpeed *= -1;
 		changing = true;
 	}
-	public void ToBad() {
+	public void ToBad(bool instantChange) {
+		if(instantChange){
+			currentVar = 1;
+			mat.SetFloat("_Blend",1);
+			return;
+		}
 		if (currentVar >= 1) return;
 		if (changeSpeed < 0) changeSpeed *= -1;
 		changing = true;
