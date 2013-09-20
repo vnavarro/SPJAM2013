@@ -12,14 +12,11 @@ public class Board : MonoBehaviour {
 		public int rotation;
 		public bool hasObject;
 	}
-	
 	public float tileWidth;
 	public float tileHeight;
 	public TextAsset levelsData;
-	public GameObject powerCurvePrefab;
-	public GameObject powerStraightPrefab;
-	public GameObject downCurvePrefab;
-	public GameObject downStraightPrefab;
+	public GameObject curvePrefab;
+	public GameObject straightPrefab;
 	public GameObject goodPortalPrefab;
 	public GameObject badPortalPrefab;
 	public GameObject stonePrefab;
@@ -29,6 +26,7 @@ public class Board : MonoBehaviour {
 	[SerializeField]
 	private List<List<Tile>> tiles;
 	private JSONObject levels;
+	private string solution = "";
 	
 	// Use this for initialization
 	void Start () {
@@ -39,6 +37,12 @@ public class Board : MonoBehaviour {
 		this.tileWidth = collider.bounds.size.x/maxTiles;
 		this.tileHeight = collider.bounds.size.y/maxTiles;
 		Debug.Log("Tile width,height"+this.tileWidth+","+this.tileHeight);
+		//change bg if needed
+		if (levels["levels"]["level"+GameSettings.Instance.levelNumber]["bgImg"].str == "bad") {
+			ChangeBG bg = FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
+			bg.ToBad(true);
+		}
+		solution = levels["levels"]["level"+GameSettings.Instance.levelNumber]["solution"].str;
 		createTiles();
 		PopulateBoard();
 	}
@@ -98,17 +102,11 @@ public class Board : MonoBehaviour {
 				case "stone":
 					Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 					break;
-				case "powercurve":
-					Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+				case "curve":
+					Instantiate(curvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 					break;
-				case "powerstraight":
-					Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
-					break;
-				case "downcurve":
-					Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
-					break;
-				case "downstraight":
-					Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+				case "straight":
+					Instantiate(straightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 					break;
 				case "goodportal":
 					Instantiate(goodPortalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
@@ -160,6 +158,8 @@ public class Board : MonoBehaviour {
 		}
 		return null;
 	}
+	
+	
 	
 	// test function (can be removed later)
 	void accessData(JSONObject obj){
