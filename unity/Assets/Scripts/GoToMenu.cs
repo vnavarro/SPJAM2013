@@ -1,0 +1,35 @@
+﻿using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(GestureControl))]
+public class GoToMenu : MonoBehaviour {
+	public GameObject menu;
+	// Use this for initialization
+	void Awake (){
+		iTween.Init(gameObject);
+		iTween.CameraFadeAdd();
+	}
+	void Start () {
+		GestureControl control = GetComponent<GestureControl>();
+		control.onTouchBegin += Go;
+	}
+	
+	void OnEnable() {
+		iTween.CameraFadeFrom(iTween.Hash("amount",.5f));
+		iTween.CameraFadeTo(0,1.5f);
+	}
+	
+	void OnMouseDown() {
+		Go(new Touch());
+	}
+	
+	void Go (Touch t){
+		//iTween.CameraFadeTo(1,3);
+		iTween.CameraFadeTo(iTween.Hash("amount",.5f,"time",1.5f,"oncomplete","SwapGameObjects","oncompletetarget",gameObject));
+	}
+	
+	void SwapGameObjects() {
+		menu.SetActive(true);
+		transform.root.gameObject.SetActive(false);
+	}
+}
