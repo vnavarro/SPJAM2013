@@ -14,11 +14,11 @@ public class GoToLevel : MonoBehaviour {
 		GestureControl control = GetComponent<GestureControl>();
 		control.onTouchBegin += FadeOut;
 	}
-	
+#if UNITY_EDITOR
 	void OnMouseDown (){
 		FadeOut(new Touch());
 	}
-	
+#endif
 	void FadeOut(Touch t){
 		iTween.CameraFadeTo(iTween.Hash("amount",.5f,"time",1.5f,"oncomplete","LoadLevel","oncompletetarget",gameObject));
 	}
@@ -26,10 +26,5 @@ public class GoToLevel : MonoBehaviour {
 	void LoadLevel() {
 		GameSettings.Instance.levelNumber = levelNumber;
 		Application.LoadLevel("level");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

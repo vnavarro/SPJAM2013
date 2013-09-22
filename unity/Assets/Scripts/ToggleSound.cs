@@ -10,11 +10,11 @@ public class ToggleSound : MonoBehaviour {
 		GestureControl control = GetComponent<GestureControl>();
 		control.onTouchBegin += Toggle;
 	}
-	
+#if UNITY_EDITOR
 	void OnMouseDown(){
 		Toggle(new Touch());
 	}
-	
+#endif
 	void Toggle(Touch t){
 		AudioListener.pause = !AudioListener.pause;
 		if(AudioListener.pause){

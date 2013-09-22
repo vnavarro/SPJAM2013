@@ -18,11 +18,11 @@ public class GoToMenu : MonoBehaviour {
 		iTween.CameraFadeFrom(iTween.Hash("amount",.5f));
 		iTween.CameraFadeTo(0,1.5f);
 	}
-	
+#if UNITY_EDITOR
 	void OnMouseDown() {
 		Go(new Touch());
 	}
-	
+#endif
 	void Go (Touch t){
 		//iTween.CameraFadeTo(1,3);
 		iTween.CameraFadeTo(iTween.Hash("amount",.5f,"time",1.5f,"oncomplete","SwapGameObjects","oncompletetarget",gameObject));
