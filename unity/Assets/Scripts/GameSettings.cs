@@ -41,6 +41,9 @@ public class GameSettings : MonoBehaviour {
 			return _instance;
 		}
 	}
+	void Awake (){
+		DontDestroyOnLoad(gameObject);
+	}
 	
 	void Start () {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;

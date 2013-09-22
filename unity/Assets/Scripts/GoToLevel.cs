@@ -20,11 +20,11 @@ public class GoToLevel : MonoBehaviour {
 	}
 #endif
 	void FadeOut(Touch t){
+		GameSettings.Instance.levelNumber = levelNumber;
 		iTween.CameraFadeTo(iTween.Hash("amount",.5f,"time",1.5f,"oncomplete","LoadLevel","oncompletetarget",gameObject));
 	}
 	
 	void LoadLevel() {
-		GameSettings.Instance.levelNumber = levelNumber;
 		Application.LoadLevel("level");
 	}
 }
