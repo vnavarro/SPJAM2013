@@ -12,7 +12,7 @@ public class PieceSpawner : MonoBehaviour {
 		touchControl = gameObject.GetComponent<GestureControl>();
 		touchControl.onTouchBegin += OnTouchBegin;
 		counter = transform.GetChild(0).GetComponent<TextMesh>();
-		counter.text = string.Format("x{0:D2}",amount);
+		UpdateAmount();
 		Piece.boardLimits = GameObject.Find("BoardLimits");
 	}
 	
@@ -23,7 +23,7 @@ public class PieceSpawner : MonoBehaviour {
 			p.spawner = this;
 			Piece.selected = p;
 			p.transform.Translate(Vector3.back*0.1f,Space.World);
-			counter.text = string.Format("x{0:D2}",amount);
+			UpdateAmount();
 		}
 	}
 #if UNITY_EDITOR
@@ -34,16 +34,16 @@ public class PieceSpawner : MonoBehaviour {
 			p.spawner = this;
 			Piece.selected = p;
 			p.transform.Translate(Vector3.back*0.1f,Space.World);
-			counter.text = string.Format("x{0:D2}",amount);
+			UpdateAmount();
 		}
 	}
 #endif
 	public void RestorePiece(){
 		amount++;
-		counter.text = string.Format("x{0:D2}",amount);
+		UpdateAmount();
 	}
 	// Update is called once per frame
-	void Update () {
-	
+	public void UpdateAmount () {
+		counter.text = string.Format("x{0:D2}",amount);
 	}
 }
