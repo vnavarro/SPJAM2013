@@ -2,7 +2,6 @@
 
 public class ChangeBG : MonoBehaviour {
 	public float changeSpeed = 1;
-	public Material straightMaterial, curveMaterial;
 	
 	private Material mat;
 	private float currentVar = 0;
@@ -10,8 +9,6 @@ public class ChangeBG : MonoBehaviour {
 	void Start () {
 		mat = renderer.material;
 		mat.SetFloat("_Blend",0);
-		straightMaterial.SetFloat("_Blend",0);
-		curveMaterial.SetFloat("_Blend",0);
 	}
 	
 	public void ToGood(){
@@ -26,8 +23,6 @@ public class ChangeBG : MonoBehaviour {
 		if(instantChange){
 			currentVar = 0;
 			mat.SetFloat("_Blend",0);
-			straightMaterial.SetFloat("_Blend",0);
-			curveMaterial.SetFloat("_Blend",0);
 			return;
 		}
 		if (currentVar <= 0) return;
@@ -38,8 +33,6 @@ public class ChangeBG : MonoBehaviour {
 		if(instantChange){
 			currentVar = 1;
 			mat.SetFloat("_Blend",1);
-			straightMaterial.SetFloat("_Blend",1);
-			curveMaterial.SetFloat("_Blend",1);
 			return;
 		}
 		if (currentVar >= 1) return;
@@ -51,8 +44,6 @@ public class ChangeBG : MonoBehaviour {
 		if(changing){
 			currentVar += Time.deltaTime*changeSpeed;
 			mat.SetFloat("_Blend",currentVar);
-			straightMaterial.SetFloat("_Blend",currentVar);
-			curveMaterial.SetFloat("_Blend",currentVar);
 			if (currentVar >= 1 || currentVar <= 0) {
 				currentVar = Mathf.Clamp01(currentVar);
 				changing = false;
