@@ -19,8 +19,7 @@ public class Board : MonoBehaviour {
 	public GameObject downCurvePrefab;
 	public GameObject powerStraightPrefab;
 	public GameObject downStraightPrefab;
-	public GameObject goodPortalPrefab;
-	public GameObject badPortalPrefab;
+	public GameObject portalPrefab;
 	public GameObject stonePrefab;
 	
 	
@@ -30,9 +29,10 @@ public class Board : MonoBehaviour {
 	private JSONObject levels;
 	private string solution = "";
 	private PieceSpawner powerCurveSpawner, downCurveSpawner, powerStraightSpawner, downStraightSpawner;
-	
+	private ChangeBG bg;
 	// Use this for initialization
 	void Start () {
+		bg = FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
 		powerCurveSpawner = GameObject.Find("PowerCurve").GetComponent<PieceSpawner>();
 		downCurveSpawner = GameObject.Find("DownCurve").GetComponent<PieceSpawner>();
 		powerStraightSpawner = GameObject.Find("PowerStraight").GetComponent<PieceSpawner>();
@@ -45,7 +45,6 @@ public class Board : MonoBehaviour {
 		Debug.Log("Tile width,height"+this.tileWidth+","+this.tileHeight);
 		//change bg if needed
 		if (levels["levels"]["level"+GameSettings.Instance.levelNumber]["bgImg"].str == "bad") {
-			ChangeBG bg = FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
 			bg.ToBad(true);
 		}
 		solution = levels["levels"]["level"+GameSettings.Instance.levelNumber]["solution"].str;
@@ -96,11 +95,7 @@ public class Board : MonoBehaviour {
 						tile.name = currentLevelData[i][j]["name"].str;
 						tile.rotation = (int)currentLevelData[i][j]["rotation"].n;
 					} else {
-						if(currentLevelData[i][j]["tileType"].str == "portal"){
-							tile.name = currentLevelData[i][j]["name"].str + currentLevelData[i][j]["tileType"].str;
-						} else {
-							tile.name = currentLevelData[i][j]["tileType"].str;
-						}
+						tile.name = currentLevelData[i][j]["tileType"].str;
 						tile.rotation = 0;
 					}
 				} else {
@@ -140,11 +135,8 @@ public class Board : MonoBehaviour {
 				case "downstraight":
 					Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 					break;
-				case "goodportal":
-					Instantiate(goodPortalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
-					break;
-				case "badportal":
-					Instantiate(badPortalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+				case "portal":
+					Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 					break;
 				}
 			}
@@ -167,6 +159,9 @@ public class Board : MonoBehaviour {
 		t.hasBlock = true;
 		t.name = name;
 		t.rotation = (int)rotation;
+		if(t.name.Contains("Down")){
+			bg.ToBad();
+		}
 	}
 	
 	public void RemovePieceAt(Vector3 position){

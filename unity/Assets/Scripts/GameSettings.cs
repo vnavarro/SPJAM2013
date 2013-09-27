@@ -22,7 +22,7 @@ public class GameSettings : MonoBehaviour {
 	*/
 	public int widthRef = 960;
 	public int heightRef = 640;
-	public int levelNumber = 1;
+	public int levelNumber = 4;
 	public bool soundOn = true;
 	
 	private static GameSettings _instance = null;

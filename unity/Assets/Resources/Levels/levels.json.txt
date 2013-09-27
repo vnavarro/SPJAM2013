@@ -7,7 +7,7 @@
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"}],
       [{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":0}],
-      [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":"portal","name":"good"}]
+      [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":"portal"}]
     ],
     "pieces" : [
       {"name":"powercurve","count":4},{"name":"downstraight","count":0},
@@ -20,8 +20,8 @@
     "bgImg" : "good",
     "board" : [
       [{"tileType":"stone"},{"tileType":"stone"},{"tileType":"block","name":"powercurve","rotation":180},{"tileType":""},{"tileType":""}],
-      [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"portal", "name":"bad"}],
-      [{"tileType":"portal","name":"good"},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
+      [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"portal"}],
+      [{"tileType":"portal"},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}]
     ],
@@ -37,7 +37,7 @@
     "board" : [
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}],
-      [{"tileType":"portal","name":"good"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180}],
+      [{"tileType":"portal"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180}],
       [{"tileType":"stone"},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"}]
     ],
@@ -51,7 +51,7 @@
     "level4" : {
     "bgImg" : "good",
     "board" : [
-      [{"tileType":"portal","name":"good"},{"tileType":"block", "name":"powercurve", "rotation" : 0},{"tileType":"stone"},{"tileType":"stone"},{"tileType":"stone"}],
+      [{"tileType":"portal"},{"tileType":"block", "name":"powercurve", "rotation" : 0},{"tileType":"stone"},{"tileType":"stone"},{"tileType":"stone"}],
       [{"tileType":"stone"},{"tileType":"block", "name":"powercurve", "rotation" : 180},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
       [{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"block", "name":"powerstraight", "rotation":90}],
@@ -68,7 +68,7 @@
     "bgImg" : "bad",
     "bgImg" : "good",
     "board" : [
-      [{"tileType":"portal","name":"good"},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"}],
+      [{"tileType":"portal"},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"}],
       [{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "powercurve", "rotation":90},{"tileType":""},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""}],
@@ -87,7 +87,7 @@
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "powercurve", "rotation" : 0},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"},{"tileType":""}],
-      [{"tileType":"portal","name":"good"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180}],
+      [{"tileType":"portal"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180}],
       [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"stone"}]
     ],
     "pieces" : [

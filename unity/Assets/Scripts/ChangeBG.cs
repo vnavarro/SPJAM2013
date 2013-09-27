@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public class ChangeBG : MonoBehaviour {
+	public Material portalMat;
 	public float changeSpeed = 1;
 	
 	private Material mat;
@@ -9,6 +10,7 @@ public class ChangeBG : MonoBehaviour {
 	void Start () {
 		mat = renderer.material;
 		mat.SetFloat("_Blend",0);
+		portalMat.SetFloat("_Blend",0);
 	}
 	
 	public void ToGood(){
@@ -23,6 +25,7 @@ public class ChangeBG : MonoBehaviour {
 		if(instantChange){
 			currentVar = 0;
 			mat.SetFloat("_Blend",0);
+			portalMat.SetFloat("_Blend",0);
 			return;
 		}
 		if (currentVar <= 0) return;
@@ -33,6 +36,7 @@ public class ChangeBG : MonoBehaviour {
 		if(instantChange){
 			currentVar = 1;
 			mat.SetFloat("_Blend",1);
+			portalMat.SetFloat("_Blend",1);
 			return;
 		}
 		if (currentVar >= 1) return;
@@ -44,18 +48,11 @@ public class ChangeBG : MonoBehaviour {
 		if(changing){
 			currentVar += Time.deltaTime*changeSpeed;
 			mat.SetFloat("_Blend",currentVar);
+			portalMat.SetFloat("_Blend",currentVar);
 			if (currentVar >= 1 || currentVar <= 0) {
 				currentVar = Mathf.Clamp01(currentVar);
 				changing = false;
 			}
-		}
-	}
-	void OnGUI (){
-		if (GUILayout.Button("to good")){
-			ToGood();
-		}
-		if (GUILayout.Button("to bad")){
-			ToBad();
 		}
 	}
 }

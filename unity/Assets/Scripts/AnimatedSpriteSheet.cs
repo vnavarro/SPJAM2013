@@ -78,6 +78,7 @@ public class AnimatedSpriteSheet : MonoBehaviour
 		m.triangles = tri;
 		m.name = "spriteQuad";
 		renderer.sharedMaterial.SetTextureScale  ("_MainTex", size);
+		renderer.sharedMaterial.SetTextureScale("_OverlayTexture", size);
 	}
 	//Update
 	void Update() {
@@ -97,6 +98,9 @@ public class AnimatedSpriteSheet : MonoBehaviour
 	    
 		renderer.sharedMaterial.SetTextureOffset ("_MainTex", offset);
 	    renderer.sharedMaterial.SetTextureScale  ("_MainTex", size);
+		
+		renderer.sharedMaterial.SetTextureOffset ("_OverlayTexture", offset);
+		renderer.sharedMaterial.SetTextureScale("_OverlayTexture", size);
 	}
 	
 	float Scale(float srcFloor, float srcCeil, float srcVal, float dstFloor, float dstCeil) {
