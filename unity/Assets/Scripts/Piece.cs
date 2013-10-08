@@ -155,7 +155,7 @@ public class Piece : MonoBehaviour {
 	
 	void RotatePiece() {
 		transform.Rotate(Vector3.back,90);
-		this.adjustConnectors();
+		this.AdjustConnectors();
 		Debug.Log(transform.rotation.eulerAngles.z);		
 	}
 	
