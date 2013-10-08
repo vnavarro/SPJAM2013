@@ -27,9 +27,10 @@ public class Board : MonoBehaviour {
 	[SerializeField]
 	private List<List<Tile>> tiles;
 	private JSONObject levels;
-	private string solution = "";
+	//private string solution = "";
 	private PieceSpawner powerCurveSpawner, downCurveSpawner, powerStraightSpawner, downStraightSpawner;
 	private ChangeBG bg;
+	private List<Piece> usedPieces = new List<Piece>();
 	// Use this for initialization
 	void Start () {
 		bg = FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
@@ -47,25 +48,26 @@ public class Board : MonoBehaviour {
 		if (levels["levels"]["level"+GameSettings.Instance.levelNumber]["bgImg"].str == "bad") {
 			bg.ToBad(true);
 		}
-		solution = levels["levels"]["level"+GameSettings.Instance.levelNumber]["solution"].str;
-		foreach(JSONObject pieceInfo in levels["levels"]["level"+GameSettings.Instance.levelNumber]["pieces"].list){
+		//solution = levels["levels"]["level"+GameSettings.Instance.levelNumber]["solution"].str;
+		List<JSONObject> jsonPieces = levels["levels"]["level"+GameSettings.Instance.levelNumber]["pieces"].list;
+		foreach(JSONObject pieceInfo in jsonPieces){
 			switch(pieceInfo["name"].str){
-			case "powercurve":
-				powerCurveSpawner.amount = (int)pieceInfo["count"].n;
-				powerCurveSpawner.UpdateAmount();
-				break;
-			case "downcurve":
-				downCurveSpawner.amount = (int)pieceInfo["count"].n;
-				downCurveSpawner.UpdateAmount();
-				break;
-			case "powerstraight":
-				powerStraightSpawner.amount = (int)pieceInfo["count"].n;
-				powerStraightSpawner.UpdateAmount();
-				break;
-			case "downstraight":
-				downStraightSpawner.amount = (int)pieceInfo["count"].n;
-				downStraightSpawner.UpdateAmount();
-				break;
+				case "powercurve":
+					powerCurveSpawner.amount = (int)pieceInfo["count"].n;
+					powerCurveSpawner.UpdateAmount();
+					break;
+				case "downcurve":
+					downCurveSpawner.amount = (int)pieceInfo["count"].n;
+					downCurveSpawner.UpdateAmount();
+					break;
+				case "powerstraight":
+					powerStraightSpawner.amount = (int)pieceInfo["count"].n;
+					powerStraightSpawner.UpdateAmount();
+					break;
+				case "downstraight":
+					downStraightSpawner.amount = (int)pieceInfo["count"].n;
+					downStraightSpawner.UpdateAmount();
+					break;
 			}
 		}
 		createTiles();
@@ -119,25 +121,29 @@ public class Board : MonoBehaviour {
 		for (int i = 0; i < maxTiles; i++) {
 			for (int j = 0; j < maxTiles; j++) {
 				if (!tiles[i][j].hasObject) continue;
-				switch(tiles[i][j].name){
-				case "stone":
-					Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
-					break;
-				case "powercurve":
-					Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
-					break;
-				case "powerstraight":
-					Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
-					break;
-				case "downcurve":
-					Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
-					break;
-				case "downstraight":
-					Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
-					break;
-				case "portal":
-					Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
-					break;
+				Piece pieceToAdd = null;
+				switch(tiles[i][j].name){					
+					case "stone":
+						pieceToAdd = (Piece)Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						break;
+					case "powercurve":
+						pieceToAdd = (Piece)Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						break;
+					case "powerstraight":
+						pieceToAdd = (Piece)Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						break;
+					case "downcurve":
+						pieceToAdd = (Piece)Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						break;
+					case "downstraight":
+						pieceToAdd = (Piece)Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						break;
+					case "portal":
+						pieceToAdd = (Piece)Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						break;
+				}
+				if(pieceToAdd != null){
+					this.usedPieces.Add(pieceToAdd);
 				}
 			}
 		}
@@ -152,6 +158,13 @@ public class Board : MonoBehaviour {
 		}
 	}
 	
+	public void AddPieceToUsed(Piece p){
+		this.usedPieces.Add(p);
+	}
+	
+	public void RemovePieceFromUsed(Piece p){
+		this.usedPieces.Remove(p);
+	}
 	
 	public void PutPieceAt(Vector3 position, string name, float rotation){
 		Tile t = GetTileAt(position);

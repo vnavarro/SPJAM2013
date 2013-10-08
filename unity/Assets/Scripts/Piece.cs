@@ -10,6 +10,7 @@ public class Piece : MonoBehaviour {
 	private bool isMoving = false;
 	
 	private BoxCollider myCollider;
+	private PieceConnector[] connectors;
 	// Use this for initialization
 	void Start () {
 		name = name.Replace("(Clone)","");
@@ -26,6 +27,54 @@ public class Piece : MonoBehaviour {
 		Debug.Log(myCollider.size);
 		myCollider.size *= 2;
 		Debug.Log(myCollider.size);
+		
+		this.CreateConnectors();
+	}
+	
+	void CreateConnectors(){
+		connectors = new PieceConnector[2];
+		connectors[0] = new PieceConnector(Orientation.LEFT,false);
+		connectors[1] = new PieceConnector(Orientation.RIGHT,false);		
+		
+		this.AdjustConnectors();
+	}
+	
+	void AdjustConnectors(){
+		int rotation = (int)this.gameObject.transform.rotation.eulerAngles.z;
+		if(this.name.Contains("portal")){
+			connectors[0].isOn = true;
+			connectors[1].isOn = true;
+			connectors[2] = new PieceConnector(Orientation.UP,true);
+			connectors[3] = new PieceConnector(Orientation.DOWN,true);
+		}
+		else if (this.name.Contains("straight")){
+			if (rotation == 0 || rotation == 180){
+				connectors[0].currentOrientation = Orientation.UP;
+				connectors[1].currentOrientation = Orientation.DOWN;
+            }
+            else if(rotation == 90 || rotation == 270){
+				connectors[0].currentOrientation = Orientation.LEFT;
+				connectors[1].currentOrientation = Orientation.RIGHT;
+            }			
+		}
+		else{
+			if (rotation == 0){
+				connectors[0].currentOrientation = Orientation.UP;
+				connectors[1].currentOrientation = Orientation.RIGHT;
+            }	
+            else if(rotation == 90){
+				connectors[0].currentOrientation = Orientation.RIGHT;
+				connectors[1].currentOrientation = Orientation.DOWN;
+            }
+            else if(rotation == 180){
+				connectors[0].currentOrientation = Orientation.LEFT;
+				connectors[1].currentOrientation = Orientation.DOWN;
+            }
+            else if(rotation == 270){
+                connectors[0].currentOrientation = Orientation.UP;
+				connectors[1].currentOrientation = Orientation.LEFT;
+            }			
+		}
 	}
 #if UNITY_EDITOR
 	private Vector3 lastMousePos;
@@ -35,6 +84,7 @@ public class Piece : MonoBehaviour {
 		if(!isMoving){
 			RotatePiece();
 			boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
+			boardLimits.GetComponent<Board>().RemovePieceFromUsed(this);
 			SnapInBoard();
 		} else {
 			if (!(isInsideBoard() && SnapInBoard())){
@@ -63,6 +113,7 @@ public class Piece : MonoBehaviour {
 			myCollider.size *= 2;
 			if(isInsideBoard()){
 				boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
+				boardLimits.GetComponent<Board>().RemovePieceFromUsed(this);
 			}
 		}
 		lastMousePos = Input.mousePosition;
@@ -73,6 +124,7 @@ public class Piece : MonoBehaviour {
 		myCollider.size *= 2;
 		if(isInsideBoard()){
 			boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
+			boardLimits.GetComponent<Board>().RemovePieceFromUsed(this);
 		}
 		//selected = this;
 	}
@@ -103,7 +155,8 @@ public class Piece : MonoBehaviour {
 	
 	void RotatePiece() {
 		transform.Rotate(Vector3.back,90);
-		Debug.Log(transform.rotation.eulerAngles.z);
+		this.adjustConnectors();
+		Debug.Log(transform.rotation.eulerAngles.z);		
 	}
 	
 	bool isInsideBoard () {
@@ -124,6 +177,7 @@ public class Piece : MonoBehaviour {
 		if(!board.HavePieceAt(myPos)){
 			transform.position = myPos;
 			board.PutPieceAt(myPos,name,transform.rotation.eulerAngles.z);
+			board.AddPieceToUsed(this);
 			return true;
 		} else {
 			return false;
