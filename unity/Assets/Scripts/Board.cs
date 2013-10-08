@@ -121,29 +121,29 @@ public class Board : MonoBehaviour {
 		for (int i = 0; i < maxTiles; i++) {
 			for (int j = 0; j < maxTiles; j++) {
 				if (!tiles[i][j].hasObject) continue;
-				Piece pieceToAdd = null;
+				GameObject pieceToAdd = null;
 				switch(tiles[i][j].name){					
 					case "stone":
-						pieceToAdd = (Piece)Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						pieceToAdd = (GameObject)Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 						break;
 					case "powercurve":
-						pieceToAdd = (Piece)Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						pieceToAdd = (GameObject)Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "powerstraight":
-						pieceToAdd = (Piece)Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						pieceToAdd = (GameObject)Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "downcurve":
-						pieceToAdd = (Piece)Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						pieceToAdd = (GameObject)Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "downstraight":
-						pieceToAdd = (Piece)Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						pieceToAdd = (GameObject)Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "portal":
-						pieceToAdd = (Piece)Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						pieceToAdd = (GameObject)Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 						break;
 				}
 				if(pieceToAdd != null){
-					this.usedPieces.Add(pieceToAdd);
+					this.usedPieces.Add(pieceToAdd.GetComponent<Piece>());
 				}
 			}
 		}
