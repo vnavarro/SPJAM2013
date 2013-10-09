@@ -21,6 +21,7 @@ public class GoToLevel : MonoBehaviour {
 #endif
 	void FadeOut(Touch t){
 		GameSettings.Instance.levelNumber = levelNumber;
+		iTween.AudioTo(GameObject.Find("Music"),0,1,1.5f);
 		iTween.CameraFadeTo(iTween.Hash("amount",.5f,"time",1.5f,"oncomplete","LoadLevel","oncompletetarget",gameObject));
 	}
 	

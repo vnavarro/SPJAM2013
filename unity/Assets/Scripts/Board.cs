@@ -47,6 +47,8 @@ public class Board : MonoBehaviour {
 		//change bg if needed
 		if (levels["levels"]["level"+GameSettings.Instance.levelNumber]["bgImg"].str == "bad") {
 			bg.ToBad(true);
+		} else {
+			bg.ToGood(true);
 		}
 		//solution = levels["levels"]["level"+GameSettings.Instance.levelNumber]["solution"].str;
 		List<JSONObject> jsonPieces = levels["levels"]["level"+GameSettings.Instance.levelNumber]["pieces"].list;
@@ -124,7 +126,7 @@ public class Board : MonoBehaviour {
 				GameObject pieceToAdd = null;
 				switch(tiles[i][j].name){					
 					case "stone":
-						pieceToAdd = (GameObject)Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 						break;
 					case "powercurve":
 						pieceToAdd = (GameObject)Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));

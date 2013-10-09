@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public class ChangeBG : MonoBehaviour {
+	public AudioSource goodMusic, badMusic, changeSound;
 	public Material portalMat;
 	public float changeSpeed = 1;
 	
@@ -22,6 +23,8 @@ public class ChangeBG : MonoBehaviour {
 	}
 	
 	public void ToGood(bool instantChange) {
+		badMusic.Stop();
+		if (!goodMusic.isPlaying) goodMusic.Play();
 		if(instantChange){
 			currentVar = 0;
 			mat.SetFloat("_Blend",0);
@@ -30,9 +33,14 @@ public class ChangeBG : MonoBehaviour {
 		}
 		if (currentVar <= 0) return;
 		if (changeSpeed > 0) changeSpeed *= -1;
+		if (!changing) {
+			changeSound.Play();
+		}
 		changing = true;
 	}
 	public void ToBad(bool instantChange) {
+		goodMusic.Stop();
+		if (!badMusic.isPlaying) badMusic.Play();
 		if(instantChange){
 			currentVar = 1;
 			mat.SetFloat("_Blend",1);
@@ -41,6 +49,9 @@ public class ChangeBG : MonoBehaviour {
 		}
 		if (currentVar >= 1) return;
 		if (changeSpeed < 0) changeSpeed *= -1;
+		if (!changing) {
+			changeSound.Play();
+		}
 		changing = true;
 	}
 	// Update is called once per frame
