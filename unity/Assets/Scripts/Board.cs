@@ -212,6 +212,8 @@ public class Board : MonoBehaviour {
 		//change bg if needed
 		if (levels["levels"]["level"+GameSettings.Instance.levelNumber]["bgImg"].str == "bad") {
 			bg.ToBad(true);
+		} else {
+			bg.ToGood(true);
 		}
 		//solution = levels["levels"]["level"+GameSettings.Instance.levelNumber]["solution"].str;
 		List<JSONObject> jsonPieces = levels["levels"]["level"+GameSettings.Instance.levelNumber]["pieces"].list;
