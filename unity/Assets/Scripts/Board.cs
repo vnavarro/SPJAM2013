@@ -65,13 +65,22 @@ public class Board : MonoBehaviour {
 			if (!this.ContainsPiece()){
 				return;
 			}
-			connectors = new List<PieceConnector>();
+			if(connectors == null){
+				connectors = new List<PieceConnector>();
+			}
 			connectors.Add(new PieceConnector(Orientation.LEFT,false));
 			connectors.Add(new PieceConnector(Orientation.RIGHT,false));		
 			
 			this.AdjustConnectors();
 		}
 	
+		public void RemoveConnectors(){
+			if (!this.ContainsPiece()){
+				return;
+			}
+			connectors.Clear();
+		}
+		
 		public void AdjustConnectors(){
 			if (this.name.Contains("straight")){
 				if (rotation == 0 || rotation == 180){
@@ -243,9 +252,6 @@ public class Board : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(this.pathFind()){
-			Debug.Log("YAY FUNFA!");
-		}
 	}
 	
 	
@@ -335,9 +341,13 @@ public class Board : MonoBehaviour {
 		t.hasBlock = true;
 		t.name = name;
 		t.rotation = (int)rotation;
+		t.CreateConnectors();
 		t.AdjustConnectors();
 		if(t.name.Contains("Down")){
 			bg.ToBad();
+		}
+		if(this.pathFind()){
+			Debug.Log("YAY FUNFA!");
 		}
 	}
 	
@@ -347,6 +357,7 @@ public class Board : MonoBehaviour {
 		t.hasBlock = false;
 		t.name = "";
 		t.rotation = 0;
+		t.RemoveConnectors();
 	}
 	
 	Tile GetTileAt(Vector3 position) {
@@ -364,6 +375,7 @@ public class Board : MonoBehaviour {
 	}
 	
 	bool pathFind(){
+		Debug.Log("Start Tile:"+(int)this.initialPathTile.y+"."+(int)this.initialPathTile.x);
 		Tile startTile = tiles[(int)this.initialPathTile.y][(int)this.initialPathTile.x];
 		Orientation startOrientation = startTile.GetStartToOrientation();
 		Vector2 nextTilePosition = startTile.NextTile(startOrientation);
@@ -381,7 +393,7 @@ public class Board : MonoBehaviour {
 		Orientation connectedTo;		
 		if(tile.HasConnectorWith(from,out connectedTo)){
 			return false;
-		}
+		}		
 		Orientation remainingOrientation = tile.GetRemainingConnector(connectedTo);
 		return pathFind(tile.NextTile(remainingOrientation),remainingOrientation);
 			
