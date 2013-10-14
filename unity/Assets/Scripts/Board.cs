@@ -389,14 +389,14 @@ public class Board : MonoBehaviour {
 	
 	bool pathFind(Vector2 position,Orientation from){
 		Tile tile = tiles[(int)position.y][(int)position.x];
+		if(tile.ContainsPortal()){
+			Debug.Log("==== Found portal at i,j:"+position.y+","+position.x);
+			return true;
+		}
 		if(!tile.ContainsPiece()){
 			Debug.Log("==== Found nothing at i,j:"+position.y+","+position.x);
 			Debug.Log("=====> Name:"+tile.name);
 			return false;
-		}
-		if(tile.ContainsPortal()){
-			Debug.Log("==== Found portal at i,j:"+position.y+","+position.x);
-			return true;
 		}
 		Orientation connectedTo;		
 		if(!tile.HasConnectorWith(from,out connectedTo)){
