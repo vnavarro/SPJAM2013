@@ -21,7 +21,10 @@ public class Board : MonoBehaviour {
 			return this.name.Contains("portal");
 		}
 		
-		public Vector2 NextTile(Orientation orientation){
+		
+		//X is equivalent to column (a.k.a -> j)
+		//Y is equivalent to line (a.k.a -> i)
+		public Vector2 NextTile(Orientation orientation,Vector2 position){
 			switch (orientation) {
 				case Orientation.UP:
 					return new Vector2(position.x,position.y-1);
@@ -347,7 +350,7 @@ public class Board : MonoBehaviour {
 			bg.ToBad();
 		}
 		if(this.pathFind()){
-			Debug.Log("YAY FUNFA!");
+			Debug.Log("=====> YAY FUNFA!");
 		}
 	}
 	
@@ -375,27 +378,33 @@ public class Board : MonoBehaviour {
 	}
 	
 	bool pathFind(){
-		Debug.Log("Start Tile:"+(int)this.initialPathTile.y+"."+(int)this.initialPathTile.x);
+		Debug.Log("=====> Start Tile i,j:"+(int)this.initialPathTile.y+","+(int)this.initialPathTile.x);
+		Debug.Log("=====> Start Tile name:"+this.name);
 		Tile startTile = tiles[(int)this.initialPathTile.y][(int)this.initialPathTile.x];
 		Orientation startOrientation = startTile.GetStartToOrientation(this.initialPathTile);
-		Vector2 nextTilePosition = startTile.NextTile(startOrientation);
+		Debug.Log("=====> Start orientation:"+startOrientation);
+		Vector2 nextTilePosition = startTile.NextTile(startOrientation,this.initialPathTile);
+		Debug.Log("=====> Next Tile i,j:"+(int)nextTilePosition.y+","+(int)nextTilePosition.x);
 		return pathFind(nextTilePosition,startTile.GetStartToOrientation(this.initialPathTile));
 	}
 	
 	bool pathFind(Vector2 position,Orientation from){
 		Tile tile = tiles[(int)position.y][(int)position.x];
 		if(!tile.ContainsPiece()){
+			Debug.Log("==== Found nothing at i,j:"+position.y+","+position.x);
 			return false;
 		}
 		if(tile.ContainsPortal()){
+			Debug.Log("==== Found portal at i,j:"+position.y+","+position.x);
 			return true;
 		}
 		Orientation connectedTo;		
-		if(tile.HasConnectorWith(from,out connectedTo)){
+		if(!tile.HasConnectorWith(from,out connectedTo)){
+			Debug.Log("==== Didn't found connector at i,j:"+position.y+","+position.x);
 			return false;
 		}		
 		Orientation remainingOrientation = tile.GetRemainingConnector(connectedTo);
-		return pathFind(tile.NextTile(remainingOrientation),remainingOrientation);
+		return pathFind(tile.NextTile(remainingOrientation,position),remainingOrientation);
 			
 	}
 	
