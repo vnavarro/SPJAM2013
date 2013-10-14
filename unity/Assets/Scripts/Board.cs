@@ -11,6 +11,171 @@ public class Board : MonoBehaviour {
 		public string name;
 		public int rotation;
 		public bool hasObject;
+		public bool start;
+		
+		public bool ContainsPiece(){
+			return this.name.Contains("straight") || this.name.Contains("curve");
+		}
+		
+		public bool ContainsPortal(){
+			return this.name.Contains("portal");
+		}
+		
+		public Vector2 NextTile(Orientation orientation){
+			switch (orientation) {
+				case Orientation.UP:
+					return new Vector2(position.x,position.y-1);
+				case Orientation.DOWN:
+					return new Vector2(position.x,position.y+1);
+				case Orientation.RIGHT:
+					return new Vector2(position.x+1,position.y);
+				case Orientation.LEFT:
+					return new Vector2(position.x-1,position.y);
+				default:
+					return position;
+			}
+		}
+		
+		public bool HasConnectorWith(Orientation from,out Orientation connectedTo){
+			foreach (PieceConnector connector in this.connectors) {
+				if(from == Orientation.UP && connector.currentOrientation == Orientation.DOWN){
+					connectedTo = connector.currentOrientation;
+					return true;
+				}
+				else if(from == Orientation.DOWN && connector.currentOrientation == Orientation.UP){
+					connectedTo = connector.currentOrientation;
+					return true;
+				}
+				else if(from == Orientation.RIGHT && connector.currentOrientation == Orientation.LEFT){
+					connectedTo = connector.currentOrientation;
+					return true;
+				}
+				else if(from == Orientation.LEFT && connector.currentOrientation == Orientation.RIGHT){
+					connectedTo = connector.currentOrientation;
+					return true;
+				}				
+			}
+			connectedTo = Orientation.DOWN;
+			return false;
+		}
+		
+		public List<PieceConnector> connectors;
+		
+		public void CreateConnectors(){
+			if (!this.ContainsPiece()){
+				return;
+			}
+			connectors = new List<PieceConnector>();
+			connectors.Add(new PieceConnector(Orientation.LEFT,false));
+			connectors.Add(new PieceConnector(Orientation.RIGHT,false));		
+			
+			this.AdjustConnectors();
+		}
+	
+		public void AdjustConnectors(){
+			if (this.name.Contains("straight")){
+				if (rotation == 0 || rotation == 180){
+					connectors[0].currentOrientation = Orientation.UP;
+					connectors[1].currentOrientation = Orientation.DOWN;
+	            }
+	            else if(rotation == 90 || rotation == 270){
+					connectors[0].currentOrientation = Orientation.LEFT;
+					connectors[1].currentOrientation = Orientation.RIGHT;
+	            }			
+			}
+			else if(this.name.Contains("curve")){
+				if (rotation == 0){
+					connectors[0].currentOrientation = Orientation.UP;
+					connectors[1].currentOrientation = Orientation.RIGHT;
+	            }	
+	            else if(rotation == 90){
+					connectors[0].currentOrientation = Orientation.RIGHT;
+					connectors[1].currentOrientation = Orientation.DOWN;
+	            }
+	            else if(rotation == 180){
+					connectors[0].currentOrientation = Orientation.LEFT;
+					connectors[1].currentOrientation = Orientation.DOWN;
+	            }
+	            else if(rotation == 270){
+	                connectors[0].currentOrientation = Orientation.UP;
+					connectors[1].currentOrientation = Orientation.LEFT;
+	            }			
+			}
+		}
+		
+		
+		public Orientation GetStartToOrientation(){
+			int iy = (int)this.position.y;
+			int jx = (int)this.position.x;
+			if (this.name.Contains("straight")){
+				if (rotation == 0 || rotation == 180){
+					//Só pode estar no canto superior ou inferiro
+					if (iy == 0){
+						return Orientation.DOWN;
+					}
+					else{
+						return Orientation.UP;
+					}
+	            }
+	            else if(rotation == 90 || rotation == 270){
+					//Só pode estar no canto esquerdo ou direito
+					if(jx == 0){
+						return Orientation.RIGHT;
+					}
+					else {
+						return Orientation.LEFT;
+					}
+	            }			
+			}
+			else if(this.name.Contains("curve")){
+				if (rotation == 0){
+					//Só pode estar no canto superior ou direito
+					if(iy == 0){
+						return Orientation.RIGHT;
+					}
+					else{
+						return Orientation.UP;
+					}					
+	            }	
+	            else if(rotation == 90){
+					//Só pode estar no canto inferior ou direito
+					if(jx == 0){
+						return Orientation.DOWN;
+					}
+					else{
+						return Orientation.RIGHT;
+					}
+	            }
+	            else if(rotation == 180){
+					//Só pode estar no canto inferior ou esquerdo
+					if(iy == 0){
+						return Orientation.DOWN;
+					}
+					else{
+						return Orientation.LEFT;
+					}
+	            }
+	            else if(rotation == 270){
+					//Só pode estar no canto superiro ou esquerdo
+					if(jx == 0){
+						return Orientation.LEFT;
+					}
+					else{
+						return Orientation.UP;
+					}
+	            }			
+			}
+			Debug.LogWarning("Should not have entered on else in GetStartToOrientation!");
+			return Orientation.UP;
+		}
+		
+		public Orientation GetRemainingConnector(Orientation from){
+			if(this.connectors[0].currentOrientation == from){
+				return this.connectors[1].currentOrientation;
+			}else{
+				return this.connectors[0].currentOrientation;
+			}
+		}
 	}
 	public float tileWidth;
 	public float tileHeight;
@@ -30,7 +195,7 @@ public class Board : MonoBehaviour {
 	//private string solution = "";
 	private PieceSpawner powerCurveSpawner, downCurveSpawner, powerStraightSpawner, downStraightSpawner;
 	private ChangeBG bg;
-	private List<Piece> usedPieces = new List<Piece>();
+	private Vector2 initialPathTile;
 	// Use this for initialization
 	void Start () {
 		bg = FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
@@ -76,7 +241,9 @@ public class Board : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(this.pathFind()){
+			Debug.Log("YAY FUNFA!");
+		}
 	}
 	
 	
@@ -91,6 +258,11 @@ public class Board : MonoBehaviour {
 				tile.position.y = boardBounds.max.y-(this.tileHeight*i);
 				
 				tile.hasObject = currentLevelData[i][j]["tileType"].str != "";
+				tile.start = currentLevelData[i][j]["start"];
+				if(tile.start){
+					this.initialPathTile = new Vector2(j,i);
+				}
+				
 				if (tile.hasObject) {
 					tile.hasBlock = currentLevelData[i][j]["tileType"].str == "block";
 					if (tile.hasBlock) {
@@ -105,6 +277,7 @@ public class Board : MonoBehaviour {
 					tile.rotation = 0;
 					tile.hasBlock = false;
 				}
+				tile.CreateConnectors();
 				Debug.Log("===Tile line "+i+",column "+j+" in pos:"+tile.position.x+","+tile.position.y);
 				Debug.Log("name: " + tile.name);
 				Debug.Log("has object: " + tile.hasObject);
@@ -121,29 +294,25 @@ public class Board : MonoBehaviour {
 		for (int i = 0; i < maxTiles; i++) {
 			for (int j = 0; j < maxTiles; j++) {
 				if (!tiles[i][j].hasObject) continue;
-				Piece pieceToAdd = null;
 				switch(tiles[i][j].name){					
 					case "stone":
-						pieceToAdd = (Piece)Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						Instantiate(stonePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 						break;
 					case "powercurve":
-						pieceToAdd = (Piece)Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						Instantiate(powerCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "powerstraight":
-						pieceToAdd = (Piece)Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						Instantiate(powerStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "downcurve":
-						pieceToAdd = (Piece)Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						Instantiate(downCurvePrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "downstraight":
-						pieceToAdd = (Piece)Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
+						Instantiate(downStraightPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.AngleAxis(tiles[i][j].rotation,Vector3.forward));
 						break;
 					case "portal":
-						pieceToAdd = (Piece)Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
+						Instantiate(portalPrefab,new Vector3(tiles[i][j].position.x + tileWidth/2,tiles[i][j].position.y - tileHeight/2,-5f),Quaternion.identity);
 						break;
-				}
-				if(pieceToAdd != null){
-					this.usedPieces.Add(pieceToAdd);
 				}
 			}
 		}
@@ -158,20 +327,13 @@ public class Board : MonoBehaviour {
 		}
 	}
 	
-	public void AddPieceToUsed(Piece p){
-		this.usedPieces.Add(p);
-	}
-	
-	public void RemovePieceFromUsed(Piece p){
-		this.usedPieces.Remove(p);
-	}
-	
 	public void PutPieceAt(Vector3 position, string name, float rotation){
 		Tile t = GetTileAt(position);
 		t.hasObject = true;
 		t.hasBlock = true;
 		t.name = name;
 		t.rotation = (int)rotation;
+		t.AdjustConnectors();
 		if(t.name.Contains("Down")){
 			bg.ToBad();
 		}
@@ -199,7 +361,29 @@ public class Board : MonoBehaviour {
 		return null;
 	}
 	
+	bool pathFind(){
+		Tile startTile = tiles[(int)this.initialPathTile.y][(int)this.initialPathTile.x];
+		Orientation startOrientation = startTile.GetStartToOrientation();
+		Vector2 nextTilePosition = startTile.NextTile(startOrientation);
+		return pathFind(nextTilePosition,startTile.GetStartToOrientation());
+	}
 	
+	bool pathFind(Vector2 position,Orientation from){
+		Tile tile = tiles[(int)position.y][(int)position.x];
+		if(!tile.ContainsPiece()){
+			return false;
+		}
+		if(tile.ContainsPortal()){
+			return true;
+		}
+		Orientation connectedTo;		
+		if(tile.HasConnectorWith(from,out connectedTo)){
+			return false;
+		}
+		Orientation remainingOrientation = tile.GetRemainingConnector(connectedTo);
+		return pathFind(tile.NextTile(remainingOrientation),remainingOrientation);
+			
+	}
 	
 	// test function (can be removed later)
 	void accessData(JSONObject obj){
