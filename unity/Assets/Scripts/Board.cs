@@ -113,9 +113,9 @@ public class Board : MonoBehaviour {
 		}
 		
 		
-		public Orientation GetStartToOrientation(){
-			int iy = (int)this.position.y;
-			int jx = (int)this.position.x;
+		public Orientation GetStartToOrientation(Vector2 position){
+			int iy = (int)position.y;
+			int jx = (int)position.x;
 			if (this.name.Contains("straight")){
 				if (rotation == 0 || rotation == 180){
 					//Só pode estar no canto superior ou inferiro
@@ -174,7 +174,7 @@ public class Board : MonoBehaviour {
 					}
 	            }			
 			}
-			Debug.LogWarning("Should not have entered on else in GetStartToOrientation!");
+			Debug.LogWarning("Should not have entered on else in GetStartToOrientation! i,j:"+iy+"."+jx);
 			return Orientation.UP;
 		}
 		
@@ -377,9 +377,9 @@ public class Board : MonoBehaviour {
 	bool pathFind(){
 		Debug.Log("Start Tile:"+(int)this.initialPathTile.y+"."+(int)this.initialPathTile.x);
 		Tile startTile = tiles[(int)this.initialPathTile.y][(int)this.initialPathTile.x];
-		Orientation startOrientation = startTile.GetStartToOrientation();
+		Orientation startOrientation = startTile.GetStartToOrientation(this.initialPathTile);
 		Vector2 nextTilePosition = startTile.NextTile(startOrientation);
-		return pathFind(nextTilePosition,startTile.GetStartToOrientation());
+		return pathFind(nextTilePosition,startTile.GetStartToOrientation(this.initialPathTile));
 	}
 	
 	bool pathFind(Vector2 position,Orientation from){
