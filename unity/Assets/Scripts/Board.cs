@@ -97,24 +97,23 @@ public class Board : MonoBehaviour {
 			}
 			else if(this.name.Contains("curve")){
 				if (rotation == 0){
-					connectors[0].currentOrientation = Orientation.UP;
-					connectors[1].currentOrientation = Orientation.RIGHT;
+					connectors[0].currentOrientation = Orientation.DOWN;
+					connectors[1].currentOrientation = Orientation.LEFT;
 	            }	
 	            else if(rotation == 90){
 					connectors[0].currentOrientation = Orientation.RIGHT;
 					connectors[1].currentOrientation = Orientation.DOWN;
 	            }
 	            else if(rotation == 180){
-					connectors[0].currentOrientation = Orientation.LEFT;
-					connectors[1].currentOrientation = Orientation.DOWN;
+					connectors[0].currentOrientation = Orientation.UP;
+					connectors[1].currentOrientation = Orientation.RIGHT;
 	            }
 	            else if(rotation == 270){
 	                connectors[0].currentOrientation = Orientation.UP;
 					connectors[1].currentOrientation = Orientation.LEFT;
 	            }			
 			}
-		}
-		
+		}		
 		
 		public Orientation GetStartToOrientation(Vector2 position){
 			int iy = (int)position.y;
@@ -143,11 +142,11 @@ public class Board : MonoBehaviour {
 				if (rotation == 0){
 					//Só pode estar no canto superior ou direito
 					if(iy == 0){
-						return Orientation.RIGHT;
+						return Orientation.DOWN;
 					}
 					else{
-						return Orientation.UP;
-					}					
+						return Orientation.LEFT;
+					}										
 	            }	
 	            else if(rotation == 90){
 					//Só pode estar no canto inferior ou direito
@@ -161,11 +160,11 @@ public class Board : MonoBehaviour {
 	            else if(rotation == 180){
 					//Só pode estar no canto inferior ou esquerdo
 					if(iy == 0){
-						return Orientation.DOWN;
+						return Orientation.RIGHT;
 					}
 					else{
-						return Orientation.LEFT;
-					}
+						return Orientation.UP;
+					}			
 	            }
 	            else if(rotation == 270){
 					//Só pode estar no canto superiro ou esquerdo
@@ -378,9 +377,9 @@ public class Board : MonoBehaviour {
 	}
 	
 	bool pathFind(){
-		Debug.Log("=====> Start Tile i,j:"+(int)this.initialPathTile.y+","+(int)this.initialPathTile.x);
-		Debug.Log("=====> Start Tile name:"+this.name);
+		Debug.Log("=====> Start Tile i,j:"+(int)this.initialPathTile.y+","+(int)this.initialPathTile.x);				
 		Tile startTile = tiles[(int)this.initialPathTile.y][(int)this.initialPathTile.x];
+		Debug.Log("=====> Start rotation:"+startTile.rotation);
 		Orientation startOrientation = startTile.GetStartToOrientation(this.initialPathTile);
 		Debug.Log("=====> Start orientation:"+startOrientation);
 		Vector2 nextTilePosition = startTile.NextTile(startOrientation,this.initialPathTile);
@@ -392,6 +391,7 @@ public class Board : MonoBehaviour {
 		Tile tile = tiles[(int)position.y][(int)position.x];
 		if(!tile.ContainsPiece()){
 			Debug.Log("==== Found nothing at i,j:"+position.y+","+position.x);
+			Debug.Log("=====> Name:"+tile.name);
 			return false;
 		}
 		if(tile.ContainsPortal()){
