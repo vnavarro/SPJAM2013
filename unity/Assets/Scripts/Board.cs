@@ -345,7 +345,7 @@ public class Board : MonoBehaviour {
 		t.rotation = (int)rotation;
 		t.CreateConnectors();
 		t.AdjustConnectors();
-		if(t.name.Contains("Down")){
+		if(t.name.Contains("down")){
 			bg.ToBad();
 		}
 		if(this.pathFind()){

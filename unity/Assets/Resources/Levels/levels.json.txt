@@ -19,8 +19,8 @@
     "level2" : {
     "bgImg" : "good",
     "board" : [
-      [{"tileType":"stone"},{"tileType":"stone"},{"tileType":"block","name":"powercurve","rotation":180},{"tileType":""},{"tileType":""}],
-      [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"portal"}],
+      [{"tileType":"stone"},{"tileType":"stone"},{"tileType":"block","name":"powercurve","rotation":180,"start":true},{"tileType":""},{"tileType":""}],
+      [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block","name":"downcurve","rotation":0}],
       [{"tileType":"portal"},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}]
