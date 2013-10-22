@@ -37,7 +37,7 @@
     "board" : [
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":""}],
-      [{"tileType":"portal"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180}],
+      [{"tileType":"portal"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180, "start":true}],
       [{"tileType":"stone"},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"}]
     ],
@@ -51,8 +51,8 @@
     "level4" : {
     "bgImg" : "good",
     "board" : [
-      [{"tileType":"portal"},{"tileType":"block", "name":"powercurve", "rotation" : 0},{"tileType":"stone"},{"tileType":"stone"},{"tileType":"stone"}],
-      [{"tileType":"stone"},{"tileType":"block", "name":"powercurve", "rotation" : 180},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
+      [{"tileType":"portal"},{"tileType":"block", "name":"downcurve", "rotation" : 0},{"tileType":"stone"},{"tileType":"stone"},{"tileType":"stone"}],
+      [{"tileType":"stone"},{"tileType":"block", "name":"downcurve", "rotation" : 180},{"tileType":""},{"tileType":""},{"tileType":"stone"}],
       [{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":""},{"tileType":"block", "name":"powerstraight", "rotation":90,"start":true}],
       [{"tileType":""},{"tileType":"stone"},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"}]
@@ -65,14 +65,13 @@
 	"solution" : "up",
   },
     "level5" : {
-    "bgImg" : "bad",
     "bgImg" : "good",
     "board" : [
       [{"tileType":"portal"},{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"}],
-      [{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "powercurve", "rotation":90},{"tileType":""},{"tileType":""}],
+      [{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "downcurve", "rotation":90},{"tileType":""},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""}],
-      [{"tileType":"stone"},{"tileType":"stone"},{"tileType":"block", "name":"powercurve", "rotation":90},{"tileType":""},{"tileType":"stone"}]
+      [{"tileType":"stone"},{"tileType":"stone"},{"tileType":"block", "name":"powercurve", "rotation":90,"start":true},{"tileType":""},{"tileType":"stone"}]
     ],
     "pieces" : [
       {"name":"powercurve","count":4},{"name":"downstraight","count":1},
@@ -87,7 +86,7 @@
       [{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"block", "name" : "powercurve", "rotation" : 0},{"tileType":""}],
       [{"tileType":"stone"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""}],
       [{"tileType":""},{"tileType":""},{"tileType":"stone"},{"tileType":"stone"},{"tileType":""}],
-      [{"tileType":"portal"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180}],
+      [{"tileType":"portal"},{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":"block", "name":"powercurve", "rotation":180,"start":true}],
       [{"tileType":""},{"tileType":"stone"},{"tileType":""},{"tileType":""},{"tileType":"stone"}]
     ],
     "pieces" : [
