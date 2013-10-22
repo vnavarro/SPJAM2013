@@ -22,7 +22,6 @@ public class VideoSeq : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	int i = 0;
 	void Update () {
 		if(lastUpdate + 1f/fps < Time.time){
 			if(textures.Count > 0){

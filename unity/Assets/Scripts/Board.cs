@@ -207,6 +207,7 @@ public class Board : MonoBehaviour {
 	private PieceSpawner powerCurveSpawner, downCurveSpawner, powerStraightSpawner, downStraightSpawner;
 	private ChangeBG bg;
 	private Vector2 initialPathTile;
+
 	// Use this for initialization
 	void Start () {
 		bg = FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
@@ -349,6 +350,12 @@ public class Board : MonoBehaviour {
 			bg.ToBad();
 		}
 		if(this.pathFind()){
+			TimerBar timer = GameObject.FindObjectOfType(typeof(TimerBar)) as TimerBar;
+			if (timer){
+				timer.paused = true;
+				LevelTransition transition = GameObject.FindObjectOfType(typeof(LevelTransition)) as LevelTransition;
+				transition.NextLevelTransition();
+			}
 			Debug.Log("=====> YAY FUNFA!");
 		}
 	}
@@ -388,10 +395,16 @@ public class Board : MonoBehaviour {
 	}
 	
 	bool pathFind(Vector2 position,Orientation from){
-		Tile tile = tiles[(int)position.y][(int)position.x];
-		if(tile.ContainsPortal()){
-			Debug.Log("==== Found portal at i,j:"+position.y+","+position.x);
-			return true;
+		Tile tile;
+		try{
+			tile = tiles[(int)position.y][(int)position.x];
+			if(tile.ContainsPortal()){
+				Debug.Log("==== Found portal at i,j:"+position.y+","+position.x);
+				return true;
+			}
+		}
+		catch(System.ArgumentOutOfRangeException){
+			return false;
 		}
 		if(!tile.ContainsPiece()){
 			Debug.Log("==== Found nothing at i,j:"+position.y+","+position.x);

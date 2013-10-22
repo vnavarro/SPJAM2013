@@ -54,6 +54,11 @@ public class ChangeBG : MonoBehaviour {
 		}
 		changing = true;
 	}
+	public void StopMusic() {
+		goodMusic.Stop();
+		badMusic.Stop();
+		changeSound.Stop();
+	}
 	// Update is called once per frame
 	void Update () {
 		if(changing){

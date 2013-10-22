@@ -11,13 +11,17 @@ public class TimerBar : MonoBehaviour {
 	// used to animate the timer bar
 	public GameObject timerBar;
 	
-	public bool paused = false;
+	public bool paused = true;
 	// used to make the lua version-like calc
 	private float totalTime;
 	// timerBar material caching
 	private Material barMaterial;
+	private AudioSource gameOverSound;
+	private ChangeBG bg;
 	
 	void Start () {
+		gameOverSound = GameObject.Find("Game Over Sound").audio;
+		bg = GameObject.FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
 		totalTime = finalPos.position.x - currentPos.position.x;
 		barMaterial = timerBar.renderer.material;
 		barMaterial.SetFloat("_Cut", 0);
@@ -38,6 +42,11 @@ public class TimerBar : MonoBehaviour {
 		moveTimer.x += timerSpeed * Time.deltaTime * totalTime/10;
 		if (moveTimer.x >= endTimer.x){
 			moveTimer.x = endTimer.x;
+			bg.StopMusic();
+			gameOverSound.Play();
+			LevelTransition lt = GameObject.FindObjectOfType(typeof(LevelTransition)) as LevelTransition;
+			lt.GameOverTransition();
+			
 			if(ExpiredTime != null){
 				ExpiredTime();
 			}
