@@ -191,6 +191,7 @@ public class Board : MonoBehaviour {
 	public float tileWidth;
 	public float tileHeight;
 	public TextAsset levelsData;
+	public GameObject selina;
 	public GameObject powerCurvePrefab;
 	public GameObject downCurvePrefab;
 	public GameObject powerStraightPrefab;
@@ -221,6 +222,22 @@ public class Board : MonoBehaviour {
 		this.tileWidth = collider.bounds.size.x/maxTiles;
 		this.tileHeight = collider.bounds.size.y/maxTiles;
 		Debug.Log("Tile width,height"+this.tileWidth+","+this.tileHeight);
+		switch(levels["levels"]["level"+GameSettings.Instance.levelNumber]["startPos"].str) {
+		case "left":
+			selina.transform.Translate(-0.6f,-0.7f,0);
+			break;
+		case "right":
+			selina.transform.Translate(0.6f,-0.7f,0);
+			break;
+		case "down":
+			selina.transform.Translate(0,-1.4f,0);
+			TimerBar timer = GameObject.FindObjectOfType(typeof(TimerBar)) as TimerBar;
+			if (timer){
+				timer.MoveUp();
+			}
+			break;
+		}
+		
 		//change bg if needed
 		if (levels["levels"]["level"+GameSettings.Instance.levelNumber]["bgImg"].str == "bad") {
 			bg.ToBad(true);

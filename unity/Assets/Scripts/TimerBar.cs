@@ -33,6 +33,10 @@ public class TimerBar : MonoBehaviour {
 										 ,currentPos.position.z);
 	}
 	
+	public void MoveUp () {
+		transform.Translate(0,1.4f,0);
+	}
+	
 	// Update is called once per frame
 	void Update () {
 		if(paused) return;
