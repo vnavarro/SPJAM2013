@@ -6,17 +6,20 @@
 	SubShader {
 		Tags { "Queue"="Transparent" "RenderType"="Transparent" }
 		LOD 200
-		Pass {
-			//BlendOp Sub
-			Blend DstColor Zero
-			//Blend SrcAlpha OneMinusSrcAlpha
-			//Blend One One
-			SetTexture[_MainTex] {
-				ConstantColor [_Color] 
-	        	combine texture * constant + previous
-			}
-			
+		CGPROGRAM
+		#pragma surface surf Lambert alpha
+		struct Input {
+			float2 uv_MainTex;
+		};
+		sampler2D _MainTex;
+		fixed4 _Color;
+		
+		void surf (Input IN, inout SurfaceOutput o) {
+			o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb * _Color;  
+			o.Alpha = _Color.a;
+		
 		}
+		ENDCG
 	} 
 	FallBack "Transparent/Diffuse"
 }
