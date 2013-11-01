@@ -364,6 +364,10 @@ public class Board : MonoBehaviour {
 		t.CreateConnectors();
 		t.AdjustConnectors();
 		if(t.name.Contains("down")){
+			TimerBar timer = GameObject.FindObjectOfType(typeof(TimerBar)) as TimerBar;
+			if (timer){
+				timer.timerSpeed += 0.025f;
+			}
 			bg.ToBad();
 		}
 		if(this.pathFind()){
