@@ -8,6 +8,7 @@ public class VideoSeq : MonoBehaviour {
 	private float lastUpdate = 0;
 	// Use this for initialization
 	void Start () {
+		iTween.CameraFadeAdd();
 		lastUpdate = Time.time;
 		StartCoroutine("AddTextures");
 	}
@@ -23,7 +24,11 @@ public class VideoSeq : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(lastUpdate + 1f/fps < Time.time){
+		if(textures.Count == 0){
+			iTween.CameraFadeTo(iTween.Hash("amount",1,
+										"time",2f));
+			Invoke("BackToMenu",2f);
+		} else if(lastUpdate + 1f/fps < Time.time){
 			if(textures.Count > 0){
 				Resources.UnloadAsset(renderer.material.mainTexture);
 				renderer.material.mainTexture = textures.Dequeue();
@@ -31,5 +36,9 @@ public class VideoSeq : MonoBehaviour {
 			}
 			lastUpdate = Time.time;
 		}
+		
+	}
+	void BackToMenu() {
+		Application.LoadLevel("menu");
 	}
 }

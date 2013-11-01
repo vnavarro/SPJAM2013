@@ -6,14 +6,24 @@ public class LevelTransition : MonoBehaviour {
 	private string nextScreen;
 	// Use this for initialization
 	void Start () {
-		iTween.Init(gameObject);
-		iTween.CameraFadeAdd();
-		iTween.ColorTo(nextLevelBG,iTween.Hash("a",0,"time",0));
+		/*iTween.ColorTo(nextLevelBG,iTween.Hash("a",0,"time",0));
 		iTween.ColorTo(nextLevelImage,iTween.Hash("a",0,"time",0));
 		iTween.ColorTo(gameOverBG,iTween.Hash("a",0,"time",0));
 		iTween.ColorTo(gameOverImage,iTween.Hash("a",0,"time",0));
-		iTween.CameraFadeFrom(iTween.Hash("amount",.5f,"time",1.5f));
+		*/
+		nextLevelBG.SetActive(false);
+		nextLevelImage.SetActive(false);
+		gameOverBG.SetActive(false);
+		gameOverImage.SetActive(false);
+		
+		iTween.CameraFadeAdd();
+		
+		iTween.CameraFadeFrom(iTween.Hash("amount",.5f));
+		iTween.CameraFadeTo(iTween.Hash("amount",0,
+										"time",1.5f));
+		
 		Invoke("StartTimer",1.5f);
+		
 	}
 	
 	void StartTimer() {
@@ -22,6 +32,8 @@ public class LevelTransition : MonoBehaviour {
 	}
 	
 	public void NextLevelTransition() {
+		nextLevelBG.SetActive(true);
+		nextLevelImage.SetActive(true);
 		if(GameSettings.Instance.levelNumber == 6){
 			nextScreen = "video";
 		} else {
@@ -29,7 +41,7 @@ public class LevelTransition : MonoBehaviour {
 			nextScreen = "level";
 		}
 		nextLevelBG.collider.enabled = true;
-		iTween.ColorTo(nextLevelBG,iTween.Hash("a",.8f,
+		iTween.ColorTo(nextLevelBG,iTween.Hash("a",1f,
 											   "time",3f));
 		iTween.ColorTo(nextLevelImage,iTween.Hash("a",1,
 											   	  "time",3f));
@@ -37,9 +49,11 @@ public class LevelTransition : MonoBehaviour {
 	}
 	
 	public void GameOverTransition() {
+		gameOverBG.SetActive(true);
+		gameOverImage.SetActive(true);
 		nextScreen = "menu";
 		gameOverBG.collider.enabled = true;
-		iTween.ColorTo(gameOverBG,iTween.Hash("a",1,
+		iTween.ColorTo(gameOverBG,iTween.Hash("a",0.8f,
 											   "time",3f));
 		iTween.ColorTo(gameOverImage,iTween.Hash("a",1,
 											   	  "time",3f));
