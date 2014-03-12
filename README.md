@@ -7,7 +7,7 @@ SPJam is a game jam that happens at São Paulo Brazil, and had its third edition
 This game is the first made by the Blue Balls Monkeys. The team is composed by 4 at that time:
 
 * Arthur Ferrai @arthur_ferrai [Site](www.arthur.ferrai.nom.br)
-* Joel Oliveira 
+* Joel Oliveira Silva @joel_ladyrock [Site](http://quantik.com.br/)
 * Rogério Rennó Cavalcanti @rogerrenno
 * Vitor Navarro @vitor_navarro [Site](www.vnavarro.com.br)
 
