@@ -19,8 +19,8 @@ public class RealSize : MonoBehaviour {
 	void Awake () {
 		float screenWidth = GameSettings.Instance.widthRef;
 		float screenHeight = GameSettings.Instance.heightRef;
-		float textureWidth = renderer.sharedMaterial.mainTexture.width;
-		float textureHeight = renderer.sharedMaterial.mainTexture.height;
+		float textureWidth = GetComponent<Renderer>().sharedMaterial.mainTexture.width;
+		float textureHeight = GetComponent<Renderer>().sharedMaterial.mainTexture.height;
 	
 		// create mesh to hold sprite
 		Mesh m = new Mesh();

@@ -16,14 +16,14 @@ public class Piece : MonoBehaviour {
 		name = name.Replace("(Clone)","");
 		control = gameObject.GetComponent<GestureControl>();
 		if(spawner == null) {
-			collider.enabled = false;
+			GetComponent<Collider>().enabled = false;
 			enabled = false;
 			control.enabled = false;
 		}
 		control.onTouchBegin += OnTouchBegin;
 		control.onTouchMoved += OnTouchMove;
 		control.onTouchEnded += OnTouchEnd;
-		myCollider = collider as BoxCollider;
+		myCollider = GetComponent<Collider>() as BoxCollider;
 		Debug.Log(myCollider.size);
 		myCollider.size *= 2;
 		Debug.Log(myCollider.size);		
@@ -109,7 +109,7 @@ public class Piece : MonoBehaviour {
 	}
 	
 	bool isInsideBoard () {
-		Bounds boardBounds = Piece.boardLimits.collider.bounds;
+		Bounds boardBounds = Piece.boardLimits.GetComponent<Collider>().bounds;
 		Vector3 pieceCenter = transform.position;
 		bool isInsideX = pieceCenter.x >= boardBounds.min.x && pieceCenter.x <= boardBounds.max.x;		
 		bool isInsideY = pieceCenter.y >= boardBounds.min.y && pieceCenter.y <= boardBounds.max.y;
@@ -118,7 +118,7 @@ public class Piece : MonoBehaviour {
 	
 	bool SnapInBoard() {
 		Board board = boardLimits.GetComponent<Board>();
-		Bounds boardBounds = board.collider.bounds;
+		Bounds boardBounds = board.GetComponent<Collider>().bounds;
 		Vector3 myPos = transform.position;
 		myPos.x = Mathf.Floor((myPos.x - boardBounds.min.x)/board.tileWidth)*board.tileWidth + boardBounds.min.x + board.tileWidth/2;
 		myPos.y = Mathf.Floor((myPos.y - boardBounds.min.y)/board.tileHeight)*board.tileHeight + boardBounds.min.y + board.tileHeight/2;

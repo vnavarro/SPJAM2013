@@ -20,10 +20,10 @@ public class TimerBar : MonoBehaviour {
 	private ChangeBG bg;
 	
 	void Start () {
-		gameOverSound = GameObject.Find("Game Over Sound").audio;
+		gameOverSound = GameObject.Find("Game Over Sound").GetComponent<AudioSource>();
 		bg = GameObject.FindObjectOfType(typeof(ChangeBG)) as ChangeBG;
 		totalTime = finalPos.position.x - currentPos.position.x;
-		barMaterial = timerBar.renderer.material;
+		barMaterial = timerBar.GetComponent<Renderer>().material;
 		barMaterial.SetFloat("_Cut", 0);
 	}
 	

@@ -30,8 +30,8 @@ public class VideoSeq : MonoBehaviour {
 			Invoke("BackToMenu",2f);
 		} else if(lastUpdate + 1f/fps < Time.time){
 			if(textures.Count > 0){
-				Resources.UnloadAsset(renderer.material.mainTexture);
-				renderer.material.mainTexture = textures.Dequeue();
+				Resources.UnloadAsset(GetComponent<Renderer>().material.mainTexture);
+				GetComponent<Renderer>().material.mainTexture = textures.Dequeue();
 				
 			}
 			lastUpdate = Time.time;

@@ -9,7 +9,7 @@ public class ChangeBG : MonoBehaviour {
 	private float currentVar = 0;
 	private bool changing = false;
 	void Start () {
-		mat = renderer.material;
+		mat = GetComponent<Renderer>().material;
 		mat.SetFloat("_Blend",0);
 		portalMat.SetFloat("_Blend",0);
 	}

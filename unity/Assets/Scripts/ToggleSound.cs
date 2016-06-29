@@ -18,9 +18,9 @@ public class ToggleSound : MonoBehaviour {
 	void Toggle(Touch t){
 		AudioListener.pause = !AudioListener.pause;
 		if(AudioListener.pause){
-			renderer.material.mainTexture = soundOff;
+			GetComponent<Renderer>().material.mainTexture = soundOff;
 		} else {
-			renderer.material.mainTexture = soundOn;
+			GetComponent<Renderer>().material.mainTexture = soundOn;
 		}
 		GameSettings.Instance.soundOn = !AudioListener.pause;
 	}

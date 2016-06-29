@@ -35,12 +35,12 @@ public class LevelTransition : MonoBehaviour {
 		nextLevelBG.SetActive(true);
 		nextLevelImage.SetActive(true);
 		if(GameSettings.Instance.levelNumber == 6){
-			nextScreen = "video";
+			nextScreen = "final_cutscene";
 		} else {
 			GameSettings.Instance.levelNumber++;
 			nextScreen = "level";
 		}
-		nextLevelBG.collider.enabled = true;
+		nextLevelBG.GetComponent<Collider>().enabled = true;
 		iTween.ColorTo(nextLevelBG,iTween.Hash("a",1f,
 											   "time",3f));
 		iTween.ColorTo(nextLevelImage,iTween.Hash("a",1,
@@ -52,7 +52,7 @@ public class LevelTransition : MonoBehaviour {
 		gameOverBG.SetActive(true);
 		gameOverImage.SetActive(true);
 		nextScreen = "menu";
-		gameOverBG.collider.enabled = true;
+		gameOverBG.GetComponent<Collider>().enabled = true;
 		iTween.ColorTo(gameOverBG,iTween.Hash("a",0.8f,
 											   "time",3f));
 		iTween.ColorTo(gameOverImage,iTween.Hash("a",1,

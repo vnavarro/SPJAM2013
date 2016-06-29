@@ -38,8 +38,8 @@ public class AnimatedSpriteSheet : MonoBehaviour
 		float screenWidth = GameSettings.Instance.widthRef;
 		float screenHeight = GameSettings.Instance.heightRef;
 		
-		float textureWidth = renderer.sharedMaterial.mainTexture.width;
-		float textureHeight = renderer.sharedMaterial.mainTexture.height;
+		float textureWidth = GetComponent<Renderer>().sharedMaterial.mainTexture.width;
+		float textureHeight = GetComponent<Renderer>().sharedMaterial.mainTexture.height;
 	
 	
 		// create mesh to hold sprite
@@ -77,8 +77,8 @@ public class AnimatedSpriteSheet : MonoBehaviour
 		m.uv = uv;
 		m.triangles = tri;
 		m.name = "spriteQuad";
-		renderer.sharedMaterial.SetTextureScale  ("_MainTex", size);
-		renderer.sharedMaterial.SetTextureScale("_OverlayTexture", size);
+		GetComponent<Renderer>().sharedMaterial.SetTextureScale  ("_MainTex", size);
+		GetComponent<Renderer>().sharedMaterial.SetTextureScale("_OverlayTexture", size);
 	}
 	//Update
 	void Update() {
@@ -96,11 +96,11 @@ public class AnimatedSpriteSheet : MonoBehaviour
 	    offset.x = (uIndex+colNumber) * size.x;
 	    offset.y = (1.0f - size.y) - (vIndex + rowNumber) * size.y;
 	    
-		renderer.sharedMaterial.SetTextureOffset ("_MainTex", offset);
-	    renderer.sharedMaterial.SetTextureScale  ("_MainTex", size);
+		GetComponent<Renderer>().sharedMaterial.SetTextureOffset ("_MainTex", offset);
+	    GetComponent<Renderer>().sharedMaterial.SetTextureScale  ("_MainTex", size);
 		
-		renderer.sharedMaterial.SetTextureOffset ("_OverlayTexture", offset);
-		renderer.sharedMaterial.SetTextureScale("_OverlayTexture", size);
+		GetComponent<Renderer>().sharedMaterial.SetTextureOffset ("_OverlayTexture", offset);
+		GetComponent<Renderer>().sharedMaterial.SetTextureScale("_OverlayTexture", size);
 	}
 	
 	float Scale(float srcFloor, float srcCeil, float srcVal, float dstFloor, float dstCeil) {

@@ -219,8 +219,8 @@ public class Board : MonoBehaviour {
 		levels = new JSONObject(levelsData.text);
 		//accessData(j);
 		this.tiles = new List<List<Tile>>();
-		this.tileWidth = collider.bounds.size.x/maxTiles;
-		this.tileHeight = collider.bounds.size.y/maxTiles;
+		this.tileWidth = GetComponent<Collider>().bounds.size.x/maxTiles;
+		this.tileHeight = GetComponent<Collider>().bounds.size.y/maxTiles;
 		Debug.Log("Tile width,height"+this.tileWidth+","+this.tileHeight);
 		switch(levels["levels"]["level"+GameSettings.Instance.levelNumber]["startPos"].str) {
 		case "left":
@@ -276,7 +276,7 @@ public class Board : MonoBehaviour {
 	
 	
 	void createTiles(){
-		Bounds boardBounds = collider.bounds;
+		Bounds boardBounds = GetComponent<Collider>().bounds;
 		JSONObject currentLevelData = levels["levels"]["level"+GameSettings.Instance.levelNumber]["board"];
 		for (int i = 0; i < maxTiles; i++) {
 			List<Tile> rowTiles = new List<Tile>();
@@ -391,7 +391,7 @@ public class Board : MonoBehaviour {
 	}
 	
 	Tile GetTileAt(Vector3 position) {
-		Bounds boardBounds = collider.bounds;
+		Bounds boardBounds = GetComponent<Collider>().bounds;
 		for (int i = 0; i < maxTiles; i++) {
 			for (int j = 0; j < maxTiles; j++) {
 				if ((int)((position.x - boardBounds.min.x)/tileWidth) == j){

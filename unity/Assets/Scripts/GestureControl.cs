@@ -50,7 +50,7 @@ public class GestureControl : MonoBehaviour {
 	}
 	
 	bool hasCollider(){
-		if(this.collider == null || !this.collider.enabled){
+		if(this.GetComponent<Collider>() == null || !this.GetComponent<Collider>().enabled){
 			Debug.LogWarning("To check for touch use/enable a collider in the game object");
 			return false;
 		}
@@ -64,7 +64,7 @@ public class GestureControl : MonoBehaviour {
 		RaycastHit hit;
 		Debug.DrawLine(Camera.main.ScreenPointToRay (touch.position).origin,endVector,Color.magenta);
 		if (Physics.Raycast(ray,out hit)) {
-			if (hit.collider == collider)
+			if (hit.collider == GetComponent<Collider>())
 			return true;
 		}
 		return false;
