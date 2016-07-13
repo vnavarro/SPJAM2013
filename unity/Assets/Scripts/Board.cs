@@ -363,7 +363,7 @@ public class Board : MonoBehaviour {
 		t.rotation = (int)rotation;
 		t.CreateConnectors();
 		t.AdjustConnectors();
-		if(t.name.Contains("down")){
+		if(t.name.ToLower().Contains("down")){
 			TimerBar timer = GameObject.FindObjectOfType(typeof(TimerBar)) as TimerBar;
 			if (timer){
 				timer.timerSpeed += 0.025f;
