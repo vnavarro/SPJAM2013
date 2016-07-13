@@ -38,6 +38,7 @@ public class LevelTransition : MonoBehaviour {
 			nextScreen = "final_cutscene";
 		} else {
 			GameSettings.Instance.levelNumber++;
+			GameSettings.Instance.SaveCurrentLevel();
 			nextScreen = "level";
 		}
 		nextLevelBG.GetComponent<Collider>().enabled = true;

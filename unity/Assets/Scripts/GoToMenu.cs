@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(GestureControl))]
 public class GoToMenu : MonoBehaviour {
 	public GameObject menu;
+	public GameObject[] levelsButtons;
 	// Use this for initialization
 	void Awake (){
 		iTween.Init(gameObject);
@@ -30,6 +31,12 @@ public class GoToMenu : MonoBehaviour {
 	
 	void SwapGameObjects() {
 		menu.SetActive(true);
+		if(GameSettings.Instance.IsCurrentLevelSaved()){
+			int currentLevel = GameSettings.Instance.GetCurrentLevel();
+			for(int level = 0; level < currentLevel; level++){
+				levelsButtons[level].SetActive(true);
+			}
+		}
 		transform.root.gameObject.SetActive(false);
 	}
 }

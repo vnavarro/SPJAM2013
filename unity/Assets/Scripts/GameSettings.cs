@@ -48,4 +48,22 @@ public class GameSettings : MonoBehaviour {
 	void Start () {
 		Screen.sleepTimeout = SleepTimeout.NeverSleep;
 	}
+
+	public void SaveCurrentLevel() {
+		bool mayUpdateSavedCurrentLevel = true;
+		if(IsCurrentLevelSaved()){
+			mayUpdateSavedCurrentLevel = GetCurrentLevel() < levelNumber;
+		}
+		if(mayUpdateSavedCurrentLevel){
+			PlayerPrefs.SetInt("CurrentLevel", levelNumber);
+		}
+	}
+
+	public int GetCurrentLevel(){
+		return PlayerPrefs.GetInt("CurrentLevel");
+	}
+
+	public bool IsCurrentLevelSaved(){
+		return PlayerPrefs.HasKey("CurrentLevel");
+	}
 }
