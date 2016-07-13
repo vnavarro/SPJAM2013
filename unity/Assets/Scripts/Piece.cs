@@ -29,6 +29,10 @@ public class Piece : MonoBehaviour {
 		Debug.Log(myCollider.size);		
 	}
 
+		public void startOnTouchBegin(Touch t){
+				OnTouchBegin(t);
+		}
+
 #if UNITY_EDITOR
 	private Vector3 lastMousePos;
 	private bool firstClick = true;
@@ -39,9 +43,16 @@ public class Piece : MonoBehaviour {
 			boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
 			SnapInBoard();
 		} else {
-			if (!(isInsideBoard() && SnapInBoard())){
+			bool isInsideBoard = IsInsideBoard();
+			bool snapedInBoard = false;
+			if(isInsideBoard) snapedInBoard = SnapInBoard();
+			if (!(isInsideBoard && snapedInBoard)){
 				spawner.RestorePiece();
 				Destroy(gameObject);
+			}
+			else if(isInsideBoard && snapedInBoard){
+				spawner.UpdateAmount();
+				spawner.SpawnPiece();				
 			}
 		}
 		isMoving = false;
@@ -63,17 +74,21 @@ public class Piece : MonoBehaviour {
 			firstClick = false;
 		} else {
 			myCollider.size *= 2;
-			if(isInsideBoard()){
+			if(IsInsideBoard()){
 				boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
 			}
 		}
 		lastMousePos = Input.mousePosition;
 		//selected = this;
 	}
+
+		public void startOnMouseDown(){
+				this.OnMouseDown();
+		}
 #endif
 	void OnTouchBegin (Touch t) {
 		myCollider.size *= 2;
-		if(isInsideBoard()){
+		if(IsInsideBoard()){
 			boardLimits.GetComponent<Board>().RemovePieceAt(transform.position);
 		}
 		//selected = this;
@@ -94,9 +109,16 @@ public class Piece : MonoBehaviour {
 			RotatePiece();
 			SnapInBoard();
 		} else {
-			if (!(isInsideBoard() && SnapInBoard())){
-				spawner.RestorePiece();
-				Destroy(gameObject);
+			bool isInsideBoard = IsInsideBoard();
+			bool snapedInBoard = false;
+			if(isInsideBoard) snapedInBoard = SnapInBoard();
+			if (!(isInsideBoard && snapedInBoard)){
+					spawner.RestorePiece();
+					Destroy(gameObject);
+			}
+			else if(isInsideBoard && snapedInBoard){
+					spawner.UpdateAmount();
+					spawner.SpawnPiece();				
 			}
 		}
 		isMoving = false;
@@ -108,7 +130,7 @@ public class Piece : MonoBehaviour {
 		Debug.Log(transform.rotation.eulerAngles.z);		
 	}
 	
-	bool isInsideBoard () {
+	bool IsInsideBoard () {
 		Bounds boardBounds = Piece.boardLimits.GetComponent<Collider>().bounds;
 		Vector3 pieceCenter = transform.position;
 		bool isInsideX = pieceCenter.x >= boardBounds.min.x && pieceCenter.x <= boardBounds.max.x;		

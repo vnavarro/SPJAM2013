@@ -15,32 +15,31 @@ public class PieceSpawner : MonoBehaviour {
 		UpdateAmount();
 		Piece.boardLimits = GameObject.Find("BoardLimits");
 	}
-	
-	void OnTouchBegin(Touch t){
+
+	public void SpawnPiece() {
 		if (amount > 0){
 			amount--;
 			Piece p = Instantiate(piece,transform.position,transform.rotation) as Piece;
 			p.spawner = this;
-			Piece.selected = p;
+			Piece.selected = p;			
 			p.transform.Translate(Vector3.back*0.1f,Space.World);
-			UpdateAmount();
 		}
+	}
+	
+	void OnTouchBegin(Touch t){
+		UpdateAmount();
+		SpawnPiece();		
 	}
 #if UNITY_EDITOR
 	void OnMouseDown() {
-		if (amount > 0){
-			amount--;
-			Piece p = Instantiate(piece,transform.position,transform.rotation) as Piece;
-			p.spawner = this;
-			Piece.selected = p;
-			p.transform.Translate(Vector3.back*0.1f,Space.World);
-			UpdateAmount();
-		}
+		UpdateAmount();
+		SpawnPiece();		
 	}
 #endif
 	public void RestorePiece(){
 		amount++;
 		UpdateAmount();
+		SpawnPiece();
 	}
 	// Update is called once per frame
 	public void UpdateAmount () {

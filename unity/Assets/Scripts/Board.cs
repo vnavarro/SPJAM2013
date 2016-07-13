@@ -251,18 +251,22 @@ public class Board : MonoBehaviour {
 				case "powercurve":
 					powerCurveSpawner.amount = (int)pieceInfo["count"].n;
 					powerCurveSpawner.UpdateAmount();
+					powerCurveSpawner.SpawnPiece();
 					break;
 				case "downcurve":
 					downCurveSpawner.amount = (int)pieceInfo["count"].n;
 					downCurveSpawner.UpdateAmount();
+					downCurveSpawner.SpawnPiece();
 					break;
 				case "powerstraight":
 					powerStraightSpawner.amount = (int)pieceInfo["count"].n;
 					powerStraightSpawner.UpdateAmount();
+					powerStraightSpawner.SpawnPiece();
 					break;
 				case "downstraight":
 					downStraightSpawner.amount = (int)pieceInfo["count"].n;
 					downStraightSpawner.UpdateAmount();
+					downStraightSpawner.SpawnPiece();
 					break;
 			}
 		}
