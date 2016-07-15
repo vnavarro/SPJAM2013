@@ -14,11 +14,11 @@ public class Board : MonoBehaviour {
 		public bool start;
 		
 		public bool ContainsPiece(){
-			return this.name.Contains("straight") || this.name.Contains("curve");
+			return this.name.ToLower().Contains("straight") || this.name.ToLower().Contains("curve");
 		}
 		
 		public bool ContainsPortal(){
-			return this.name.Contains("portal");
+			return this.name.ToLower().Contains("portal");
 		}
 		
 		
@@ -85,7 +85,7 @@ public class Board : MonoBehaviour {
 		}
 		
 		public void AdjustConnectors(){
-			if (this.name.Contains("straight")){
+			if (this.name.ToLower().Contains("straight")){
 				if (rotation == 0 || rotation == 180){
 					connectors[0].currentOrientation = Orientation.UP;
 					connectors[1].currentOrientation = Orientation.DOWN;
@@ -95,7 +95,7 @@ public class Board : MonoBehaviour {
 					connectors[1].currentOrientation = Orientation.RIGHT;
 	            }			
 			}
-			else if(this.name.Contains("curve")){
+			else if(this.name.ToLower().Contains("curve")){
 				if (rotation == 0){
 					connectors[0].currentOrientation = Orientation.DOWN;
 					connectors[1].currentOrientation = Orientation.LEFT;
@@ -387,6 +387,7 @@ public class Board : MonoBehaviour {
 	
 	public void RemovePieceAt(Vector3 position){
 		Tile t = GetTileAt(position);
+		if (t == null) return;
 		t.hasObject = false;
 		t.hasBlock = false;
 		t.name = "";
